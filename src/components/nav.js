@@ -15,7 +15,9 @@ export default function Nav({ defaultPage, paths }) {
   return (
     <div className='tabs is-centered'>
       <ul>
-        {paths.map(({ href, label, name }, key) => {
+        {paths.map(({ href, label }, key) => {
+          const segments = href.split('/')
+          const name = segments[segments.length - 1]
           return (
             <li className={`${pathname == name && 'is-active'}`} key={key}>
               <Link href={href} onClick={() => handlePage(name)}>
