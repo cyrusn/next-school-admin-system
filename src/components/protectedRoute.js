@@ -1,25 +1,24 @@
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import Unauthorized from '@/pages/unauthorised'
 
 const ProtectedRoute = ({ children }) => {
   const { data: session, status } = useSession()
   const router = useRouter()
 
   useEffect(() => {
-    if (status === 'loading') return // Do nothing while loading
+    if (status === 'loading') return 
     if (!session) {
-      // Redirect to login page if not authenticated
       router.push('/unauthorised')
     }
   }, [session, status, router])
 
-  // If the session is loading or the user is not authenticated, return null (or a loading spinner)
-  if (status === 'loading' || !session) {
-    return null // You can also return a loading spinner here
-  }
+  if (status === 'loading') return null
 
-  return children // Render the protected content
+  if (!session) return <Unauthorized />
+
+  return children
 }
 
 export default ProtectedRoute

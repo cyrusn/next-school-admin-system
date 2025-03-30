@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { DateTime } from 'luxon'
 import { validateForm } from '../../utils/formValidation' // Import the validation function
 
-import ProtectedRoute from '@/components/protectedRoute'
 import Notification from '@/components/notification'
 import Nav from '@/components/nav'
 import DataTag from './components/form/date'
@@ -151,12 +150,12 @@ export default function FormPage() {
   }
 
   const paths = [
-    { href: '/announcement/form', name: 'form', label: 'Form' },
-    { href: '/announcement/record', name: 'record', label: 'Record' }
+    { href: '/announcement/form', label: 'Form' },
+    { href: '/announcement/record', label: 'Record' }
   ]
 
   return (
-    <ProtectedRoute>
+    <>
       <h1 className='title has-text-centered'>Announcement</h1>
       <Nav paths={paths} />
       <Notification {...notification} />
@@ -169,6 +168,6 @@ export default function FormPage() {
         <Content {...{ formData, errors, handleChange }} />
         <ConfirmButton isDisabled={isDisabled} />
       </form>
-    </ProtectedRoute>
+    </>
   )
 }

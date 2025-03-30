@@ -1,7 +1,6 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState, useContext } from 'react'
 
-import ProtectedRoute from '@/components/protectedRoute'
 import Notification from '@/components/notification'
 import Link from 'next/link'
 
@@ -97,14 +96,13 @@ export default function Record() {
   }, [session, startDate])
 
   const paths = [
-    { href: '/announcement/form', name: 'form', label: 'Form' },
-    { href: '/announcement/record', name: 'record', label: 'Record' }
+    { href: '/announcement/form', label: 'Form' },
+    { href: '/announcement/record', label: 'Record' }
   ]
 
   return (
-    <ProtectedRoute>
+    <>
       {status === 'loading' && <p>Loading...</p>}
-
       <Nav paths={paths} />
       <Notification {...notification} />
 
@@ -132,6 +130,6 @@ export default function Record() {
             />
           )
         })}
-    </ProtectedRoute>
+    </>
   )
 }
