@@ -7,6 +7,9 @@ import {
   faChevronRight
 } from '@fortawesome/free-solid-svg-icons'
 
+const calenderEventUrl = process.env.NEXT_PUBLIC_CALENDAR_EVENT_SPREADSHEET_URL
+const regularActivity = process.env.NEXT_PUBLIC_REGULAR_ACTIVITY_DOCUMENT_URL
+
 const MenuTitle = ({ keyName, title, children }) => {
   const [isOpen, setIsOpen] = useState(false)
   const toggle = () => {
@@ -37,12 +40,6 @@ const MenuTitle = ({ keyName, title, children }) => {
 }
 
 const Sidebar = () => {
-  const calenderEventUrl =
-    'https://docs.google.com/spreadsheets/d/1yxF61VcBGgMb8RlO-_MgsI9GlF2XhcyiaJtL3KVHwkE/edit?gid=0#gid=0'
-
-  const regularActivity =
-    'https://docs.google.com/document/d/1tuNpW9XFJZ0oLEiAzBQMdfgOWC1LoXiXeG4TFentkWg/edit?tab=t.0#heading=h.u0k2orlzzmwe'
-
   return (
     <aside className='menu is-normal column is-one-fifth is-fullheight'>
       <MenuTitle keyName='general' title='General'>
@@ -70,8 +67,9 @@ const Sidebar = () => {
       <ul className='menu-list'></ul>
       <p className='menu-label'>Acadmemic</p>
       <ul className='menu-list'></ul>
-      <p className='menu-label'>Discipline</p>
-      <ul className='menu-list'></ul>
+      <MenuTitle keyName='discipline' title='Discipline'>
+        <Link href='/discipline'>Discipline</Link>
+      </MenuTitle>
       <p className='menu-label'>Careers</p>
       <ul className='menu-list'></ul>
       <p className='menu-label'>Staff Development</p>

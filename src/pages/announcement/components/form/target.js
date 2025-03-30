@@ -1,9 +1,12 @@
 import House from './target/house'
 import TargetForm from './target/targetForm'
-import Input from './target/input'
+import FormInput from '@/components/form/formInput'
 
 const Target = (props) => {
-  switch (parseInt(props.formData.targetType)) {
+  const { handleChange, formData, errors } = props
+  const { targetType, target } = formData
+
+  switch (parseInt(targetType)) {
     case 0:
       return <></>
     case 1:
@@ -11,7 +14,25 @@ const Target = (props) => {
     case 2:
       return <TargetForm {...props} />
     default:
-      return <Input {...props} />
+      return (
+        <div className='field is-horizontal'>
+          <div className='field-label is-normal'>
+            <label className='label'></label>
+          </div>
+          <div className='field-body'>
+            <div className='field'>
+              <FormInput
+                name='target'
+                label='target'
+                handleChange={handleChange}
+                value={target}
+                placeholder=''
+                error={errors.target}
+              />
+            </div>
+          </div>
+        </div>
+      )
   }
 }
 

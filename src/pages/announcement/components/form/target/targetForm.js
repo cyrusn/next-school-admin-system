@@ -1,4 +1,5 @@
-import ErrorLabel from '../errorLabel'
+import ErrorLabel from '@/components/form/errorLabel'
+import MultiSelectInput from '@/components/form/multiSelectInput'
 
 const TargetForm = ({ handleChange, errors, formData }) => {
   const forms = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6']
@@ -7,23 +8,18 @@ const TargetForm = ({ handleChange, errors, formData }) => {
       <div className='field-label'></div>
       <div className='field-body'>
         <div className='field'>
-          <div className='control'>
-            <div
-              className={`select is-multiple ${errors.target && 'is-danger'}`}
-            >
-              <select name='target' onChange={handleChange} multiple size='7'>
-                <option value='' disabled>
-                  Please select Form
-                </option>
-                {forms.map((f, i) => (
-                  <option value={f} key={i}>
-                    {f}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <ErrorLabel error={errors.target} />
-          </div>
+          <MultiSelectInput
+            name='target'
+            error={errors.target}
+            size='7'
+            handleChange={handleChange}
+          >
+            {forms.map((f, i) => (
+              <option value={f} key={i}>
+                {f}
+              </option>
+            ))}
+          </MultiSelectInput>
         </div>
       </div>
     </div>

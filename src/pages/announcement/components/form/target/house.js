@@ -1,4 +1,5 @@
-import ErrorLabel from '../errorLabel'
+import ErrorLabel from '@/components/form/errorLabel'
+import SelectInput from '@/components/form/selectInput'
 
 const House = ({ handleChange, errors, formData }) => {
   return (
@@ -6,24 +7,17 @@ const House = ({ handleChange, errors, formData }) => {
       <div className='field-label'></div>
       <div className='field-body'>
         <div className='field'>
-          <div className='control'>
-            <div className={`select ${errors.target && 'is-danger'}`}>
-              <select
-                name='target'
-                onChange={handleChange}
-                value={formData.target}
-              >
-                <option value='' disabled>
-                  Please select House
-                </option>
-                <option value='Red'>Red</option>
-                <option value='Yellow'>Yellow</option>
-                <option value='Blue'>Blue</option>
-                <option value='Green'>Green</option>
-              </select>
-            </div>
-            <ErrorLabel error={errors.target} />
-          </div>
+          <SelectInput
+            name='target'
+            error={errors.target}
+            value={formData.target}
+            handleChange={handleChange}
+          >
+            <option value='Red'>Red</option>
+            <option value='Yellow'>Yellow</option>
+            <option value='Blue'>Blue</option>
+            <option value='Green'>Green</option>
+          </SelectInput>
         </div>
       </div>
     </div>

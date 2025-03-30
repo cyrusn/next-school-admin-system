@@ -1,4 +1,4 @@
-import ErrorLabel from '../errorLabel'
+import ErrorLabel from '@/components/form/errorLabel'
 
 const Input = (props) => {
   const { formData, handleChange, errors } = props

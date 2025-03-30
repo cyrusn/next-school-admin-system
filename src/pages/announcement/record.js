@@ -1,14 +1,15 @@
-import ProtectedRoute from '../../components/protectedRoute'
-import Notification from '../../components/notification'
-import Box from './components/record/box'
-import Nav from './components/nav'
-
-import Link from 'next/link'
-import { useEffect, useState, useContext } from 'react'
 import { useSession } from 'next-auth/react'
+import { useEffect, useState, useContext } from 'react'
+
+import ProtectedRoute from '@/components/protectedRoute'
+import Notification from '@/components/notification'
+import Link from 'next/link'
+
 import { DateTime } from 'luxon'
 import _ from 'lodash'
-import { fetchData } from 'next-auth/client/_utils'
+
+import Box from './components/record/box'
+import Nav from './components/nav'
 
 export default function Record() {
   const { data: session, status } = useSession()

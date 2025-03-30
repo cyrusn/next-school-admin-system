@@ -1,4 +1,4 @@
-import ErrorLabel from '../errorLabel'
+import ErrorLabel from '@/components/form/errorLabel'
 import { DateTime } from 'luxon'
 
 const Content = (props) => {

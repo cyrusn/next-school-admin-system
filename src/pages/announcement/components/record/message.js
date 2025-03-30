@@ -1,8 +1,6 @@
 import { useSession } from 'next-auth/react'
 import { useState, useEffect, useContext } from 'react'
-import { UsersContext } from '../../../../context/usersContext.js'
-
-// TODO: function to delete event
+import { UsersContext } from '@/context/usersContext.js'
 
 const Message = ({ event, index, onDelete }) => {
   const { users } = useContext(UsersContext)

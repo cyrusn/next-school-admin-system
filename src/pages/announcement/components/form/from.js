@@ -1,23 +1,22 @@
-import ErrorLabel from './errorLabel'
+import ErrorLabel from '@/components/form/errorLabel'
+import FormInput from '@/components/form/formInput'
+
 const From = ({ errors, handleChange, formData }) => {
   return (
     <div className='field is-horizontal'>
-      <div className='field-label'>
+      <div className='field-label is-normal'>
         <label className='label'>From</label>
       </div>
       <div className='field-body'>
         <div className='field'>
-          <div className='control'>
-            <input
-              name='from'
-              type='text'
-              className={`input ${errors.from && 'is-danger'}`}
-              onChange={handleChange}
-              value={formData.from}
-              placeholder='Announcement From (Committee / Department / House ...)'
-            ></input>
-            <ErrorLabel error={errors.from} />
-          </div>
+          <FormInput
+            name='from'
+            label='From'
+            handleChange={handleChange}
+            value={formData.from}
+            placeholder='Announcement From (Committee / Department / House ...)'
+            error={errors.from}
+          />
         </div>
       </div>
     </div>

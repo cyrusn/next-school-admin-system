@@ -1,8 +1,9 @@
-import Message from './message'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import { UsersContextProvider } from '../../../../context/usersContext'
 import _ from 'lodash'
+import { UsersContextProvider } from '@/context/usersContext'
+
+import Message from './message'
 
 const Box = ({ date, events, onDelete }) => {
   const [userInfo, setUserInfo] = useState({})

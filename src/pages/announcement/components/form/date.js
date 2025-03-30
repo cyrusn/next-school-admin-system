@@ -1,25 +1,20 @@
+import DateInput from '@/components/form/dateInput'
+
 const Date = ({ handleChange, errors, formData, min }) => {
   return (
     <div className='field is-horizontal'>
-      <div className='field-label'>
+      <div className='field-label is-normal'>
         <label className='label'>Date</label>
       </div>
       <div className='field-body'>
         <div className='field'>
-          <div className='control'>
-            <input
-              name='date'
-              type='date'
-              className={`input ${errors.date && 'is-danger'}`}
-              min={min}
-              onChange={handleChange}
-              value={formData.date}
-              required
-            />
-            {errors.date && (
-              <label className='help is-danger'>{errors.date}</label>
-            )}
-          </div>
+          <DateInput
+            name='date'
+            error={errors.date}
+            min={min}
+            handleChange={handleChange}
+            value={formData.date}
+          />
         </div>
       </div>
     </div>
