@@ -6,7 +6,7 @@ import { validateForm } from '../../utils/formValidation' // Import the validati
 
 import ProtectedRoute from '@/components/protectedRoute'
 import Notification from '@/components/notification'
-import Nav from './components/nav'
+import Nav from '@/components/nav'
 import DataTag from './components/form/date'
 import From from './components/form/from'
 import TargetType from './components/form/targetType'
@@ -150,10 +150,15 @@ export default function FormPage() {
     }
   }
 
+  const paths = [
+    { href: '/announcement/form', name: 'form', label: 'Form' },
+    { href: '/announcement/record', name: 'record', label: 'Record' }
+  ]
+
   return (
     <ProtectedRoute>
       <h1 className='title has-text-centered'>Announcement</h1>
-      <Nav />
+      <Nav paths={paths} />
       <Notification {...notification} />
       <form id='form' onSubmit={handleSubmit}>
         <DataTag {...{ formData, errors, handleChange, min: minDate() }} />

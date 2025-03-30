@@ -9,7 +9,7 @@ import { DateTime } from 'luxon'
 import _ from 'lodash'
 
 import Box from './components/record/box'
-import Nav from './components/nav'
+import Nav from '@/components/nav'
 
 export default function Record() {
   const { data: session, status } = useSession()
@@ -96,11 +96,16 @@ export default function Record() {
     }
   }, [session, startDate])
 
+  const paths = [
+    { href: '/announcement/form', name: 'form', label: 'Form' },
+    { href: '/announcement/record', name: 'record', label: 'Record' }
+  ]
+
   return (
     <ProtectedRoute>
       {status === 'loading' && <p>Loading...</p>}
 
-      <Nav />
+      <Nav paths={paths} />
       <Notification {...notification} />
 
       <div className='field'>
