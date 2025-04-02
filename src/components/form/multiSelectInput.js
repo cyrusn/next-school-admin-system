@@ -6,11 +6,14 @@ const MultiSelectInput = ({
   handleChange,
   size,
   value,
-  children
+  children,
+  className
 }) => {
   return (
     <div className='control'>
-      <div className={`select is-multiple ${error && 'is-danger'}`}>
+      <div
+        className={`select is-multiple ${error && 'is-danger'} ${className}`}
+      >
         <select
           name={name}
           onChange={handleChange}

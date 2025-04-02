@@ -1,5 +1,3 @@
-// context/UserContext.js
-import { wrap } from 'lodash'
 import { createContext, useEffect, useState, useSession } from 'react'
 
 export const UsersContext = createContext()

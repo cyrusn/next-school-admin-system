@@ -3,6 +3,8 @@ import { SessionProvider } from 'next-auth/react'
 import '../styles/globals.css' // Import your global styles
 import ProtectedRoute from '@/components/protectedRoute'
 
+import { StudentsContextProvider } from '@/context/studentContext'
+
 import Navbar from '../components/navbar'
 import Sidebar from '../components/sidebar'
 
@@ -16,7 +18,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
             <Sidebar />
             <div className='column'>
               <ProtectedRoute>
-                <Component {...pageProps} />
+                <StudentsContextProvider>
+                  <Component {...pageProps} />
+                </StudentsContextProvider>
               </ProtectedRoute>
             </div>
           </div>

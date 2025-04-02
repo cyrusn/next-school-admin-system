@@ -19,7 +19,7 @@ const Unauthorized = () => {
   return (
     <div className='notification is-danger is-light'>
       <h1 className='title is-size-5'>Unauthorized Access</h1>
-      <p>You do not have permission to view this site.</p>
+      <p>Please sign in with LPSS account to continue.</p>
     </div>
   )
 }

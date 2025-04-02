@@ -13,7 +13,7 @@ export default function Nav({ defaultPage, paths }) {
   const pathname = segments[segments.length - 1]
 
   return (
-    <div className='tabs is-centered'>
+    <div className='tabs is-centered is-boxed'>
       <ul>
         {paths.map(({ href, label }, key) => {
           const segments = href.split('/')

@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react'
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
 
 import Notification from '@/components/notification'
 import Link from 'next/link'

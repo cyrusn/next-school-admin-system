@@ -1,6 +1,6 @@
 import ErrorLabel from '@/components/form/errorLabel'
 
-const DateInput = ({ error, value, handleChange, name, min }) => {
+const DateInput = ({ error, value, handleChange, name, min, max }) => {
   return (
     <div className='control'>
       <input
@@ -8,6 +8,7 @@ const DateInput = ({ error, value, handleChange, name, min }) => {
         type='date'
         className={`input ${error && 'is-danger'}`}
         min={min}
+        max={max}
         onChange={handleChange}
         value={value}
         required

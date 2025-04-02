@@ -3,8 +3,8 @@ import {
   batchGetSheetData,
   appendRows,
   clearSheetData
-} from '../../../lib/googleSheet'
-import { convertRowsToCollection } from '../../../lib/helper'
+} from '@/lib/googleSheet'
+import { convertRowsToCollection } from '@/lib/helper'
 import { getSession } from 'next-auth/react'
 import { DateTime } from 'luxon'
 const spreadsheetId = process.env.ANNOUNCEMENT_GOOGLE_SHEET_ID
