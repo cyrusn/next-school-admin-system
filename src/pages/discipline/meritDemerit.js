@@ -1,10 +1,10 @@
 import DisciplineNav from './components/nav'
 
-export default function DisciplineTeacherRecord() {
+export default function MeritDemerit() {
   return (
     <>
       <DisciplineNav />
-      <h1>Teacher&apos;s Record</h1>
+      <h1>Merit Demerit</h1>
     </>
   )
 }

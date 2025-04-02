@@ -1,1 +1,4 @@
 @import 'bulma/css/bulma.css';
+@import url('datatables.net-bm');
+@import url('datatables.net-buttons-bm');
+@import url('datatables.net-select-bm');
