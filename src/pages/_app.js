@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SessionProvider session={session}>
       <Navbar />
-      <div className='container'>
+      <div className='container-fluid'>
         <div className='section py-4'>
           <div className='columns'>
             <Sidebar />

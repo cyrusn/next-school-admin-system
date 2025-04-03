@@ -1,20 +1,23 @@
 // discipline record show all conduct relate to user in the given period of time
 import DisciplineNav from './components/nav'
 import { StudentsContext } from '@/context/studentContext'
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useRef } from 'react'
+import { useSession } from 'next-auth/react'
 import MultiSelectInput from '@/components/form/multiSelectInput'
 import DateInput from '@/components/form/dateInput'
 import _ from 'lodash'
 import { DateTime } from 'luxon'
 import DataTable from '@/components/dataTable'
-import Notification from '@/components/notification'
 import { setLazyProp } from 'next/dist/server/api-utils'
+import { ITEM_CODES, MERIT_DEMERIT_CODES } from './components/code'
 
 export default function DisciplineRecord() {
   const COHORT_START_DATE = '2025-01-24'
   const today = DateTime.now().setZone('Asia/Hong_Kong').toFormat('yyyy-MM-dd')
 
+  const { data: session, status } = useSession()
   const { students } = useContext(StudentsContext)
+  const [url, setUrl] = useState('')
   const [filters, setFilters] = useState({
     classcodes: [],
     regnos: [],
@@ -24,11 +27,8 @@ export default function DisciplineRecord() {
 
   const groupedStudents = _.groupBy(students, 'classcode')
   const classcodes = Object.keys(groupedStudents)
+  const tableRef = useRef()
 
-  const [notification, setNotification] = useState({
-    className: 'is-warning',
-    message: ''
-  })
   const [conductData, setConductData] = useState([])
 
   const [loading, setLoading] = useState(true) // Loading state
@@ -71,21 +71,29 @@ export default function DisciplineRecord() {
       }
     },
     {
+      name: 'classcode',
+      data: 'classcode'
+    },
+    {
+      name: 'classno',
+      data: 'classno'
+    },
+    {
       title: 'Date',
       data: 'eventDate'
     },
-    //{
-    //  title: 'Item',
-    //  data: 'itemCode',
-    //  render(itemCode) {
-    //    const itemObject = [...ITEM_CODES, ...MERIT_DEMERIT_CODES].find(
-    //      ({ code }) => {
-    //        return code === parseInt(itemCode)
-    //      }
-    //    )
-    //    return `${itemCode} - ${itemObject['cTitle']}`
-    //  }
-    //},
+    {
+      title: 'Item',
+      data: 'itemCode',
+      render(itemCode) {
+        const itemObject = [...ITEM_CODES, ...MERIT_DEMERIT_CODES].find(
+          ({ code }) => {
+            return code === parseInt(itemCode)
+          }
+        )
+        return `${itemCode} - ${itemObject['cTitle']}`
+      }
+    },
     {
       title: 'Mark',
       data: 'mark'
@@ -124,17 +132,13 @@ export default function DisciplineRecord() {
     }
   ]
 
-  const fetchData = async (url) => {
-    const response = await fetch(url)
-    const json = await response.json()
-    const { meta, data } = json
-    setConductData(data)
-  }
-
   const handleSubmitFilter = async () => {
-    setNotification({ className: 'is-warning', message: 'Loading ...' })
     const { startDate, endDate, classcodes, regnos } = filters
-    let newUrl = `/api/discipline/conducts?filters[schoolYear]=2024&filters[term]=2&filters[eventDate][$gte]=${startDate}&filters[eventDate][$lte]=${endDate}`
+    let newUrl = `/api/discipline/conducts?filters[schoolYear]=2024&filters[term]=2`
+    newUrl += `&filters[eventDate][$gte]=${startDate}&filters[eventDate][$lte]=${endDate}`
+    if (session.user.info.initial) {
+      newUrl += `&filters[teacher]=${session.user.info.initial}`
+    }
 
     classcodes.forEach((c, index) => {
       newUrl += `&filters[classcode][${index}]=${c}`
@@ -144,15 +148,40 @@ export default function DisciplineRecord() {
       newUrl += `&filters[regno][${index}]=${c}`
     })
 
-    await fetchData(newUrl)
+    setUrl(newUrl)
 
-    setNotification({ className: 'is-warning', message: '' })
+    if (tableRef.current) {
+      tableRef.current.dt().ajax.url(newUrl).load()
+    }
+  }
+
+  const options = {
+    searching: false,
+    processing: true,
+    serverSide: true,
+    columnDefs: [
+      { orderData: [1, 2], targets: 0 },
+      { targets: [1, 2], visible: false }
+    ],
+    order: [
+      {
+        name: 'eventDate',
+        dir: 'desc'
+      },
+      {
+        name: 'classcode',
+        dir: 'asc'
+      },
+      {
+        name: 'classno',
+        dir: 'asc'
+      }
+    ]
   }
 
   return (
     <div>
       <DisciplineNav />
-      <Notification {...notification} />
       <form
         id='filterForm'
         className='field is-grouped is-grouped-centered columns'
@@ -238,7 +267,18 @@ export default function DisciplineRecord() {
         </a>
       </div>
 
-      <DataTable tableId='conductTable' columns={columns} data={conductData} />
+      <div>
+        {url ? (
+          <DataTable
+            ref={tableRef}
+            columns={columns}
+            url={url}
+            options={options}
+          />
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   )
 }

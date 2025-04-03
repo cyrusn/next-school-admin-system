@@ -7,7 +7,7 @@ export default function DisciplineNav() {
 
   const paths = [
     { href: '/discipline/form', label: 'Form' },
-    { href: '/discipline/merit_demerit', label: 'Merit / Demerit' },
+    { href: '/discipline/meritDemerit', label: 'Merit / Demerit' },
     { href: '/discipline/record', label: 'Record' }
   ]
   const ROLE = session?.user.info.role
