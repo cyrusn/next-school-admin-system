@@ -1,20 +1,19 @@
 // discipline record show all conduct relate to user in the given period of time
-import DisciplineNav from './components/nav'
-import { StudentsContext } from '@/context/studentContext'
 import { useContext, useState, useEffect, useRef } from 'react'
+import { setLazyProp } from 'next/dist/server/api-utils'
 import { useSession } from 'next-auth/react'
+import { DateTime } from 'luxon'
+import _ from 'lodash'
+
 import MultiSelectInput from '@/components/form/multiSelectInput'
 import DateInput from '@/components/form/dateInput'
-import _ from 'lodash'
-import { DateTime } from 'luxon'
 import DataTable from '@/components/dataTable'
-import { setLazyProp } from 'next/dist/server/api-utils'
-import { ITEM_CODES, MERIT_DEMERIT_CODES } from './components/code'
+import { StudentsContext } from '@/context/studentContext'
+import { TODAY, COHORT_START_DATE, SCHOOL_YEAR, TERM } from '@/config/constant'
+import { ITEM_CODES, MERIT_DEMERIT_CODES } from '@/config/constant'
+import DisciplineNav from './components/nav'
 
 export default function DisciplineRecord() {
-  const COHORT_START_DATE = '2025-01-24'
-  const today = DateTime.now().setZone('Asia/Hong_Kong').toFormat('yyyy-MM-dd')
-
   const { data: session, status } = useSession()
   const { students } = useContext(StudentsContext)
   const [url, setUrl] = useState('')
@@ -22,12 +21,13 @@ export default function DisciplineRecord() {
     classcodes: [],
     regnos: [],
     startDate: COHORT_START_DATE,
-    endDate: today
+    endDate: TODAY
   })
 
   const groupedStudents = _.groupBy(students, 'classcode')
   const classcodes = Object.keys(groupedStudents)
   const tableRef = useRef()
+  const buttonRef = useRef()
 
   const [conductData, setConductData] = useState([])
 
@@ -51,6 +51,15 @@ export default function DisciplineRecord() {
   }
 
   const columns = [
+    { name: 'id', data: 'id' },
+    {
+      name: 'classcode',
+      data: 'classcode'
+    },
+    {
+      name: 'classno',
+      data: 'classno'
+    },
     {
       title: 'Student',
       data(data, type) {
@@ -69,14 +78,6 @@ export default function DisciplineRecord() {
 
         return 'regno'
       }
-    },
-    {
-      name: 'classcode',
-      data: 'classcode'
-    },
-    {
-      name: 'classno',
-      data: 'classno'
     },
     {
       title: 'Date',
@@ -132,9 +133,11 @@ export default function DisciplineRecord() {
     }
   ]
 
+
   const handleSubmitFilter = async () => {
     const { startDate, endDate, classcodes, regnos } = filters
-    let newUrl = `/api/discipline/conducts?filters[schoolYear]=2024&filters[term]=2`
+    let newUrl = ''
+    newUrl += `/api/discipline/conduct?filters[schoolYear]=${SCHOOL_YEAR}&filters[term]=${TERM}`
     newUrl += `&filters[eventDate][$gte]=${startDate}&filters[eventDate][$lte]=${endDate}`
     if (session.user.info.initial) {
       newUrl += `&filters[teacher]=${session.user.info.initial}`
@@ -156,12 +159,23 @@ export default function DisciplineRecord() {
   }
 
   const options = {
+    dom: '<"level" <"level-left"l> <"level-right" B> > frtip',
+    select: {
+      items: 'row',
+      style: 'multi'
+    },
     searching: false,
     processing: true,
     serverSide: true,
+    buttons: ['copy', 'print'],
+    rowId: 'id',
     columnDefs: [
-      { orderData: [1, 2], targets: 0 },
-      { targets: [1, 2], visible: false }
+      { orderData: [1, 2], targets: 3 },
+      { targets: [0, 1, 2], visible: false },
+      {
+        className: 'has-text-centered',
+        targets: [6, 8, 9, 10, 11]
+      }
     ],
     order: [
       {
@@ -178,6 +192,11 @@ export default function DisciplineRecord() {
       }
     ]
   }
+
+  useEffect(() => {
+    console.log('run onclick at start')
+    buttonRef.current.click()
+  }, [])
 
   return (
     <div>
@@ -250,7 +269,7 @@ export default function DisciplineRecord() {
               value={filters.endDate}
               name='endDate'
               placeholder='End Date'
-              max={today}
+              max={TODAY}
               handleChange={handleChange}
             />
           </div>
@@ -262,9 +281,13 @@ export default function DisciplineRecord() {
         Ctrl (Window) or ⌘ (macOS) key and click the items.
       </p>
       <div className='my-2'>
-        <a className='button is-info' onClick={handleSubmitFilter}>
+        <button
+          className='button is-info'
+          onClick={handleSubmitFilter}
+          ref={buttonRef}
+        >
           Filter
-        </a>
+        </button>
       </div>
 
       <div>

@@ -1,14 +1,23 @@
 import ErrorLabel from '@/components/form/errorLabel'
 
 const FormInput = (props) => {
-  const { value, handleChange, error, name, placeholder } = props
+  const {
+    value,
+    className,
+    handleChange,
+    error,
+    name,
+    placeholder,
+    rows = 3
+  } = props
   return (
-    <div className='control'>
-      <input
+    <div className={`control ${className || ''}`}>
+      <textarea
         name={name}
-        type='input'
+        type='textarea'
+        rows={rows}
         value={value}
-        className={`input ${error ? 'is-danger' : ''}`}
+        className={`textarea ${error ? 'is-danger' : ''}`}
         onChange={handleChange}
         placeholder={placeholder}
       />

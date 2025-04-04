@@ -19,24 +19,6 @@ const getHandler = async (req, res) => {
   modifiedQuery += `&pagination[limit]=${length}`
 
   const reducedKeys = Object.keys(query).reduce((prev, key, index, keys) => {
-    // Don't search in DataTable
-    //const columnRegex = /columns\[(?<column>\d)\]\[name\]/
-    //const matchSearch = columnRegex.exec(key)
-    //
-    //if (matchSearch && matchSearch.groups) {
-    //  const { column } = matchSearch.groups
-    //  console.log(column)
-    //  if (column) {
-    //    const columnName = query[`columns[${column}][name]`]
-    //    const columnData = query[`columns[${column}][data]`]
-    //    const columnSearchable = query[`columns[${column}][searchable]`]
-    //    const columnOrderable = query[`columns[${column}][orderable]`]
-    //    const columnSearchValue = query[`columns[${column}][search][value]`]
-    //    const columnSearchRegex = query[`columns[${column}][search][regex]`]
-    //
-    //  }
-    //}
-
     const orderRegex = /order\[(?<order>\d)\]\[column\]/
     const matchOrder = orderRegex.exec(key)
 
@@ -93,6 +75,36 @@ const getHandler = async (req, res) => {
     res.status(500).json({ message: 'Error accessing strapi' })
   }
 }
+
+const postHandler = async (req, res) => {
+  const { data } = req.body
+  try {
+    const response = await fetch(`${BASE_URL}/conducts`, {
+      method: 'POST',
+      body: JSON.stringify({ data }),
+      headers: {
+        Authorization,
+        'Content-Type': 'application/json'
+      }
+    })
+
+    if (!response.ok) {
+      const json = await response.json()
+
+      res.status(500).json({
+        message: 'Error accessing strapi server:' + JSON.stringify(json)
+      }) // Handle errors
+    }
+
+    const json = await response.json()
+
+    res.status(200).json(json) // Send back the response
+  } catch (error) {
+    console.error('Error accessing strapi server:', error)
+    res.status(500).json({ message: error.message }) // Handle errors
+  }
+}
+
 export default async function handler(req, res) {
   const { method } = req
   const body = { ...req.body }
@@ -103,6 +115,10 @@ export default async function handler(req, res) {
   }
 
   switch (method) {
+    case 'POST':
+      req.body = body
+      await postHandler(req, res)
+      break
     default:
       await getHandler(req, res)
   }

@@ -1,12 +1,20 @@
 import ErrorLabel from '@/components/form/errorLabel'
 
-const SelectInput = ({ name, error, children, handleChange, value }) => {
+const SelectInput = ({
+  className,
+  name,
+  error,
+  children,
+  handleChange,
+  value,
+  title = 'Please select'
+}) => {
   return (
-    <div className='control'>
-      <div className={`select ${error && 'is-danger'}`}>
+    <div className={`control ${className}`}>
+      <div className={`select is-fullwidth ${error ? 'is-danger' : ''}`}>
         <select name={name} onChange={handleChange} value={value}>
           <option value='' disabled>
-            Please select
+            {title}
           </option>
           {children}
         </select>

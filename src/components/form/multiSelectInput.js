@@ -12,7 +12,7 @@ const MultiSelectInput = ({
   return (
     <div className='control'>
       <div
-        className={`select is-multiple ${error && 'is-danger'} ${className}`}
+        className={`select is-multiple ${error ? 'is-danger' : ''} ${className}`}
       >
         <select
           name={name}

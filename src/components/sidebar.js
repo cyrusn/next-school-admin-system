@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -11,6 +12,17 @@ import {
 
 const calenderEventUrl = process.env.NEXT_PUBLIC_CALENDAR_EVENT_SPREADSHEET_URL
 const regularActivity = process.env.NEXT_PUBLIC_REGULAR_ACTIVITY_DOCUMENT_URL
+
+const PageLink = ({ link, title }) => {
+  const pathname = usePathname()
+  const rootPath = pathname.split('/')[1]
+  console.log('link', link, 'root', rootPath)
+  return (
+    <Link href={`/${link}`} className={rootPath == link ? 'is-active' : ''}>
+      {title}
+    </Link>
+  )
+}
 
 const MenuTitle = ({ keyName, title, children }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -49,7 +61,7 @@ const Sidebar = () => {
   if (isShow) {
     return (
       <>
-        <button class='mt-2 icon button is-light is-info' onClick={toggle}>
+        <button className='mt-2 icon button is-light is-info' onClick={toggle}>
           <FontAwesomeIcon icon={faCompress} />
         </button>
         <aside className='menu is-normal column is-one-fifth is-fullheight'>
@@ -72,14 +84,14 @@ const Sidebar = () => {
           </MenuTitle>
 
           <MenuTitle keyName='school_admin' title='School Admin'>
-            <Link href='/announcement'>Announcement</Link>
+            <PageLink title='Announcement' link='announcement' />
           </MenuTitle>
           <p className='menu-label'>ITAV</p>
           <ul className='menu-list'></ul>
           <p className='menu-label'>Acadmemic</p>
           <ul className='menu-list'></ul>
           <MenuTitle keyName='discipline' title='Discipline'>
-            <Link href='/discipline'>Conduct</Link>
+            <PageLink title='Conduct' link='discipline' />
           </MenuTitle>
           <p className='menu-label'>Careers</p>
           <ul className='menu-list'></ul>
@@ -94,7 +106,7 @@ const Sidebar = () => {
   return (
     <>
       <aside className='menu is-normal is-fullheight'>
-        <button class='mt-2 icon button is-light is-info' onClick={toggle}>
+        <button className='mt-2 icon button is-light is-info' onClick={toggle}>
           <FontAwesomeIcon icon={faExpand} />
         </button>
       </aside>

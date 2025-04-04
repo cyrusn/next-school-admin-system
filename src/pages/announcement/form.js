@@ -2,7 +2,8 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import { DateTime } from 'luxon'
-import { validateForm } from '../../utils/formValidation' // Import the validation function
+import { validateForm } from '@/utils/formValidation' // Import the validation function
+import { TIMEZONE } from '@/config/constant'
 
 import Notification from '@/components/notification'
 import Nav from '@/components/nav'
@@ -17,9 +18,8 @@ import ConfirmButton from './components/form/confirmButton'
 export default function FormPage() {
   const { data: session } = useSession()
   const router = useRouter()
-  const zone = 'Asia/Hong_Kong'
-  const dateFormat = 'yyyy-MM-dd'
-  const now = DateTime.now().setZone(zone)
+  const TIMEZONE = 'Asia/Hong_Kong'
+  const now = DateTime.now().setZone(TIMEZONE)
 
   const minDate = () => {
     let dt =
@@ -28,7 +28,7 @@ export default function FormPage() {
     while (dt.weekday === 6 || dt.weekday === 7) {
       dt = dt.plus({ days: 1 })
     }
-    return dt.toFormat(dateFormat)
+    return dt.toFormat('yyyy-MM-dd')
   }
 
   const defaultFormDataState = {
@@ -92,7 +92,7 @@ export default function FormPage() {
         content: { required: true }
       }
 
-      const validationErrors = validateForm(newFormData, validationRules, zone)
+      const validationErrors = validateForm(newFormData, validationRules)
       setErrors(validationErrors)
       setIsDisabled(Object.keys(validationErrors).length > 0) // Update disabled state based on validation
 
