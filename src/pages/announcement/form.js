@@ -156,7 +156,6 @@ export default function FormPage() {
 
   return (
     <>
-      <h1 className='title has-text-centered'>Announcement</h1>
       <Nav paths={paths} />
       <Notification {...notification} />
       <form id='form' onSubmit={handleSubmit}>

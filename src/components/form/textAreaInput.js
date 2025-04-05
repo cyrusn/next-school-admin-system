@@ -8,12 +8,14 @@ const FormInput = (props) => {
     error,
     name,
     placeholder,
-    rows = 3
+    rows = 3,
+    disabled = false
   } = props
   return (
     <div className={`control ${className || ''}`}>
       <textarea
         name={name}
+        disabled={disabled}
         type='textarea'
         rows={rows}
         value={value}

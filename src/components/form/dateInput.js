@@ -7,12 +7,14 @@ const DateInput = ({
   name,
   min,
   max,
-  className
+  className,
+  disabled = false
 }) => {
   return (
     <div className={`control ${className}`}>
       <input
         name={name}
+        disabled={disabled}
         type='date'
         className={`input ${error ? 'is-danger' : ''}`}
         min={min}

@@ -8,11 +8,13 @@ const NumberInput = ({
   handleChange,
   name,
   min,
-  max
+  max,
+  disabled = false
 }) => {
   return (
     <div className={`control ${className}`}>
       <input
+        disabled={disabled}
         placeholder={placeholder}
         name={name}
         type='number'

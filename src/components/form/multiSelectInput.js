@@ -7,7 +7,9 @@ const MultiSelectInput = ({
   size,
   value,
   children,
-  className
+  className,
+  placeholder,
+  disabled = false
 }) => {
   return (
     <div className='control'>
@@ -15,15 +17,20 @@ const MultiSelectInput = ({
         className={`select is-multiple ${error ? 'is-danger' : ''} ${className}`}
       >
         <select
+          disabled={disabled}
           name={name}
           onChange={handleChange}
           value={value}
           multiple
           size={size}
         >
-          <option value='' disabled>
-            Please select
-          </option>
+          {placeholder ? (
+            <option value='' disabled>
+              {placeholder}
+            </option>
+          ) : (
+            <></>
+          )}
           {children}
         </select>
       </div>

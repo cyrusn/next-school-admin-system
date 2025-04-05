@@ -2,12 +2,22 @@ import Link from 'next/link'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome } from '@fortawesome/free-solid-svg-icons'
+import Navigator from '../components/navigator'
+import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 const Navbar = () => {
   const { data: session, status } = useSession()
+  const [isActive, setIsActive] = useState(false)
+  const pathname = usePathname()
   const handleLogin = () => {
     signIn('google')
   }
+
+  useEffect(() => {
+    setIsActive(false)
+  }, [pathname])
+
   return (
     <nav className='navbar is-light'>
       <div className='navbar-brand'>
@@ -31,19 +41,22 @@ const Navbar = () => {
           </span>
         </Link>
 
-        <button
-          className='navbar-burger burger'
-          aria-label='menu'
-          aria-expanded='false'
+        <a
+          role='button'
+          className='navbar-burger'
+          onClick={() => setIsActive(!isActive)}
         >
           <span aria-hidden='true'></span>
           <span aria-hidden='true'></span>
           <span aria-hidden='true'></span>
-        </button>
+          <span aria-hidden='true'></span>
+        </a>
       </div>
 
-      <div className='navbar-menu'>
-        <div className='navbar-start'></div>
+      <div className={`navbar-menu ${isActive ? 'is-active' : ''}`}>
+        <div className='navbar-start'>
+          <Navigator />
+        </div>
 
         <div className='navbar-end'>
           {session ? (

@@ -7,15 +7,25 @@ const SelectInput = ({
   children,
   handleChange,
   value,
-  title = 'Please select'
+  placeholder,
+  disabled = false
 }) => {
   return (
     <div className={`control ${className}`}>
       <div className={`select is-fullwidth ${error ? 'is-danger' : ''}`}>
-        <select name={name} onChange={handleChange} value={value}>
-          <option value='' disabled>
-            {title}
-          </option>
+        <select
+          name={name}
+          onChange={handleChange}
+          value={value}
+          disabled={disabled}
+        >
+          {placeholder ? (
+            <option value='' disabled>
+              {placeholder}
+            </option>
+          ) : (
+            <></>
+          )}
           {children}
         </select>
       </div>

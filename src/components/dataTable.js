@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react'
-import $ from 'jquery'
 import pdfmake from 'pdfmake'
 
 import DataTable from 'datatables.net-react'
@@ -10,13 +9,13 @@ import 'datatables.net-buttons-bm'
 import 'datatables.net-buttons/js/buttons.html5'
 import 'datatables.net-buttons/js/buttons.print'
 
-const DataTableInstance = ({ columns, url, ref, options }) => {
+const DataTableInstance = ({ columns, url, ref, options, className }) => {
   DataTable.use(DT)
 
   return (
     <DataTable
       ref={ref}
-      className='table is-bordered is-striped is-narrow is-hoverable is-fullwidth'
+      className={`table is-bordered is-striped is-narrow is-hoverable is-fullwidth ${className ? className : ''}`}
       columns={columns}
       ajax={url}
       options={options}

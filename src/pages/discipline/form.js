@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
 import {
+  START_TERM_DATE,
   SCHOOL_YEAR,
   TERM,
   ITEM_CODES,
@@ -191,7 +192,6 @@ export default function DisciplineForm() {
 
     const result = await response.json()
     if (!response.ok) {
-      console.log(result)
       setNotification({
         className: 'is-danger',
         message: `Failed to submit data: ${result.message}`
@@ -222,7 +222,7 @@ export default function DisciplineForm() {
             <div className='field is-horizontal '>
               <div className='field-body columns'>
                 <div className='field column is-2'>
-                  <p className='heading'>Information</p>
+                  <p className='heading'>Type</p>
                   <SelectInput
                     className='is-expanded'
                     required={true}
@@ -230,20 +230,22 @@ export default function DisciplineForm() {
                     error={errors[index]['type']}
                     value={rows[index]['type']}
                     handleChange={(e) => handleChange(e, index)}
-                    title='Type'
+                    placeholder='Please select'
                   >
                     <option value='demerit'>Demerit</option>
                     <option value='merit'>Merit</option>
                   </SelectInput>
 
+                  <p className='heading mt-2'>Item</p>
                   <SelectInput
-                    className='is-expanded mt-2'
+                    disabled={!rows[index]['type']}
+                    className='is-expanded'
                     required={true}
                     name='itemCode'
                     error={errors[index]['itemCode']}
                     value={rows[index]['itemCode']}
                     handleChange={(e) => handleChange(e, index)}
-                    title='Item'
+                    placeholder='Please select'
                   >
                     {getItemsOptions(index).map((item, key) => {
                       return (
@@ -254,8 +256,8 @@ export default function DisciplineForm() {
                     })}
                   </SelectInput>
 
+                  <p className='heading mt-2'>Mark</p>
                   <NumberInput
-                    className='mt-2'
                     placeholder='Mark'
                     name='mark'
                     min={getMarkDescriptions(index).min}
@@ -263,6 +265,7 @@ export default function DisciplineForm() {
                     value={rows[index]['mark']}
                     error={errors[index]['mark']}
                     handleChange={(e) => handleChange(e, index)}
+                    disabled={!rows[index]['itemCode']}
                   />
                   <label className='help is-info'>
                     {getMarkDescriptions(index).helpText}
@@ -273,6 +276,7 @@ export default function DisciplineForm() {
                   <label className='heading'>Event Date</label>
                   <DateInput
                     className='is-expanded'
+                    disabled={!rows[index]['itemCode']}
                     name='eventDate'
                     max={TODAY}
                     min={LAST_MONDAY}
@@ -300,6 +304,7 @@ export default function DisciplineForm() {
                     handleChange={(e) => handleChange(e, index)}
                     error={errors[index]['classcodes']}
                     value={rows[index]['classcodes']}
+                    disabled={!rows[index]['itemCode']}
                   >
                     {classcodes.map((classcode) => {
                       return (
@@ -320,6 +325,7 @@ export default function DisciplineForm() {
                     error={errors[index]['regnos']}
                     handleChange={(e) => handleChange(e, index)}
                     value={rows[index]['regnos']}
+                    disabled={!rows[index]['classcodes'].length}
                   >
                     {rows[index].classcodes.length ? (
                       students
@@ -364,10 +370,10 @@ export default function DisciplineForm() {
                 .map(({ regno, classcode, classno, ename, cname }) => {
                   const displayName = `${classcode}${String(classno).padStart(2, 0)} ${cname || ename}`
                   return (
-                    <span class='tag is-warning' key={regno}>
+                    <span className='tag is-warning' key={regno}>
                       <span>{displayName}</span>
                       <button
-                        class='delete is-small'
+                        className='delete is-small'
                         onClick={() => removeSelectedStudent(index, regno)}
                       ></button>
                     </span>
