@@ -7,8 +7,18 @@ const Authorization = `Bearer ${TOKEN}`
 const BASE_URL = 'https://careers.liping.edu.hk/strapi/api'
 import { ROLE_ENUM } from '@/config/constant'
 import { dataTableQueryStrapiConverter } from '@/lib/helper'
+import { addConductDetailToSummaryData } from '@/lib/conductDetail'
 
 const getHandler = async (req, res) => {
+  const schoolYear = req.query['filters[schoolYear]']
+  const term = req.query['filters[term]']
+  if (!schoolYear || !term) {
+    res.status(400).json({
+      message:
+        'The filter for schoolYear and Term must be present in the the query'
+    })
+    return
+  }
   const { qs, draw } = dataTableQueryStrapiConverter(req.query)
   try {
     const url = `${BASE_URL}/conducts/summary?${qs}`
@@ -20,6 +30,7 @@ const getHandler = async (req, res) => {
     const json = await response.json()
 
     const { meta, data } = json
+    const modifiedData = addConductDetailToSummaryData(data)
 
     const { pagination } = meta
     const { page, pageCount, pageSize, total } = pagination
@@ -28,8 +39,10 @@ const getHandler = async (req, res) => {
       draw,
       recordsTotal: total,
       recordsFiltered: total,
-      data: data.map(({ id, attributes }) => ({
+      data: modifiedData.map(({ id, attributes }) => ({
         id,
+        schoolYear,
+        term,
         ...attributes
       }))
     }

@@ -1,20 +1,28 @@
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useRef } from 'react'
 
 const calenderEventUrl = process.env.NEXT_PUBLIC_CALENDAR_EVENT_SPREADSHEET_URL
 const regularActivity = process.env.NEXT_PUBLIC_REGULAR_ACTIVITY_DOCUMENT_URL
 
-const PageLink = ({ link, title }) => {
+const PageLink = ({ href, title }) => {
   return (
-    <Link href={`/${link}`} className='navbar-item'>
+    <Link href={href} className='navbar-item'>
       {title}
     </Link>
   )
 }
 
 const NavbarDropdown = ({ includedPaths, title, children }) => {
+  const pathname = usePathname()
+  const rootPath = pathname.split('/')[1]
   return (
     <div className='navbar-item has-dropdown is-hoverable'>
-      <a className='navbar-link is-arrowless'>{title}</a>
+      <a
+        className={`navbar-link is-arrowless ${includedPaths?.includes(rootPath) ? 'has-text-weight-bold' : ''}`}
+      >
+        {title}
+      </a>
       <div className='navbar-dropdown'>{children}</div>
     </div>
   )
@@ -54,7 +62,7 @@ const Navigator = () => {
       </NavbarDropdown>
 
       <NavbarDropdown title='School Admin' includedPaths={['announcement']}>
-        <PageLink title='Announcement' link='announcement' />
+        <PageLink title='Announcement' href='/announcement' />
       </NavbarDropdown>
       {
         //<p className='menu-label'>ITAV</p>
@@ -63,11 +71,11 @@ const Navigator = () => {
         //<ul className='menu-list'></ul>
       }
       <NavbarDropdown title='Discipline' includedPaths={['discipline']}>
-        <PageLink title='Conduct' link='discipline' />
+        <PageLink title='Conduct' href='/discipline' />
       </NavbarDropdown>
 
       <NavbarDropdown title='Careers' includedPaths={['ole']}>
-        <PageLink title='OLE Record' link='ole' />
+        <PageLink title='OLE Record' href='/ole' />
         <Link
           href='https://careers.liping.edu.hk'
           target='_blank'

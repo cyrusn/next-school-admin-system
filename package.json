@@ -9,13 +9,37 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "bulma": "^1.0.3",
+    "datatables.net": "^2.2.2",
+    "datatables.net-bm": "^2.2.2",
+    "datatables.net-buttons-bm": "^3.2.2",
+    "datatables.net-dt": "^2.2.2",
+    "datatables.net-fixedcolumns-dt": "^5.0.4",
+    "datatables.net-fixedheader-dt": "^4.0.1",
+    "datatables.net-react": "^1.0.0",
+    "datatables.net-responsive-dt": "^3.0.4",
+    "datatables.net-select-bm": "^3.0.0",
+    "googleapis": "^148.0.0",
+    "jquery": "^3.7.1",
+    "jquery-param": "^1.2.4",
+    "lodash": "^4.17.21",
+    "luxon": "^3.6.0",
+    "next": "15.2.4",
+    "next-auth": "^4.24.11",
+    "pdfmake": "^0.2.18",
+    "postcss": "^8.5.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "15.2.4"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "eslint": "^9",
-    "eslint-config-next": "15.2.4",
-    "@eslint/eslintrc": "^3"
-  }
+    "eslint-config-next": "15.2.4"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

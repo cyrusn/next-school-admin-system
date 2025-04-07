@@ -6,7 +6,7 @@ import { validateForm } from '@/utils/formValidation' // Import the validation f
 import { TIMEZONE } from '@/config/constant'
 
 import Notification from '@/components/notification'
-import Nav from '@/components/nav'
+import AnnoucnementNav from './components/nav'
 import DataTag from './components/form/date'
 import From from './components/form/from'
 import TargetType from './components/form/targetType'
@@ -149,14 +149,9 @@ export default function FormPage() {
     }
   }
 
-  const paths = [
-    { href: '/announcement/form', label: 'Form' },
-    { href: '/announcement/record', label: 'Record' }
-  ]
-
   return (
     <>
-      <Nav paths={paths} />
+      <AnnoucnementNav />
       <Notification {...notification} />
       <form id='form' onSubmit={handleSubmit}>
         <DataTag {...{ formData, errors, handleChange, min: minDate() }} />

@@ -5,43 +5,47 @@ import { DateTime } from 'luxon'
 import $ from 'jquery'
 import _ from 'lodash'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faChevronDown,
-  faChevronRight
-} from '@fortawesome/free-solid-svg-icons'
+import HideformButton from '@/components/hideFormButton'
 
 import MultiSelectInput from '@/components/form/multiSelectInput'
+import SelectInput from '@/components/form/selectInput'
 import DateInput from '@/components/form/dateInput'
 import DataTable from '@/components/dataTable'
 import DisciplineNav from './components/nav'
 
 import { StudentsContext } from '@/context/studentContext'
+import { UsersContext } from '@/context/usersContext'
 import { getDisplayName } from '@/lib/helper'
 import {
   TODAY,
+  COHORT_START_DATE,
   START_TERM_DATE,
   SCHOOL_YEAR,
   TERM,
   ITEM_CODES,
-  MERIT_DEMERIT_CODES
+  MERIT_DEMERIT_CODES,
+  ROLE_ENUM
 } from '@/config/constant'
 
 export default function DisciplineRecord() {
   const { data: session, status } = useSession()
   const { role: ROLE, initial: INITIAL } = session.user.info
-
   const { students } = useContext(StudentsContext)
+  const { users } = useContext(UsersContext)
+
   const [url, setUrl] = useState('')
   const [isModalActive, setIsModalActive] = useState(false)
   const [isShowFilters, setIsShowFilters] = useState(false)
   const selectedRows = useRef([])
+  const isFirstRun = useRef(true)
 
   const defaultFilters = {
     classcodes: [],
     regnos: [],
     startDate: START_TERM_DATE,
-    endDate: TODAY
+    endDate: TODAY,
+    teacher: INITIAL,
+    term: TERM
   }
   const [filters, setFilters] = useState({ ...defaultFilters })
 
@@ -66,6 +70,13 @@ export default function DisciplineRecord() {
 
       const newFilters = { ...prevFilters, [name]: value }
       newFilters[name] = value
+
+      if (name == 'term' && value == 1) {
+        newFilters['startDate'] = COHORT_START_DATE
+      }
+      if (name == 'term' && value == 2) {
+        newFilters['startDate'] = START_TERM_DATE
+      }
       return newFilters
     })
   }
@@ -90,6 +101,7 @@ export default function DisciplineRecord() {
     },
     {
       title: 'Student',
+      width: '15%',
       data(data, type) {
         const { classcode, classno, name, cname } = data
         if (type === 'set') {
@@ -97,7 +109,7 @@ export default function DisciplineRecord() {
         }
 
         if (type === 'display' || type === 'filter') {
-          return getDisplayName({ classcode, classno, ename: name, cname })
+          return getDisplayName({ classcode, classno, name, cname })
         }
 
         if (type === 'sort') {
@@ -109,18 +121,21 @@ export default function DisciplineRecord() {
     },
     {
       title: 'Date',
-      data: 'eventDate'
+      data: 'eventDate',
+      width: '10%'
     },
     {
       title: 'Item',
       data: 'itemCode',
+      width: '20%',
       render(itemCode) {
         return getFullItemCode(itemCode)
       }
     },
     {
       title: 'Mark',
-      data: 'mark'
+      data: 'mark',
+      width: '5%'
     },
     {
       title: 'Description',
@@ -129,19 +144,24 @@ export default function DisciplineRecord() {
     },
     {
       title: 'Teacher',
-      data: 'teacher'
+      data: 'teacher',
+      orderable: false,
+      width: '5%'
     },
     {
-      title: 'Created At',
+      title: 'Created',
       data: 'createdAt',
+      width: '10%',
       render(createdAt) {
         return createdAt.slice(0, 10)
       }
     },
     {
-      title: 'From Journal',
+      title: 'Journal',
       orderable: false,
+      width: '5%',
       data: 'isImportFromJournal',
+      orderable: false,
       render(isImportFromJournal) {
         return isImportFromJournal ? '📘' : '🖊️'
       }
@@ -149,6 +169,7 @@ export default function DisciplineRecord() {
     {
       title: 'Status',
       data: 'informedAt',
+      width: '5%',
       render(informedAt) {
         return informedAt ? '🔒' : '⏳'
       },
@@ -157,12 +178,13 @@ export default function DisciplineRecord() {
   ]
 
   const handleSubmitFilter = async () => {
-    const { startDate, endDate, classcodes, regnos } = filters
+    const { startDate, endDate, classcodes, regnos, teacher } = filters
     let newUrl = ''
-    newUrl += `/api/discipline/conduct?filters[schoolYear]=${SCHOOL_YEAR}&filters[term]=${TERM}`
+    newUrl += `/api/discipline/conduct?filters[schoolYear]=${SCHOOL_YEAR}`
     newUrl += `&filters[eventDate][$gte]=${startDate}&filters[eventDate][$lte]=${endDate}`
-    if (INITIAL) {
-      newUrl += `&filters[teacher]=${INITIAL}`
+
+    if (teacher) {
+      newUrl += `&filters[teacher]=${teacher}`
     }
 
     classcodes.forEach((c, index) => {
@@ -178,12 +200,14 @@ export default function DisciplineRecord() {
     if (tableRef.current) {
       tableRef.current.dt().ajax.url(newUrl).load()
     }
+
+    isFirstRun.current = false
   }
 
   const options = {
     dom: '<"level" <"level-left"l> <"level-right" B> > frtip',
     rowCallback: function (tr, rowData) {
-      if (rowData.informedAt) {
+      if (rowData.informedAt && ROLE_ENUM[ROLE] < ROLE_ENUM['DC_ADMIN']) {
         tr.classList.add('unselectable')
       }
     },
@@ -191,7 +215,7 @@ export default function DisciplineRecord() {
       items: 'row',
       style: 'multi',
       selectable: function (rowData) {
-        return !rowData.informedAt
+        return !rowData.informedAt || ROLE_ENUM[ROLE] == ROLE_ENUM['DC_ADMIN']
       }
     },
     searching: false,
@@ -210,12 +234,21 @@ export default function DisciplineRecord() {
       { extend: 'print', className: 'is-warning' }
     ],
     rowId: 'id',
+    pageLength: 25,
+    lengthMenu: [
+      [10, 25, 50, 100, -1],
+      ['10 rows', '25 rows', '35 rows', '50 rows', '100 rows', 'Show all']
+    ],
     columnDefs: [
       { orderData: [1, 2], targets: 3 },
       { targets: [0, 1, 2], visible: false },
       {
         className: 'has-text-centered',
-        targets: [6, 8, 9, 10, 11]
+        targets: [4, 6, 8, 9, 10, 11]
+      },
+      {
+        className: 'has-text-left',
+        targets: [3, 5, 7]
       }
     ],
     fnRowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
@@ -273,7 +306,9 @@ export default function DisciplineRecord() {
 
   useEffect(() => {
     // update DataTable on start
-    handleSubmitFilter()
+    if (isFirstRun.current) {
+      handleSubmitFilter()
+    }
 
     const events = ['select', 'deselect']
     events.forEach((event) => {
@@ -291,26 +326,14 @@ export default function DisciplineRecord() {
   return (
     <div>
       <DisciplineNav />
-      {isShowFilters ? (
-        <button
-          className='button is-fullwidth is-small mb-2 is-light'
-          onClick={() => setIsShowFilters(false)}
-        >
-          <span className='mr-2'>Hide Filters </span>
-          <FontAwesomeIcon icon={faChevronDown} />
-        </button>
-      ) : (
-        <button
-          className='button is-fullwidth is-small mb-2 is-warning is-light'
-          onClick={() => {
-            setIsShowFilters(true)
-            setFilters({ ...defaultFilters })
-          }}
-        >
-          <span className='mr-2'>Show Filters </span>
-          <FontAwesomeIcon icon={faChevronRight} />
-        </button>
-      )}
+      <HideformButton
+        isShow={isShowFilters}
+        handleShowClick={() => {
+          setIsShowFilters(true)
+          setFilters({ ...defaultFilters })
+        }}
+        handleHideClick={() => setIsShowFilters(false)}
+      />
 
       {isShowFilters ? (
         <div className='box'>
@@ -323,7 +346,7 @@ export default function DisciplineRecord() {
               <MultiSelectInput
                 className='is-fullwidth'
                 name='classcodes'
-                size='6'
+                size='5'
                 handleChange={handleChange}
                 value={filters.classcodes}
               >
@@ -365,6 +388,22 @@ export default function DisciplineRecord() {
             </div>
 
             <div className='control column'>
+              {ROLE_ENUM[ROLE] >= ROLE_ENUM['DC_TEAM'] ? (
+                <div className='control mb-2'>
+                  <label className='heading'>Term</label>
+
+                  <SelectInput
+                    value={filters.term}
+                    name='term'
+                    handleChange={handleChange}
+                  >
+                    <option value={1}>Term 1</option>
+                    <option value={2}>Term 2</option>
+                  </SelectInput>
+                </div>
+              ) : (
+                <></>
+              )}
               <div className='control'>
                 <label className='heading'>Start Date</label>
 
@@ -373,6 +412,7 @@ export default function DisciplineRecord() {
                   name='startDate'
                   placeholder='Start Date'
                   min={START_TERM_DATE}
+                  max={TODAY}
                   handleChange={handleChange}
                 />
               </div>
@@ -383,10 +423,37 @@ export default function DisciplineRecord() {
                   value={filters.endDate}
                   name='endDate'
                   placeholder='End Date'
+                  min={START_TERM_DATE}
                   max={TODAY}
                   handleChange={handleChange}
                 />
               </div>
+              {ROLE_ENUM[ROLE] >= ROLE_ENUM['DC_TEAM'] ? (
+                <div className='control mt-2'>
+                  <label className='heading'>Teacher</label>
+                  <SelectInput
+                    name='teacher'
+                    handleChange={handleChange}
+                    value={filters.teacher}
+                  >
+                    <option value=''>Disable teacher filters</option>
+
+                    {_(users)
+                      .orderBy('initial')
+                      .map((user) => {
+                        const { initial } = user
+                        return (
+                          <option value={initial} key={initial}>
+                            {initial}
+                          </option>
+                        )
+                      })
+                      .value()}
+                  </SelectInput>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           </form>
 

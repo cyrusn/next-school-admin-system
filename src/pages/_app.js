@@ -4,6 +4,7 @@ import '../styles/globals.css' // Import your global styles
 import ProtectedRoute from '@/components/protectedRoute'
 
 import { StudentsContextProvider } from '@/context/studentContext'
+import { UsersContextProvider } from '@/context/usersContext'
 
 import Navbar from '../components/navbar'
 
@@ -14,9 +15,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       <div className='container'>
         <div className='section'>
           <ProtectedRoute>
-            <StudentsContextProvider>
-              <Component {...pageProps} />
-            </StudentsContextProvider>
+            <UsersContextProvider>
+              <StudentsContextProvider>
+                <Component {...pageProps} />
+              </StudentsContextProvider>
+            </UsersContextProvider>
           </ProtectedRoute>
         </div>
       </div>

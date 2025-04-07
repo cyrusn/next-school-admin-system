@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 
-export default function Nav({ defaultPage, paths }) {
+export default function Nav({ defaultPage, paths, title }) {
   const [page, setPage] = useState('form')
   const handlePage = (p) => {
     setPage(p)
@@ -13,20 +13,32 @@ export default function Nav({ defaultPage, paths }) {
   const pathname = segments[segments.length - 1]
 
   return (
-    <div className='tabs is-centered is-boxed'>
-      <ul>
-        {paths.map(({ href, label }, key) => {
-          const segments = href.split('/')
-          const name = segments[segments.length - 1]
-          return (
-            <li className={`${pathname == name && 'is-active'}`} key={key}>
-              <Link href={href} onClick={() => handlePage(name)}>
-                {label}
-              </Link>
-            </li>
-          )
-        })}
-      </ul>
+    <div className='level'>
+      <div className='level-start'>
+        <div className='level-item has-text-centered'>
+          <h1 className='title'>{title}</h1>
+        </div>
+      </div>
+      <div className='level-end'>
+        <div className='tabs is-toggle is-toggle-rounded'>
+          <ul>
+            {paths.map(({ href, label }, key) => {
+              const segments = href.split('/')
+              const name = segments[segments.length - 1]
+              return (
+                <li
+                  key={key}
+                  className={`${pathname == name ? 'is-active' : ''}`}
+                >
+                  <Link href={href} onClick={() => handlePage(name)}>
+                    {label}
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      </div>
     </div>
   )
 }

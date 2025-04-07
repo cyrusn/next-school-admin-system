@@ -10,6 +10,7 @@ const BASE_URL = 'https://careers.liping.edu.hk/strapi/api'
 
 const getHandler = async (req, res) => {
   const { qs, draw } = dataTableQueryStrapiConverter(req.query)
+  console.log(qs)
   try {
     const url = `${BASE_URL}/conducts?${qs}`
     const response = await fetch(url, {

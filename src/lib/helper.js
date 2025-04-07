@@ -9,7 +9,7 @@ export const convertRowsToCollection = (rows) => {
   })
 }
 
-export const getDisplayName = ({ classcode, classno, ename, cname }) => {
+export const getDisplayName = ({ classcode, classno, name, cname }) => {
   return `${classcode}${String(classno).padStart(2, '0')} ${cname || name}`
 }
 
@@ -33,7 +33,7 @@ export const dataTableQueryStrapiConverter = (query) => {
         const columnName = query[`columns[${column}][data]`]
         const dir = query[`order[${order}][dir]`]
         if (columnName && dir) {
-          prev[`${key}[${order}]`] = `${columnName}:${dir}`
+          prev[`sort[${order}]`] = `${columnName}:${dir}`
         }
       }
     }

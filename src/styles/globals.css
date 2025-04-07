@@ -3,8 +3,5 @@
 @import url('datatables.net-buttons-bm');
 @import url('datatables.net-select-bm');
 @import url('datatables.net-responsive-dt');
-
-.table-responsive {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
+@import url('datatables.net-fixedcolumns-dt');
+@import url('datatables.net-fixedheader-dt');

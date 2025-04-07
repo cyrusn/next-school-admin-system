@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+export const COHORT_START_DATE = process.env.NEXT_PUBLIC_COHORT_START_DATE
 export const START_TERM_DATE = process.env.NEXT_PUBLIC_START_TERM_DATE
 export const SCHOOL_YEAR = process.env.NEXT_PUBLIC_SCHOOL_YEAR
 export const TERM = process.env.NEXT_PUBLIC_TERM
@@ -16,7 +17,7 @@ export const ROLE_ENUM = {
   DC_ADMIN: 4
 }
 
-export const ITEM_CODES = [
+export const DEDUCTION_ITEM_CODES = [
   {
     code: 101,
     cTitle: '遲到',
@@ -168,7 +169,10 @@ export const ITEM_CODES = [
     min: 1,
     max: 1,
     isDcOnly: true
-  },
+  }
+]
+
+export const ADDITION_ITEM_CODES = [
   {
     code: 380,
     cTitle: '學術表現',
@@ -211,23 +215,49 @@ export const ITEM_CODES = [
   }
 ]
 
-export const MERIT_DEMERIT_CODES = [
-  { code: 610, title: 'Merit', cTitle: '優點' },
-  { code: 620, title: 'Minor Credit', cTitle: '小功', isDcOnly: true },
-  { code: 630, title: 'Major Credit', cTitle: '大功', isDcOnly: true },
-  { code: 900, title: 'Demerit', cTitle: '缺點' },
-  { code: 930, title: 'Minor Misconduct', cTitle: '小過', isDcOnly: true },
-  { code: 950, title: 'Serious Misconduct', cTitle: '大過', isDcOnly: true }
+export const CREDIT_ITEM_CODES = [
+  { code: 610, title: 'Merit', cTitle: '優點', key: 'merit' },
+  {
+    code: 620,
+    title: 'Minor Credit',
+    cTitle: '小功',
+    isDcOnly: true,
+    key: 'minorCredit'
+  },
+  {
+    code: 630,
+    title: 'Major Credit',
+    cTitle: '大功',
+    isDcOnly: true,
+    key: 'majorCredit'
+  }
+]
+export const MISCONDUCT_ITEM_CODES = [
+  { code: 900, title: 'Demerit', cTitle: '缺點', key: 'demerit' },
+  {
+    code: 930,
+    title: 'Minor Misconduct',
+    cTitle: '小過',
+    isDcOnly: true,
+    key: 'minorMisconduct',
+    cTitle: '小過'
+  },
+  {
+    code: 950,
+    title: 'Serious Misconduct',
+    cTitle: '大過',
+    isDcOnly: true,
+    key: 'seriousMisconduct'
+  }
 ]
 
-export const ATTENDANCE_TYPES = [
-  { key: 'lateNormalAm', title: 'Late (AM)', cTitle: '遲到(上午)' },
-  { key: 'lateNormalPm', title: 'Late (PM)', cTitle: '遲到(下午)' },
-  {
-    key: 'lateHalfDay',
-    title: 'Late (Half School Day)',
-    cTitle: '遲到(半日課)'
-  },
+export const MERIT_DEMERIT_CODES = [
+  ...CREDIT_ITEM_CODES,
+  ...MISCONDUCT_ITEM_CODES
+]
+export const ITEM_CODES = [...DEDUCTION_ITEM_CODES, ...ADDITION_ITEM_CODES]
+
+export const ABSENCE_TYPES = [
   { key: 'absentNormalAm', title: 'Absent (AM)', cTitle: '缺席(上午)' },
   { key: 'absentNormalPm', title: 'Absent (PM)', cTitle: '缺席(下午)' },
   {
@@ -239,8 +269,24 @@ export const ATTENDANCE_TYPES = [
     key: 'absentOnlineLesson',
     title: 'Absent (Online Lesson)',
     cTitle: '缺席(網課)'
-  },
+  }
+]
+export const LATE_TYPES = [
+  { key: 'lateNormalAm', title: 'Late (AM)', cTitle: '遲到(上午)' },
+  { key: 'lateNormalPm', title: 'Late (PM)', cTitle: '遲到(下午)' },
+  {
+    key: 'lateHalfDay',
+    title: 'Late (Half School Day)',
+    cTitle: '遲到(半日課)'
+  }
+]
+export const EARLY_LEAVE_TYPES = [
   { key: 'earlyLeave', title: 'Early Leave', cTitle: '早退' }
+]
+export const ATTENDANCE_TYPES = [
+  ...ABSENCE_TYPES,
+  ...LATE_TYPES,
+  ...EARLY_LEAVE_TYPES
 ]
 
 export const REASON_TYPES = [

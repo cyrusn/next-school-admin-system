@@ -1,8 +1,6 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import _ from 'lodash'
-import { UsersContextProvider } from '@/context/usersContext'
-
 import Message from './message'
 
 const Box = ({ date, events, onDelete }) => {
@@ -35,45 +33,43 @@ const Box = ({ date, events, onDelete }) => {
   }
 
   return (
-    <UsersContextProvider>
-      <div className='box' id={`announcement_${date}`}>
-        <nav className='level'>
-          <div className='level-left'>
-            <div className='level-item'>
-              <p className='subtitle'>
-                <span>{date}</span>
-              </p>
-            </div>
-            <div className='level-item'>
-              <p>
-                <span className='tag'>共{events.length}項宣布</span>
-              </p>
-            </div>
+    <div className='box' id={`announcement_${date}`}>
+      <nav className='level'>
+        <div className='level-left'>
+          <div className='level-item'>
+            <p className='subtitle'>
+              <span>{date}</span>
+            </p>
           </div>
+          <div className='level-item'>
+            <p>
+              <span className='tag'>共{events.length}項宣布</span>
+            </p>
+          </div>
+        </div>
 
-          <div className='level-right'>
-            <div className='level-item'>
-              <button
-                className='button is-info'
-                onClick={() => handlePrint(`announcement_${date}`)}
-              >
-                Print
-              </button>
-            </div>
+        <div className='level-right'>
+          <div className='level-item'>
+            <button
+              className='button is-info'
+              onClick={() => handlePrint(`announcement_${date}`)}
+            >
+              Print
+            </button>
           </div>
-        </nav>
-        {events.map((event, key) => {
-          return (
-            <Message
-              event={event}
-              key={key}
-              index={key + 1}
-              onDelete={onDelete}
-            />
-          )
-        })}
-      </div>
-    </UsersContextProvider>
+        </div>
+      </nav>
+      {events.map((event, key) => {
+        return (
+          <Message
+            event={event}
+            key={key}
+            index={key + 1}
+            onDelete={onDelete}
+          />
+        )
+      })}
+    </div>
   )
 }
 

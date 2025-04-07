@@ -13,12 +13,8 @@ export default function DisciplineNav() {
   const ROLE = session?.user.info.role
 
   if (ROLE_ENUM[ROLE] >= ROLE_ENUM['DC_TEAM']) {
-    paths.push(
-      { href: '/discipline/summary', label: 'Summary' },
-      { href: '/discipline/grade', label: 'Grade' },
-      { href: '/discipline/teacher', label: "Teacher's Record" }
-    )
+    paths.push({ href: '/discipline/summary', label: 'Summary' })
   }
 
-  return <Nav paths={paths} />
+  return <Nav paths={paths} title='Discipline' />
 }
