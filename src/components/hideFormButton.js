@@ -8,7 +8,7 @@ const HideFormButton = ({ isShow, handleShowClick, handleHideClick }) => {
   if (isShow) {
     return (
       <button
-        className='button is-fullwidth is-small mb-2 is-light'
+        className='button is-fullwidth is-small mb-2 is-light is-danger'
         onClick={handleHideClick}
       >
         <span className='mr-2'>Hide Filters </span>

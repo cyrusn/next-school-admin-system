@@ -15,9 +15,15 @@ export async function getAuth() {
   }
   const client = new google.auth.GoogleAuth({
     keyFile: SERVICE_ACCOUNT_KEY_PATH,
-    scopes: ['https://www.googleapis.com/auth/spreadsheets']
+    scopes: [
+      'https://www.googleapis.com/auth/spreadsheets',
+      'https://www.googleapis.com/auth/calendar',
+      'https://www.googleapis.com/auth/drive',
+      'https://www.googleapis.com/auth/admin.directory.resource.calendar.readonly'
+    ]
   })
 
   cachedClient = await client.getClient() // Authenticate and cache the client
+  cachedClient.subject = 'schooladmin@liping.edu.hk'
   return cachedClient
 }

@@ -71,7 +71,7 @@ export const dataTableQueryStrapiConverter = (query) => {
     return prev
   }, {})
 
-  const qs = param(newQuery)
+  const qs = decodeURI(param(newQuery))
 
   return { draw: query.draw || 1, qs }
 }

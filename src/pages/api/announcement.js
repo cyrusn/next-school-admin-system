@@ -106,6 +106,9 @@ export default async function handler(req, res) {
   }
 
   switch (method) {
+    case 'GET':
+      await getHandler(req, res)
+      break
     case 'POST':
       req.body = body
       await postHandler(req, res)

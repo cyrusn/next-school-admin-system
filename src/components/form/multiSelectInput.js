@@ -9,6 +9,7 @@ const MultiSelectInput = ({
   children,
   className,
   placeholder,
+  ref,
   disabled = false
 }) => {
   return (
@@ -17,6 +18,7 @@ const MultiSelectInput = ({
         className={`select is-multiple ${error ? 'is-danger' : ''} ${className}`}
       >
         <select
+          ref={ref}
           disabled={disabled}
           name={name}
           onChange={handleChange}

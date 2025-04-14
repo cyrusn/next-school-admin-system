@@ -1,8 +1,12 @@
 import { DateTime } from 'luxon'
-export const COHORT_START_DATE = process.env.NEXT_PUBLIC_COHORT_START_DATE
-export const START_TERM_DATE = process.env.NEXT_PUBLIC_START_TERM_DATE
+export const FIRST_TERM_START_DATE =
+  process.env.NEXT_PUBLIC_FIRST_TERM_START_DATE
+export const SECOND_TERM_START_DATE =
+  process.env.NEXT_PUBLIC_SECOND_TERM_START_DATE
 export const SCHOOL_YEAR = process.env.NEXT_PUBLIC_SCHOOL_YEAR
 export const TERM = process.env.NEXT_PUBLIC_TERM
+export const START_TERM_DATE =
+  TERM == 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE
 export const TIMEZONE = 'Asia/Hong_Kong'
 
 export const TODAY = DateTime.now()

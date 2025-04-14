@@ -1,19 +1,19 @@
 import DisciplineNav from './components/nav'
 import { useContext, useState, useEffect, useRef } from 'react'
-import { columns } from './components/summary/columns'
+import { columns as defaultColumns } from './components/summary/columns'
 import DataTable from '@/components/dataTable'
 import { StudentsContext } from '@/context/studentContext'
 import _ from 'lodash'
 
 import {
   TODAY,
-  COHORT_START_DATE,
   START_TERM_DATE,
   SCHOOL_YEAR,
   TERM,
   ITEM_CODES,
   MERIT_DEMERIT_CODES,
-  ATTENDANCE_TYPES
+  ATTENDANCE_TYPES,
+  FIRST_TERM_START_DATE
 } from '@/config/constant'
 
 import MultiSelectInput from '@/components/form/multiSelectInput'
@@ -24,7 +24,11 @@ import HideformButton from '@/components/hideFormButton'
 export default function DisciplineSummary() {
   const tableRef = useRef()
   const buttonRef = useRef()
+  const attendanceRef = useRef()
+  const itemRef = useRef()
   const [url, setUrl] = useState('')
+
+  const [columns, setColumns] = useState(defaultColumns)
 
   const defaultFilters = {
     startDate: START_TERM_DATE,
@@ -42,9 +46,15 @@ export default function DisciplineSummary() {
   const classcodes = Object.keys(groupedStudents)
 
   const handleSubmitFilter = async () => {
-    const { classcodes, term } = filters
+    const { classcodes, term, startDate, endDate } = filters
     let newUrl = ''
     newUrl += `/api/discipline/summary?filters[schoolYear]=${SCHOOL_YEAR}&filters[term]=${term}&filters[status]=ACTIVE`
+    if (startDate) {
+      newUrl += `&filters[eventDate][$gte]=${startDate}`
+    }
+    if (endDate) {
+      newUrl += `&filters[eventDate][$lte]=${endDate}`
+    }
 
     classcodes.forEach((c, index) => {
       newUrl += `&filters[classcode][${index}]=${c}`
@@ -91,6 +101,24 @@ export default function DisciplineSummary() {
   const handleChange = (e) => {
     const { name, value, type, options } = e.target
 
+    if (name == 'attendances' || name == 'items') {
+      const newColumns = [...defaultColumns]
+      attendanceRef
+      const selectedOptions = [
+        ...Array.from(attendanceRef.current.options),
+        ...Array.from(itemRef.current.options)
+      ].filter((o) => o.selected)
+      const values = selectedOptions.map((o) => {
+        return {
+          data: value,
+          title: o.text,
+          name: value
+        }
+      })
+      newColumns.push(...values)
+      setColumns(newColumns)
+    }
+
     setFilters((prevFilters) => {
       if (options && type == 'select-multiple') {
         const newFilters = { ...prevFilters, [name]: [] } // Update the formData object
@@ -104,10 +132,10 @@ export default function DisciplineSummary() {
       newFilters[name] = value
 
       if (name == 'term' && value == 1) {
-        newFilters['startDate'] = COHORT_START_DATE
+        newFilters['startDate'] = FIRST_TERM_START_DATE
       }
       if (name == 'term' && value == 2) {
-        newFilters['startDate'] = START_TERM_DATE
+        newFilters['startDate'] = SECOND_TERM_START_DATE
       }
       return newFilters
     })
@@ -137,7 +165,7 @@ export default function DisciplineSummary() {
               <MultiSelectInput
                 className='is-fullwidth'
                 name='classcodes'
-                size='6'
+                size='4'
                 handleChange={handleChange}
                 value={filters.classcodes}
               >
@@ -149,48 +177,55 @@ export default function DisciplineSummary() {
                   )
                 })}
               </MultiSelectInput>
-            </div>
 
-            <div className='control is-one-third column'>
-              <label className='heading'>Attendances</label>
-              <MultiSelectInput
-                name='attendances'
-                size='6'
-                className='is-fullwidth'
-                handleChange={handleChange}
-                value={filters.attendances}
-              >
-                {ATTENDANCE_TYPES.map((attendace) => {
-                  const { title, type } = attendace
-                  return (
-                    <option value={type} key={type}>
-                      {title}
-                    </option>
-                  )
-                })}
-              </MultiSelectInput>
+              <p className='help is-info'>
+                To select / deselect multiple classes or students, press and
+                hold down Ctrl (Window) or ⌘ (macOS) key and click the items.
+              </p>
             </div>
-
-            <div className='control is-one-third column'>
-              <label className='heading'>Items</label>
-              <MultiSelectInput
-                name='items'
-                size='6'
-                className='is-fullwidth'
-                handleChange={handleChange}
-                value={filters.items}
-              >
-                {ITEM_CODES.map((item) => {
-                  const { code, title } = item
-                  return (
-                    <option value={code} key={code}>
-                      {title}
-                    </option>
-                  )
-                })}
-              </MultiSelectInput>
-            </div>
-
+            {
+              //<div className='control is-one-third column'>
+              //  <label className='heading'>Attendances</label>
+              //  <MultiSelectInput
+              //    ref={attendanceRef}
+              //    name='attendances'
+              //    size='6'
+              //    className='is-fullwidth'
+              //    handleChange={handleChange}
+              //    value={filters.attendances}
+              //  >
+              //    {ATTENDANCE_TYPES.map((attendace) => {
+              //      const { title, key } = attendace
+              //      return (
+              //        <option value={key} key={key}>
+              //          {title}
+              //        </option>
+              //      )
+              //    })}
+              //  </MultiSelectInput>
+              //</div>
+              //
+              //<div className='control is-one-third column'>
+              //  <label className='heading'>Items</label>
+              //  <MultiSelectInput
+              //    ref={itemRef}
+              //    name='items'
+              //    size='6'
+              //    className='is-fullwidth'
+              //    handleChange={handleChange}
+              //    value={filters.items}
+              //  >
+              //    {ITEM_CODES.map((item) => {
+              //      const { code, title } = item
+              //      return (
+              //        <option value={code} key={code}>
+              //          {code} {title}
+              //        </option>
+              //      )
+              //    })}
+              //  </MultiSelectInput>
+              //</div>
+            }
             <div className='control column'>
               <div className='control mb-2'>
                 <label className='heading'>Term</label>
@@ -204,6 +239,8 @@ export default function DisciplineSummary() {
                   <option value={2}>Term 2</option>
                 </SelectInput>
               </div>
+            </div>
+            <div className='control column'>
               <div className='control'>
                 <label className='heading'>Start Date</label>
 
@@ -215,7 +252,7 @@ export default function DisciplineSummary() {
                   handleChange={handleChange}
                 />
               </div>
-              <div className='control mt-2'>
+              <div className='control'>
                 <label className='heading'>End Date</label>
 
                 <DateInput
@@ -229,29 +266,33 @@ export default function DisciplineSummary() {
             </div>
           </form>
 
-          <p className='help is-info'>
-            To select / deselect multiple classes or students, press and hold
-            down Ctrl (Window) or ⌘ (macOS) key and click the items.
-          </p>
-          <div className='my-2'>
-            <button
-              ref={buttonRef}
-              className='button is-info'
-              onClick={handleSubmitFilter}
-            >
-              Get Data
-            </button>
-          </div>
+          <button
+            ref={buttonRef}
+            className='button is-info'
+            onClick={handleSubmitFilter}
+          >
+            Get Data
+          </button>
         </div>
       ) : (
         <></>
       )}
+      <div className='tags'>
+        {ITEM_CODES.map((item) => {
+          const { code, title } = item
+          return (
+            <span key={code} className='tag is-light is-info'>
+              {code} {title}
+            </span>
+          )
+        })}
+      </div>
       <div className='table-container'>
         {url ? (
           <DataTable
             ref={tableRef}
             columns={columns}
-            url={url}
+            url={{ url, method: 'POST' }}
             options={options}
           />
         ) : (

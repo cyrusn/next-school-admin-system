@@ -11,6 +11,28 @@ import {
 
 export const BASE_MARK = 65
 
+export function mergeAccumulateAndCurrentDataToSingleObject(
+  accumulateData,
+  currentData
+) {
+  const modifiedCurrentData = currentData.map(convertSingleData)
+
+  return accumulateData.map((accData) => {
+    const { id, attributes: accumulatedAttributes } = convertSingleData(accData)
+    const result = { id, accumulatedAttributes }
+    const { regno } = accumulatedAttributes
+    const found = modifiedCurrentData.find((c) => {
+      const { attributes } = c
+      return attributes.regno == regno
+    })
+
+    if (found) {
+      result.currentAttributes = found.attributes
+    }
+    return result
+  })
+}
+
 export function addConductDetailToSummaryData(data) {
   return data.map(convertSingleData)
 }

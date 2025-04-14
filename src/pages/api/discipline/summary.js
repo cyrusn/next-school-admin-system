@@ -1,13 +1,23 @@
 import { getSession } from 'next-auth/react'
 import { DateTime } from 'luxon'
 import param from 'jquery-param'
-import { when } from 'jquery'
 const TOKEN = process.env.STRAPI_API_KEY
 const Authorization = `Bearer ${TOKEN}`
 const BASE_URL = 'https://careers.liping.edu.hk/strapi/api'
-import { ROLE_ENUM } from '@/config/constant'
+
+import {
+  ROLE_ENUM,
+  TODAY,
+  ITEM_CODES,
+  ATTENDANCE_TYPES,
+  SECOND_TERM_START_DATE,
+  FIRST_TERM_START_DATE
+} from '@/config/constant'
 import { dataTableQueryStrapiConverter } from '@/lib/helper'
-import { addConductDetailToSummaryData } from '@/lib/conductDetail'
+import {
+  mergeAccumulateAndCurrentDataToSingleObject,
+  addConductDetailToSummaryData
+} from '@/lib/conductDetail'
 
 const getHandler = async (req, res) => {
   const schoolYear = req.query['filters[schoolYear]']
@@ -19,32 +29,93 @@ const getHandler = async (req, res) => {
     })
     return
   }
-  const { qs, draw } = dataTableQueryStrapiConverter(req.query)
+  const query = Object.assign({}, req.body, req.query)
+  const { qs, draw } = dataTableQueryStrapiConverter(query)
+
+  const { qs: accumulateQs, draw: accumulateDraw } =
+    dataTableQueryStrapiConverter(
+      Object.assign({}, query, {
+        [`filters[eventDate][$gte]`]:
+          term == 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE,
+        [`filters[eventDate][$lte]`]: TODAY
+      })
+    )
   try {
     const url = `${BASE_URL}/conducts/summary?${qs}`
-    const response = await fetch(url, {
-      headers: {
-        Authorization
-      }
-    })
+    const headers = {
+      Authorization
+    }
+    const response = await fetch(url, { headers })
     const json = await response.json()
 
-    const { meta, data } = json
+    const { data } = json
+    //const { pagination } = meta
+    //const { page, pageCount, pageSize, total } = pagination
+
+    const accumulateUrl = `${BASE_URL}/conducts/summary?${accumulateQs}`
+    const accumulateResponse = await fetch(accumulateUrl, { headers })
+    const accumulateJson = await accumulateResponse.json()
+    const { meta, data: accumulateData } = accumulateJson
+
     const modifiedData = addConductDetailToSummaryData(data)
+    const modifiedAccumulateData = addConductDetailToSummaryData(accumulateData)
+    const mergedResult = mergeAccumulateAndCurrentDataToSingleObject(
+      accumulateData,
+      data
+    )
 
     const { pagination } = meta
     const { page, pageCount, pageSize, total } = pagination
+    const unusedKeys = [
+      ...ITEM_CODES.map(({ code }) => code),
+      ...ATTENDANCE_TYPES.filter(({ key }) => key != 'earlyLeave').map(
+        ({ key }) => key
+      )
+    ]
+
+    const studentInfoKeys = [
+      'regno',
+      'id',
+      'classcode',
+      'classno',
+      'name',
+      'cname',
+      'sex',
+      'house',
+      'status'
+    ]
 
     const result = {
-      draw,
+      draw: accumulateDraw,
       recordsTotal: total,
       recordsFiltered: total,
-      data: modifiedData.map(({ id, attributes }) => ({
-        id,
-        schoolYear,
-        term,
-        ...attributes
-      }))
+      data: mergedResult.map(
+        ({ id, accumulatedAttributes, currentAttributes }) => {
+          const modifiedAccumulatedAttributes = Object.keys(
+            accumulatedAttributes
+          ).reduce((prev, key) => {
+            // accumulate wont show details
+            if (unusedKeys.includes(key)) return prev
+
+            if (studentInfoKeys.includes(key)) {
+              prev[key] == accumulatedAttributes[key]
+              return prev
+            }
+
+            prev[`acc${key[0].toUpperCase()}${key.slice(1)}`] =
+              accumulatedAttributes[key]
+            return prev
+          }, {})
+
+          return {
+            id,
+            schoolYear,
+            term,
+            ...modifiedAccumulatedAttributes,
+            ...currentAttributes
+          }
+        }
+      )
     }
 
     res.status(200).json(result)
@@ -55,6 +126,9 @@ const getHandler = async (req, res) => {
 }
 
 export default async function handler(req, res) {
+  const { method } = req
+  const body = { ...req.body }
+  delete req.body
   const session = await getSession({ req, method: 'GET' })
   if (!session) {
     return res.status(401).json({ message: 'Unauthorized' })
@@ -65,5 +139,6 @@ export default async function handler(req, res) {
   if (ROLE_ENUM[ROLE] < ROLE_ENUM['DC_TEAM']) {
     res.status(404).json({ message: 'Forbidden, only DC members can access.' })
   }
+  req.body = body
   await getHandler(req, res)
 }

@@ -63,6 +63,7 @@ const Navigator = () => {
 
       <NavbarDropdown title='School Admin' includedPaths={['announcement']}>
         <PageLink title='Announcement' href='/announcement' />
+        <PageLink title='Resource Booking' href='/resource' />
       </NavbarDropdown>
       {
         //<p className='menu-label'>ITAV</p>

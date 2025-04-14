@@ -18,13 +18,14 @@ import { UsersContext } from '@/context/usersContext'
 import { getDisplayName } from '@/lib/helper'
 import {
   TODAY,
-  COHORT_START_DATE,
   START_TERM_DATE,
   SCHOOL_YEAR,
   TERM,
   ITEM_CODES,
   MERIT_DEMERIT_CODES,
-  ROLE_ENUM
+  ROLE_ENUM,
+  FIRST_TERM_START_DATE,
+  SECOND_TERM_START_DATE
 } from '@/config/constant'
 
 export default function DisciplineRecord() {
@@ -72,10 +73,10 @@ export default function DisciplineRecord() {
       newFilters[name] = value
 
       if (name == 'term' && value == 1) {
-        newFilters['startDate'] = COHORT_START_DATE
+        newFilters['startDate'] = FIRST_TERM_START_DATE
       }
       if (name == 'term' && value == 2) {
-        newFilters['startDate'] = START_TERM_DATE
+        newFilters['startDate'] = SECOND_TERM_START_DATE
       }
       return newFilters
     })
