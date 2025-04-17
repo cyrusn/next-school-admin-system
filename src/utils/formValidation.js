@@ -31,7 +31,7 @@ export const validateForm = (formData, rules) => {
       newErrors[field] = 'Non zero number'
     }
 
-    if (field === 'email' && rule.email) {
+    if (rule.email) {
       const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       if (!regex.test(formData[field])) {
         newErrors[field] = 'Please enter a valid email address.'
@@ -43,6 +43,13 @@ export const validateForm = (formData, rules) => {
       if (dt.weekday === 6 || dt.weekday === 7) {
         newErrors[field] =
           'Please select a date that is not a Saturday or Sunday.'
+      }
+    }
+
+    if ('custom' in rule) {
+      const errorMsg = rule['custom'](formData, field)
+      if (errorMsg) {
+        newErrors[field] = errorMsg
       }
     }
   }
