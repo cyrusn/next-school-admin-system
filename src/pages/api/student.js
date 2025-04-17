@@ -8,7 +8,7 @@ const spreadsheetId = process.env.STUDENT_GOOGLE_SHEET_ID
 export default async function handler(req, res) {
   const session = await getSession({ req, method: 'GET' })
   if (!session) {
-    return res.status(401).json({ message: 'Unauthorized' })
+    return res.status(401).json({ error: 'Unauthorized' })
   }
   try {
     const studentData = await getSheetData(spreadsheetId, 'A1:I')
@@ -16,6 +16,6 @@ export default async function handler(req, res) {
     res.status(200).json(studentData.filter(({ isSkip }) => !isSkip))
   } catch (error) {
     console.error('Error accessing Google Sheets:', error)
-    res.status(500).json({ message: 'Error accessing Google Sheets' })
+    res.status(500).json({ error: 'Error accessing Google Sheets' })
   }
 }
