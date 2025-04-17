@@ -8,8 +8,8 @@ import 'datatables.net-select-bm'
 import 'datatables.net-buttons-bm'
 import 'datatables.net-buttons/js/buttons.html5'
 import 'datatables.net-buttons/js/buttons.print'
-import 'datatables.net-fixedcolumns-dt'
-import 'datatables.net-fixedheader-dt'
+import 'datatables.net-fixedcolumns-bm'
+import 'datatables.net-fixedheader-bm'
 
 const DataTableInstance = ({ columns, url, ref, options, className }) => {
   DataTable.use(DT)
@@ -17,7 +17,7 @@ const DataTableInstance = ({ columns, url, ref, options, className }) => {
   return (
     <DataTable
       ref={ref}
-      className={`table is-bordered is-striped is-narrow is-hoverable is-fullwidth ${className ? className : ''}`}
+      className={`table is-bordered striped is-narrow is-hoverable is-fullwidth ${className ? className : ''}`}
       columns={columns}
       ajax={url}
       options={options}

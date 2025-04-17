@@ -19,11 +19,11 @@ const NavbarDropdown = ({ includedPaths, title, children }) => {
   return (
     <div className='navbar-item has-dropdown is-hoverable'>
       <a
-        className={`navbar-link is-arrowless ${includedPaths?.includes(rootPath) ? 'has-text-weight-bold' : ''}`}
+        className={`navbar-link is-arrowless ${includedPaths?.includes(rootPath) ? 'has-text-weight-bold has-text-link' : ''}`}
       >
         {title}
       </a>
-      <div className='navbar-dropdown'>{children}</div>
+      <div className='navbar-dropdown is-boxed'>{children}</div>
     </div>
   )
 }
@@ -61,17 +61,29 @@ const Navigator = () => {
         </Link>
       </NavbarDropdown>
 
-      <NavbarDropdown title='School Admin' includedPaths={['announcement']}>
+      <NavbarDropdown
+        title='School Admin'
+        includedPaths={['announcement', 'resource']}
+      >
         <PageLink title='Announcement' href='/announcement' />
         <PageLink title='Resource Booking' href='/resource' />
+        <PageLink title='Student Profile' href='/profile' />
+        <PageLink title='Student Photos' href='/photos' />
+        <PageLink title='CPD Record' href='/cpd' />
       </NavbarDropdown>
-      {
-        //<p className='menu-label'>ITAV</p>
-        //<ul className='menu-list'></ul>
-        //<p className='menu-label'>Acadmemic</p>
-        //<ul className='menu-list'></ul>
-      }
-      <NavbarDropdown title='Discipline' includedPaths={['discipline']}>
+      <NavbarDropdown title='ITAV'>
+        <Link href='#' target='_blank' className='navbar-item'>
+          ITAV Booking (Green Form)
+        </Link>
+        <Link href='#' target='_blank' className='navbar-item'>
+          ITAV Repair Service
+        </Link>
+      </NavbarDropdown>
+      <NavbarDropdown
+        title='Discipline'
+        includedPaths={['discipline', 'attendance']}
+      >
+        <PageLink title='Attendance' href='/attendance' />
         <PageLink title='Conduct' href='/discipline' />
       </NavbarDropdown>
 
@@ -94,6 +106,14 @@ const Navigator = () => {
         //<p className='menu-label'>ECA</p>
         //<ul className='menu-list'></ul>
       }
+      <NavbarDropdown
+        title='ECA'
+        includedPaths={['registration', 'membership', 'postExam']}
+      >
+        <PageLink title='Club registration' href='/registration' />
+        <PageLink title='Membership Record' href='/membership' />
+        <PageLink title='Post Exam Activity' href='/postExam' />
+      </NavbarDropdown>
     </>
   )
 }

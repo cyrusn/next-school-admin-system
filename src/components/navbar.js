@@ -5,6 +5,7 @@ import { faHome } from '@fortawesome/free-solid-svg-icons'
 import Navigator from '../components/navigator'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import ThemeSelector from '@/components/themeSelector'
 
 const Navbar = () => {
   const { data: session, status } = useSession()
@@ -19,7 +20,7 @@ const Navbar = () => {
   }, [pathname])
 
   return (
-    <nav className='navbar is-light'>
+    <nav className='navbar is-transparent has-shadow'>
       <div className='navbar-brand'>
         <Link href='/' className='navbar-item has-text-weight-bold'>
           <span className='is-hidden-touch icon-text'>
@@ -59,6 +60,8 @@ const Navbar = () => {
         </div>
 
         <div className='navbar-end'>
+          <ThemeSelector />
+
           {session ? (
             <div className='navbar-item'>
               <h2>Welcome, {session.user.name}!</h2>
