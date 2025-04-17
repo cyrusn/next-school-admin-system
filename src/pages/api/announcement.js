@@ -12,14 +12,14 @@ const spreadsheetId = process.env.ANNOUNCEMENT_GOOGLE_SHEET_ID
 const postHandler = async (req, res) => {
   const { range, values } = req.body // Extract data from the request body
   if (!range) {
-    return res.status(404).json({ message: 'Required: range value' })
+    return res.status(404).json({ error: 'Required: range value' })
   }
 
   try {
     const result = await appendRows(spreadsheetId, range, values) // Call the appendRow function
     res.status(200).json(result) // Send back the response
   } catch (error) {
-    res.status(500).json({ message: error.message }) // Handle errors
+    res.status(500).json({ error }) // Handle errors
   }
 }
 
@@ -30,9 +30,9 @@ const deleteHandler = async (req, res) => {
   try {
     const result = await clearSheetData(spreadsheetId, range)
     res.status(200).json(result)
-  } catch (e) {
-    console.error('Error accessing Google Sheets:', e)
-    res.status(500).json({ message: 'Error accessing Google Sheets' })
+  } catch (error) {
+    console.error('Error accessing Google Sheets:', error)
+    res.status(500).json({ error })
   }
 }
 
@@ -93,7 +93,7 @@ const getHandler = async (req, res) => {
     res.status(200).json(data)
   } catch (error) {
     console.error('Error accessing Google Sheets:', error)
-    res.status(500).json({ message: 'Error accessing Google Sheets' })
+    res.status(500).json({ error })
   }
 }
 export default async function handler(req, res) {
@@ -102,7 +102,7 @@ export default async function handler(req, res) {
   delete req.body
   const session = await getSession({ req, method: 'GET' })
   if (!session) {
-    return res.status(401).json({ message: 'Unauthorized' })
+    return res.status(401).json({ error: 'Unauthorized' })
   }
 
   switch (method) {
