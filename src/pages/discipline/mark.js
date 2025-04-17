@@ -194,7 +194,7 @@ export default function DisciplineForm() {
     if (!response.ok) {
       setNotification({
         className: 'is-danger',
-        message: `Failed to submit data: ${result.message}`
+        message: `Failed to submit data: ${result.error}`
       })
       return
     }

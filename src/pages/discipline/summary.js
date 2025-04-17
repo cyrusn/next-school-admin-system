@@ -183,49 +183,6 @@ export default function DisciplineSummary() {
                 hold down Ctrl (Window) or ⌘ (macOS) key and click the items.
               </p>
             </div>
-            {
-              //<div className='control is-one-third column'>
-              //  <label className='heading'>Attendances</label>
-              //  <MultiSelectInput
-              //    ref={attendanceRef}
-              //    name='attendances'
-              //    size='6'
-              //    className='is-fullwidth'
-              //    handleChange={handleChange}
-              //    value={filters.attendances}
-              //  >
-              //    {ATTENDANCE_TYPES.map((attendace) => {
-              //      const { title, key } = attendace
-              //      return (
-              //        <option value={key} key={key}>
-              //          {title}
-              //        </option>
-              //      )
-              //    })}
-              //  </MultiSelectInput>
-              //</div>
-              //
-              //<div className='control is-one-third column'>
-              //  <label className='heading'>Items</label>
-              //  <MultiSelectInput
-              //    ref={itemRef}
-              //    name='items'
-              //    size='6'
-              //    className='is-fullwidth'
-              //    handleChange={handleChange}
-              //    value={filters.items}
-              //  >
-              //    {ITEM_CODES.map((item) => {
-              //      const { code, title } = item
-              //      return (
-              //        <option value={code} key={code}>
-              //          {code} {title}
-              //        </option>
-              //      )
-              //    })}
-              //  </MultiSelectInput>
-              //</div>
-            }
             <div className='control column'>
               <div className='control mb-2'>
                 <label className='heading'>Term</label>
@@ -287,18 +244,16 @@ export default function DisciplineSummary() {
           )
         })}
       </div>
-      <div className='table-container'>
-        {url ? (
-          <DataTable
-            ref={tableRef}
-            columns={columns}
-            url={{ url, method: 'POST' }}
-            options={options}
-          />
-        ) : (
-          <></>
-        )}
-      </div>
+      {url ? (
+        <DataTable
+          ref={tableRef}
+          columns={columns}
+          url={{ url, method: 'POST' }}
+          options={options}
+        />
+      ) : (
+        <></>
+      )}
     </>
   )
 }

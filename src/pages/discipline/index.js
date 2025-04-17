@@ -1,7 +1,7 @@
 export async function getServerSideProps() {
   return {
     redirect: {
-      destination: '/discipline/form', // Change this to the desired route
+      destination: '/discipline/mark', // Change this to the desired route
       permanent: false // Set to true for a permanent redirect (301)
     }
   }

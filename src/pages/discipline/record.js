@@ -292,7 +292,7 @@ export default function DisciplineRecord() {
     })
     if (!response.ok) {
       const json = await response.json()
-      console.error(json.message)
+      console.error(json.error)
       return
     }
     tableRef.current.dt().ajax.reload()
