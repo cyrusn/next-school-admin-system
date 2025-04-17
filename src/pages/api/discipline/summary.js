@@ -24,7 +24,7 @@ const getHandler = async (req, res) => {
   const term = req.query['filters[term]']
   if (!schoolYear || !term) {
     res.status(400).json({
-      message:
+      error:
         'The filter for schoolYear and Term must be present in the the query'
     })
     return
@@ -121,7 +121,7 @@ const getHandler = async (req, res) => {
     res.status(200).json(result)
   } catch (error) {
     console.error('Error accessing strapi server:', error)
-    res.status(500).json({ message: 'Error accessing strapi' })
+    res.status(500).json({ error: error.message })
   }
 }
 
@@ -131,13 +131,13 @@ export default async function handler(req, res) {
   delete req.body
   const session = await getSession({ req, method: 'GET' })
   if (!session) {
-    return res.status(401).json({ message: 'Unauthorized' })
+    return res.status(401).json({ error: 'Unauthorized' })
   }
 
   const ROLE = session?.user.info.role
 
   if (ROLE_ENUM[ROLE] < ROLE_ENUM['DC_TEAM']) {
-    res.status(404).json({ message: 'Forbidden, only DC members can access.' })
+    res.status(404).json({ error: 'Forbidden, only DC members can access.' })
   }
   req.body = body
   await getHandler(req, res)

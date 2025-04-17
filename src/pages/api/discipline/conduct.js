@@ -10,7 +10,6 @@ const BASE_URL = 'https://careers.liping.edu.hk/strapi/api'
 
 const getHandler = async (req, res) => {
   const { qs, draw } = dataTableQueryStrapiConverter(req.query)
-  console.log(qs)
   try {
     const url = `${BASE_URL}/conducts?${qs}`
     const response = await fetch(url, {
@@ -74,20 +73,17 @@ const postHandler = async (req, res) => {
       }
     })
 
+    const json = await response.json()
     if (!response.ok) {
-      const json = await response.json()
-
-      res.status(500).json({
-        message: 'Error accessing strapi server:' + JSON.stringify(json)
+      return res.status(500).json({
+        error: 'Error accessing strapi server:' + JSON.stringify(json)
       }) // Handle errors
     }
-
-    const json = await response.json()
 
     res.status(200).json(json) // Send back the response
   } catch (error) {
     console.error('Error accessing strapi server:', error)
-    res.status(500).json({ message: error.message }) // Handle errors
+    res.status(500).json({ error }) // Handle errors
   }
 }
 
@@ -97,7 +93,7 @@ export default async function handler(req, res) {
   delete req.body
   const session = await getSession({ req, method: 'GET' })
   if (!session) {
-    return res.status(401).json({ message: 'Unauthorized' })
+    return res.status(401).json({ error: 'Unauthorized' })
   }
 
   switch (method) {
