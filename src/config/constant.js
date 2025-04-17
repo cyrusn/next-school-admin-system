@@ -9,6 +9,18 @@ export const START_TERM_DATE =
   TERM == 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE
 export const TIMEZONE = 'Asia/Hong_Kong'
 
+export const SPECIAL_ACKNOWLEDGE_EMAIL_MAPPER = {
+  'Career and Life Planning Activity Room': 'lpcyn@liping.edu.hk',
+  'Library Activity Room': 'lpkpf@liping.edu.hk,lpypl@liping.edu.hk',
+  'English Centre': 'lpycl@liping.edu.hk',
+  'Band Room': 'lpsfs@liping.edu.hk',
+  Notebook: 'itsupport@liping.edu.hk',
+  'iPad (Delivery)': 'itsupport@liping.edu.hk',
+  'iPad (Self-Service)': 'itsupport@liping.edu.hk',
+  "60' Television (Fixed on G03)": 'itsupport@liping.edu.hk',
+  "75' Television (Movable)": 'itsupport@liping.edu.hk'
+}
+
 export const TODAY = DateTime.now()
   .setZone('Asia/Hong_Kong')
   .toFormat('yyyy-MM-dd')
