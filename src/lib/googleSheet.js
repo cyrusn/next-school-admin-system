@@ -56,18 +56,13 @@ export async function appendRows(spreadsheetId, range, values) {
     values
   }
 
-  try {
-    const auth = await getAuth()
-    const response = await sheets.spreadsheets.values.append({
-      auth,
-      spreadsheetId,
-      range,
-      valueInputOption: 'USER_ENTERED',
-      resource
-    })
-    return response.data // Return the response data
-  } catch (error) {
-    console.error('Error appending row:', error)
-    throw new Error('Failed to append row')
-  }
+  const auth = await getAuth()
+  const response = await sheets.spreadsheets.values.append({
+    auth,
+    spreadsheetId,
+    range,
+    valueInputOption: 'USER_ENTERED',
+    resource
+  })
+  return response.data // Return the response data
 }
