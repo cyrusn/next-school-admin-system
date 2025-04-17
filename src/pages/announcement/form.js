@@ -13,7 +13,7 @@ import TargetType from './components/form/targetType'
 import Target from './components/form/target'
 import AnnouncedBy from './components/form/announcedBy'
 import Content from './components/form/target/content'
-import ConfirmButton from './components/form/confirmButton'
+import ConfirmButton from '@/components/form/confirmButton'
 
 export default function FormPage() {
   const { data: session } = useSession()
@@ -131,7 +131,7 @@ export default function FormPage() {
 
       const result = await response.json()
       if (!response.ok) {
-        throw new Error(result.message)
+        throw new Error(result.error)
       }
 
       setNotification({
@@ -153,14 +153,14 @@ export default function FormPage() {
     <>
       <AnnoucnementNav />
       <Notification {...notification} />
-      <form id='form' onSubmit={handleSubmit}>
+      <form id='form'>
         <DataTag {...{ formData, errors, handleChange, min: minDate() }} />
         <From {...{ formData, errors, handleChange }} />
         <TargetType {...{ formData, errors, handleChange }} />
         <Target {...{ formData, errors, handleChange }} />
         <AnnouncedBy {...{ formData, errors, handleChange }} />
         <Content {...{ formData, errors, handleChange }} />
-        <ConfirmButton isDisabled={isDisabled} />
+        <ConfirmButton isDisabled={isDisabled} handleSubmit={handleSubmit} />
       </form>
     </>
   )

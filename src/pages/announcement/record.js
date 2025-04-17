@@ -9,6 +9,7 @@ import _ from 'lodash'
 
 import Box from './components/record/box'
 import AnnoucnementNav from './components/nav'
+import { fetchData } from 'next-auth/client/_utils'
 
 export default function Record() {
   const { data: session, status } = useSession()
@@ -42,7 +43,9 @@ export default function Record() {
       })
 
       if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`)
+        throw new Error(
+          `Error: ${response.status} ${response.statusText} ${response.error}`
+        )
       }
 
       const json = await response.json()
@@ -54,7 +57,7 @@ export default function Record() {
       setNotification({ ...defaultNotification })
       setAnnouncements(announcements)
     } catch (error) {
-      console.error('Error fetching data:', error.message)
+      console.error('Error fetching data:', error)
 
       setNotification({
         className: 'is-danger',
@@ -62,38 +65,42 @@ export default function Record() {
       })
     }
   }
+  async function fetchData() {
+    const url = `/api/announcement?start_date=${startDate}`
+    try {
+      const response = await fetch(url)
+
+      if (!response.ok) {
+        throw new Error('Unauthorized access or error fetching data')
+      }
+
+      const data = await response.json()
+      const groupedResult = _.groupBy(data, 'date')
+      setNotification({ className: 'is-warning', message: '' })
+      setAnnouncements(groupedResult)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      setNotification({
+        className: 'is-danger',
+        message: error.message
+      })
+    }
+  }
+
+  const onClick = async () => {
+    await fetchData()
+  }
 
   useEffect(() => {
     if (session) {
-      const url = `/api/announcement?start_date=${startDate}`
       setNotification({
         className: 'is-warning',
         message: 'Loading ...'
       })
 
-      async function fetchData() {
-        try {
-          const response = await fetch(url)
-
-          if (!response.ok) {
-            throw new Error('Unauthorized access or error fetching data')
-          }
-
-          const data = await response.json()
-          const groupedResult = _.groupBy(data, 'date')
-          setNotification({ className: 'is-warning', message: '' })
-          setAnnouncements(groupedResult)
-        } catch (error) {
-          console.error('Error fetching data:', error.message)
-          setNotification({
-            className: 'is-danger',
-            message: error.message
-          })
-        }
-      }
       fetchData()
     }
-  }, [session, startDate])
+  }, [])
 
   return (
     <>
@@ -101,8 +108,8 @@ export default function Record() {
       <AnnoucnementNav />
       <Notification {...notification} />
 
-      <div className='field'>
-        <div className='control'>
+      <div className='field has-addons'>
+        <div className='control is-expanded'>
           <input
             name='startFrom'
             type='date'
@@ -110,6 +117,11 @@ export default function Record() {
             value={startDate}
             onChange={onChangeDate}
           />
+        </div>
+        <div class='control'>
+          <button class='button is-success' onClick={onClick}>
+            Search
+          </button>
         </div>
       </div>
 
