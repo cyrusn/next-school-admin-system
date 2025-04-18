@@ -13,7 +13,7 @@ export const UsersContextProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const usersResponse = await fetch('/api/teacher')
+      const usersResponse = await fetch('/api/teachers')
       const usersData = await usersResponse.json()
 
       localStorage.setItem('users', JSON.stringify(usersData))

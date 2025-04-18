@@ -181,7 +181,7 @@ export default function DisciplineRecord() {
   const handleSubmitFilter = async () => {
     const { startDate, endDate, classcodes, regnos, teacher } = filters
     let newUrl = ''
-    newUrl += `/api/discipline/conduct?filters[schoolYear]=${SCHOOL_YEAR}`
+    newUrl += `/api/discipline/conducts?filters[schoolYear]=${SCHOOL_YEAR}`
     newUrl += `&filters[eventDate][$gte]=${startDate}&filters[eventDate][$lte]=${endDate}`
 
     if (teacher) {
@@ -287,7 +287,7 @@ export default function DisciplineRecord() {
       }
       return (api += `&filters[id][$in][${n}]=${id}`)
     }, '')
-    const response = await fetch(`/api/discipline/conduct?${qs}`, {
+    const response = await fetch(`/api/discipline/conducts?${qs}`, {
       method: 'DELETE'
     })
     if (!response.ok) {

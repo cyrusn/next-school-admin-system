@@ -22,7 +22,7 @@ export default function Availability({
       `${startTime.slice(0, 10)}T${endTime}:00.000+08:00`
     )
     const items = resources.map(({ resourceEmail }) => ({ id: resourceEmail }))
-    const response = await fetch('/api/calendar/freebusy', {
+    const response = await fetch('/api/calendars/freebusy', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

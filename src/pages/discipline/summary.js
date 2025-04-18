@@ -48,7 +48,7 @@ export default function DisciplineSummary() {
   const handleSubmitFilter = async () => {
     const { classcodes, term, startDate, endDate } = filters
     let newUrl = ''
-    newUrl += `/api/discipline/summary?filters[schoolYear]=${SCHOOL_YEAR}&filters[term]=${term}&filters[status]=ACTIVE`
+    newUrl += `/api/discipline/summaries?filters[schoolYear]=${SCHOOL_YEAR}&filters[term]=${term}&filters[status]=ACTIVE`
     if (startDate) {
       newUrl += `&filters[eventDate][$gte]=${startDate}`
     }
