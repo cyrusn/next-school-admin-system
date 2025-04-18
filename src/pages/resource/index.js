@@ -2,7 +2,10 @@ import { useState, useEffect, useContext, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import _ from 'lodash'
 
-import Notification from '@/components/notification'
+import Notification, {
+  notificationWrapper,
+  defaultNotification
+} from '@/components/notification'
 import ConfirmButton from '@/components/form/confirmButton'
 import { TODAY } from '@/config/constant'
 import { validateForm } from '@/utils/formValidation' // Import the validation function
@@ -42,10 +45,13 @@ const Resource = () => {
   const [formData, setFormData] = useState({ ...defaultFormData })
   const [errors, setErrors] = useState({})
   const calendarRef = useRef(null)
-  const [notification, setNotification] = useState({
-    className: 'is-warning',
-    message: 'hello'
-  })
+  const [notification, setNotification] = useState({ ...defaultNotification })
+  const {
+    setErrorMessage,
+    setLoadingMessage,
+    setSuccessMessage,
+    clearMessage
+  } = notificationWrapper(setNotification)
 
   const validationRules = {
     resourceType: { required: true },
@@ -110,8 +116,8 @@ const Resource = () => {
 
   const handleSubmit = async () => {
     try {
-      setNotification({ className: 'is-warning', message: 'Loading...' })
-      const response = await fetch('./api/calendar', {
+      setLoadingMessage()
+      const response = await fetch('/api/calendars', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -124,12 +130,9 @@ const Resource = () => {
       }
       setFormData({ ...defaultFormData })
       calendarRef.current.src += ''
-      setNotification({ message: '' })
+      clearMessage()
     } catch (error) {
-      setNotification({ className: 'is-danger', message: error.message })
-      setTimeout(() => {
-        setNotification({ message: '' })
-      }, 5000)
+      setErrorMessage(error.message)
     }
   }
 
@@ -142,48 +145,44 @@ const Resource = () => {
     }
   }, [formData.resourceEmail, formData.resourceType, resources])
 
-  useEffect(() => {
-    const getResources = async () => {
-      setNotification({
-        className: 'is-warning',
-        message: 'Loading ...'
-      })
-      try {
-        const response = await fetch('/api/resource/list')
-        const data = await response.json()
-        const excludedResources = [
-          'Visual Art Room 1',
-          'Visual Art Room 2',
-          'Music Room',
-          'Biology Lab',
-          'Physics Lab',
-          'Chemistry Lab',
-          'IS Lab',
-          'Computer Room',
-          'Geography Room'
-        ]
-        setResources(
-          _.groupBy(
-            data.items.filter(
-              ({ resourceName }) => !excludedResources.includes(resourceName)
-            ),
-            'resourceType'
-          )
+  const getResources = async () => {
+    setLoadingMessage()
+    try {
+      const response = await fetch('/api/resources/list')
+      const data = await response.json()
+      const excludedResources = [
+        'Visual Art Room 1',
+        'Visual Art Room 2',
+        'Music Room',
+        'Biology Lab',
+        'Physics Lab',
+        'Chemistry Lab',
+        'IS Lab',
+        'Computer Room',
+        'Geography Room'
+      ]
+      setResources(
+        _.groupBy(
+          data.items.filter(
+            ({ resourceName }) => !excludedResources.includes(resourceName)
+          ),
+          'resourceType'
         )
-      } catch (error) {
-        setNotification({
-          className: 'is-danger',
-          message: error.message
-        })
-      } finally {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        })
-        setNotification({ message: '' })
-      }
+      )
+    } catch (error) {
+      setErrorMessage(error.message)
+    } finally {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
+      clearMessage()
     }
+  }
+
+  useEffect(() => {
     getResources()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

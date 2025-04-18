@@ -1,7 +1,10 @@
 import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
-import Notification from '@/components/notification'
+import Notification, {
+  notificationWrapper,
+  defaultNotification
+} from '@/components/notification'
 import Link from 'next/link'
 
 import { DateTime } from 'luxon'
@@ -25,6 +28,12 @@ export default function Record() {
   }
 
   const [notification, setNotification] = useState({ ...defaultNotification })
+  const {
+    setErrorMessage,
+    setLoadingMessage,
+    setSuccessMessage,
+    clearMessage
+  } = notificationWrapper(setNotification)
 
   const onChangeDate = (e) => {
     const date = e.target.value
@@ -32,13 +41,10 @@ export default function Record() {
   }
 
   const onDelete = async (date, range) => {
-    setNotification({
-      className: 'is-warning',
-      message: 'Loading ...'
-    })
+    setLoadingMessage()
 
     try {
-      const response = await fetch(`/api/announcement?range=${range}`, {
+      const response = await fetch(`/api/announcements?range=${range}`, {
         method: 'DELETE'
       })
 
@@ -54,20 +60,19 @@ export default function Record() {
         return event.range == range
       })
 
-      setNotification({ ...defaultNotification })
+      clearMessage()
       setAnnouncements(announcements)
     } catch (error) {
       console.error('Error fetching data:', error)
 
-      setNotification({
-        className: 'is-danger',
-        message: error.message
-      })
+      setErrorMessage(error.message)
     }
   }
   async function fetchData() {
-    const url = `/api/announcement?start_date=${startDate}`
+    const url = `/api/announcements?start_date=${startDate}`
     try {
+      setLoadingMessage()
+
       const response = await fetch(url)
 
       if (!response.ok) {
@@ -76,14 +81,11 @@ export default function Record() {
 
       const data = await response.json()
       const groupedResult = _.groupBy(data, 'date')
-      setNotification({ className: 'is-warning', message: '' })
+      clearMessage()
       setAnnouncements(groupedResult)
     } catch (error) {
       console.error('Error fetching data:', error)
-      setNotification({
-        className: 'is-danger',
-        message: error.message
-      })
+      setErrorMessage(error.message)
     }
   }
 
@@ -92,14 +94,8 @@ export default function Record() {
   }
 
   useEffect(() => {
-    if (session) {
-      setNotification({
-        className: 'is-warning',
-        message: 'Loading ...'
-      })
-
-      fetchData()
-    }
+    fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -118,8 +114,8 @@ export default function Record() {
             onChange={onChangeDate}
           />
         </div>
-        <div class='control'>
-          <button class='button is-success' onClick={onClick}>
+        <div className='control'>
+          <button className='button is-success' onClick={onClick}>
             Search
           </button>
         </div>

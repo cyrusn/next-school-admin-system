@@ -16,7 +16,10 @@ import {
 import { validateForm } from '@/utils/formValidation' // Import the validation function
 import { StudentsContext } from '@/context/studentContext'
 
-import Notification from '@/components/notification'
+import Notification, {
+  notificationWrapper,
+  defaultNotification
+} from '@/components/notification'
 import SelectInput from '@/components/form/selectInput'
 import NumberInput from '@/components/form/numberInput'
 import DateInput from '@/components/form/dateInput'
@@ -71,10 +74,8 @@ export default function DisciplineForm() {
     regnos: { nonEmpty: true }
   }
 
-  const [notification, setNotification] = useState({
-    className: 'is-warning',
-    message: ''
-  })
+  const [notification, setNotification] = useState({ ...defaultNotification })
+  const notify = notificationWrapper(setNotification)
 
   const getItemsOptions = (index) => {
     const type = rows[index].type
@@ -161,7 +162,7 @@ export default function DisciplineForm() {
   }
 
   const handleSubmit = async () => {
-    setNotification({ className: 'is-warning', message: 'Loading' })
+    notify('Loading...')
     const data = rows.reduce((prev, row, index) => {
       const { regnos, mark, itemCode, eventDate, description } = row
 
@@ -179,7 +180,7 @@ export default function DisciplineForm() {
       return prev
     }, [])
 
-    const response = await fetch('/api/discipline/conduct', {
+    const response = await fetch('/api/discipline/conducts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -192,16 +193,14 @@ export default function DisciplineForm() {
 
     const result = await response.json()
     if (!response.ok) {
-      setNotification({
-        className: 'is-danger',
-        message: `Failed to submit data: ${result.error}`
-      })
+      notify(`Failed to submit data: ${result.error}`, 'is-danger', 5000)
       return
     }
-    setNotification({
-      className: 'is-success',
-      message: `Data submitted successfully: ${JSON.stringify(result)}`
-    })
+    notify(
+      `Data submitted successfully: ${JSON.stringify(result)}`,
+      'is-success',
+      5000
+    )
     router.push('/discipline/record')
   }
 

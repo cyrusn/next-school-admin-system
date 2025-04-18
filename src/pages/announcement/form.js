@@ -5,7 +5,10 @@ import { DateTime } from 'luxon'
 import { validateForm } from '@/utils/formValidation' // Import the validation function
 import { TIMEZONE } from '@/config/constant'
 
-import Notification from '@/components/notification'
+import Notification, {
+  notificationWrapper,
+  defaultNotification
+} from '@/components/notification'
 import AnnoucnementNav from './components/nav'
 import DataTag from './components/form/date'
 import From from './components/form/from'
@@ -43,10 +46,13 @@ export default function FormPage() {
   const [formData, setFormData] = useState({ ...defaultFormDataState })
   const [errors, setErrors] = useState({})
   const [isDisabled, setIsDisabled] = useState(true)
-  const [notification, setNotification] = useState({
-    className: 'is-warning',
-    message: ''
-  })
+  const [notification, setNotification] = useState({ ...defaultNotification })
+  const {
+    setErrorMessage,
+    setLoadingMessage,
+    setSuccessMessage,
+    clearMessage
+  } = notificationWrapper(setNotification)
 
   const handleChange = (e) => {
     const { name, value, options } = e.target
@@ -103,14 +109,11 @@ export default function FormPage() {
   const handleSubmit = async (e) => {
     e.preventDefault() // Prevent default form submission
     if (isDisabled) {
-      setNotification({
-        className: 'is-danger',
-        message: 'Invalid data in form'
-      })
+      setErrorMessage('Invalid data in form')
       return
     }
 
-    setNotification({ className: 'is-warning', message: 'Loading' })
+    setLoadingMessage()
 
     try {
       const timestamp = now.toISO()
@@ -121,7 +124,7 @@ export default function FormPage() {
       ]
       const range = 'A1:I' // Specify your range
 
-      const response = await fetch('/api/announcement', {
+      const response = await fetch('/api/announcements', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -134,18 +137,15 @@ export default function FormPage() {
         throw new Error(result.error)
       }
 
-      setNotification({
-        className: 'is-success',
-        message: `Data submitted successfully: ${JSON.stringify(result)}`
-      })
+      setSuccessMessage(
+        `Data submitted successfully: ${JSON.stringify(result)}`
+      )
+
       // Clear form fields
       setFormData({ ...defaultFormDataState })
       router.push('/announcement/record')
     } catch (error) {
-      setNotification({
-        className: 'is-danger',
-        message: `Failed to submit data: ${error}`
-      })
+      setErrorMessage(`Failed to submit data: ${error.message}`)
     }
   }
 
