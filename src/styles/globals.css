@@ -2,6 +2,17 @@
 @import url('datatables.net-bm');
 @import url('datatables.net-buttons-bm');
 @import url('datatables.net-select-bm');
-@import url('datatables.net-responsive-dt');
-@import url('datatables.net-fixedcolumns-dt');
-@import url('datatables.net-fixedheader-dt');
+@import url('datatables.net-responsive-bm');
+@import url('datatables.net-fixedcolumns-bm');
+@import url('datatables.net-fixedheader-bm');
+
+table.dataTable thead tr > .dtfc-fixed-start,
+table.dataTable thead tr > .dtfc-fixed-end,
+table.dataTable tfoot tr > .dtfc-fixed-start,
+table.dataTable tfoot tr > .dtfc-fixed-end,
+table.dataTable tbody tr > .dtfc-fixed-start,
+table.dataTable tbody tr > .dtfc-fixed-end,
+table.dataTable.fixedHeader-floating,
+table.dataTable.fixedHeader-locked {
+  background-color: var(--bulma-table-row-hover-background-color);
+}
