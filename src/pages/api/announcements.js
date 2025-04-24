@@ -1,12 +1,12 @@
 import {
   getSheetData,
-  batchGetSheetData,
+  batchGetSheetDataByRow,
   appendRows,
   clearSheetData
 } from '@/lib/googleSheet'
-import { convertRowsToCollection } from '@/lib/helper'
 import { getSession } from 'next-auth/react'
 import { DateTime } from 'luxon'
+
 const spreadsheetId = process.env.ANNOUNCEMENT_GOOGLE_SHEET_ID
 
 const postHandler = async (req, res) => {
@@ -69,26 +69,12 @@ const getHandler = async (req, res) => {
       .map((rowNo) => {
         return `A${rowNo}:I${rowNo}`
       })
-    const sheetData = await batchGetSheetData(spreadsheetId, [
+    const sheetData = await batchGetSheetDataByRow(spreadsheetId, [
       'A1:I1',
       ...ranges
     ])
 
-    const rows = sheetData.valueRanges.reduce((prev, cur, index) => {
-      const { values, range } = cur
-
-      if (index == 0) {
-        const row = values[0].map((v) => v.toLowerCase())
-
-        prev.push(['range', ...row])
-        return prev
-      }
-
-      prev.push([range, ...values[0]])
-      return prev
-    }, [])
-
-    const data = convertRowsToCollection(rows).filter(({ skip }) => !skip)
+    const data = sheetData.filter(({ skip }) => !skip)
 
     res.status(200).json(data)
   } catch (error) {
@@ -96,6 +82,7 @@ const getHandler = async (req, res) => {
     res.status(500).json({ error })
   }
 }
+
 export default async function handler(req, res) {
   const { method } = req
   const body = { ...req.body }
