@@ -99,9 +99,7 @@ export default function Availability({
               </div>
             </div>
           </div>
-        ) : (
-          <></>
-        )}
+        ) : null}
       </div>
     </div>
   )

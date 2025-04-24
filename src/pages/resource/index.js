@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import _ from 'lodash'
 
@@ -172,10 +172,6 @@ const Resource = () => {
     } catch (error) {
       setErrorMessage(error.message)
     } finally {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      })
       clearMessage()
     }
   }
@@ -260,9 +256,7 @@ const Resource = () => {
           />
           <ConfirmButton isDisabled={isDisabled} handleSubmit={handleSubmit} />
         </>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </>
   )
 }

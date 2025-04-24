@@ -5,7 +5,7 @@ export default function SelectResourceType(props) {
   const { types } = props
   const [resourceTypes, setResourceTypes] = useState([])
 
-  if (!types.length) return <></>
+  if (!types.length) return null
 
   return (
     <div className='field is-horizontal'>

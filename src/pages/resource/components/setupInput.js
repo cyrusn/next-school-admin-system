@@ -42,9 +42,7 @@ const SetupInput = ({ value, handleChange, name }) => {
                 <span className='has-text-success'>successfully</span>{' '}
               </p>
             </div>
-          ) : (
-            <></>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

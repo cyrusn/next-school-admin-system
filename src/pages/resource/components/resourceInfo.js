@@ -20,9 +20,7 @@ const ResourceInfo = ({ resource }) => {
           <span>
             (<span>{floorSection}</span>)
           </span>
-        ) : (
-          <></>
-        )}
+        ) : null}
         <div className='help is-danger has-text-weight-normal'>
           Please check if the classroom is not used for normal lesson before
           booking it.
@@ -43,9 +41,7 @@ const ResourceInfo = ({ resource }) => {
               <span className='tag is-success'>{floorName}</span>
             </div>
           </div>
-        ) : (
-          <></>
-        )}
+        ) : null}
 
         {floorSection ? (
           <div className='control'>
@@ -54,9 +50,7 @@ const ResourceInfo = ({ resource }) => {
               <span className='tag is-warning'>{floorSection}</span>
             </div>
           </div>
-        ) : (
-          <></>
-        )}
+        ) : null}
       </div>
     </div>
   )

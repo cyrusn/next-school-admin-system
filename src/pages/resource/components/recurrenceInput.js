@@ -79,9 +79,7 @@ const RecurrenceInput = ({ handleChange, formData, errors }) => {
             </div>
           </div>
         </div>
-      ) : (
-        <></>
-      )}
+      ) : null}
 
       {rruleType == 'RDATE' ||
       rruleType == 'CUSTOM' ||
@@ -102,9 +100,7 @@ const RecurrenceInput = ({ handleChange, formData, errors }) => {
             </div>
           </div>
         </div>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </>
   )
 }
