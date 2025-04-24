@@ -10,8 +10,8 @@ export const notificationWrapper = (setNotification) => {
     setNotification({ className, message })
     if (duration) {
       setTimeout(() => {
-        setNotification({ ...defaultNotification }, duration)
-      })
+        setNotification({ ...defaultNotification })
+      }, 5000)
     }
   }
 
@@ -21,7 +21,7 @@ export const notificationWrapper = (setNotification) => {
       notifier(message, 'is-danger', duration)
     },
     setLoadingMessage() {
-      notifier('Loading ...')
+      notifier('Loading ...', 'is-warning')
     },
     setSuccessMessage(message, duration = 5000) {
       notifier(message, 'is-success', duration)
