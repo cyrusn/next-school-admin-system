@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 
 import GoogleProvider from 'next-auth/providers/google'
-import { getUserEmails } from '../../../lib/userInfos'
+import { getUserInfos } from '../../../lib/userInfos'
 
 export default NextAuth({
   providers: [
@@ -14,7 +14,7 @@ export default NextAuth({
     async signIn({ user }) {
       // Check if the user is allowed
 
-      const users = await getUserEmails()
+      const users = await getUserInfos()
       const found = users.find(({ email }) => email == user.email)
 
       if (found) {
