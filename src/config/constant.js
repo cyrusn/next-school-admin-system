@@ -319,3 +319,50 @@ export const REASON_TYPES = [
   { key: 'TRUANCY', cTitle: '曠課', title: 'Truancy' },
   { key: 'OTHERS', cTitle: '其他', title: 'Others' }
 ]
+
+export const CATEGORIES = [
+  { name: 'Award', cname: '獎項', code: 'AWARD' },
+  { name: 'Competition', cname: '比賽', code: 'COMP' },
+  { name: 'Course', cname: '課程', code: 'COURSE' },
+  { name: 'Field Trip', cname: '考察', code: 'FT' },
+  { name: 'Performing Arts', cname: '表演藝術', code: 'ARTS' },
+  { name: 'Service', cname: '服務', code: 'SERVICE' },
+  { name: 'Talk', cname: '講座', code: 'TALK' },
+  { name: 'Visit', cname: '參觀', code: 'VISIT' },
+  { name: 'Workshop', cname: '工作坊', code: 'WS' },
+  { name: 'Others', cname: '其他', code: 'OTHERS' }
+]
+
+export const COMPONENTS = [
+  { name: 'National Education', cname: '國民教育', code: 'NE' },
+  { name: 'STEAM Education', cname: 'STEAM教育', code: 'ST' },
+  { name: 'Language Education', cname: '語文教育', code: 'LE' },
+  { name: 'Physical Development', cname: '體育發展', code: 'PD' },
+  { name: 'Intellectual Development', cname: '智育發展', code: 'ID' },
+  { name: 'Moral and Civic Education', cname: '德育及公民教育', code: 'MCE' },
+  { name: 'Community Service', cname: '社會服務', code: 'CS' },
+  { name: 'Aesthetic Development', cname: '藝術發展', code: 'AD' },
+  { name: 'Career-related Experiences', cname: '與工作有關的經驗', code: 'CE' },
+  { name: 'Others', cname: '其他', code: 'OTHERS' }
+]
+
+export const COMMITTEES_AND_KLAS = [
+  'Committee - Academic Affairs Committee',
+  'Committee - Career and Life Planning Committee',
+  'Committee - ECA Committee',
+  'Committee - External Liaison Team',
+  'Committee - Home Affairs Committee',
+  'Committee - IT and AV Management Team',
+  'Committee - Moral Development Council',
+  'Committee - Pastoral Care Council',
+  'Committee - Professional Development Team',
+  'Committee - Student Support Committee',
+  'KLA - Arts Education',
+  'KLA - Chinese',
+  'KLA - English',
+  'KLA - Personal, Social & Humanities Education',
+  'KLA - Mathematics',
+  'KLA - Physical Education',
+  'KLA - Science',
+  'KLA - Technology Education'
+]
