@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { DateTime } from 'luxon'
 import _ from 'lodash'
 import { useSession } from 'next-auth/react'
@@ -14,7 +14,7 @@ import {
   TIMEZONE
 } from '@/config/constant'
 import { validateForm } from '@/utils/formValidation' // Import the validation function
-import { StudentsContext } from '@/context/studentContext'
+import { useStudentsContext } from '@/context/studentContext'
 
 import Notification, {
   notificationWrapper,
@@ -52,7 +52,7 @@ export default function DisciplineForm() {
   const MIN_DATE =
     ROLE_ENUM[ROLE] == ROLE_ENUM['DC_ADMIN'] ? START_TERM_DATE : LAST_MONDAY
 
-  const { students } = useContext(StudentsContext)
+  const { students } = useStudentsContext()
   const groupedStudents = _.groupBy(students, 'classcode')
   const classcodes = Object.keys(groupedStudents)
 
@@ -75,7 +75,8 @@ export default function DisciplineForm() {
   }
 
   const [notification, setNotification] = useState({ ...defaultNotification })
-  const notify = notificationWrapper(setNotification)
+  const { setLoadingMessage, setErrorMessage, setSuccessMessage } =
+    notificationWrapper(setNotification)
 
   const getItemsOptions = (index) => {
     const type = rows[index].type
@@ -162,7 +163,7 @@ export default function DisciplineForm() {
   }
 
   const handleSubmit = async () => {
-    notify('Loading...')
+    setLoadingMessage()
     const data = rows.reduce((prev, row, index) => {
       const { regnos, mark, itemCode, eventDate, description } = row
 
@@ -193,14 +194,11 @@ export default function DisciplineForm() {
 
     const result = await response.json()
     if (!response.ok) {
-      notify(`Failed to submit data: ${result.error}`, 'is-danger', 5000)
+      setErrorMessage(`Failed to submit data: ${result.error}`)
+
       return
     }
-    notify(
-      `Data submitted successfully: ${JSON.stringify(result)}`,
-      'is-success',
-      5000
-    )
+    setSuccessMessage(`Data submitted successfully: ${JSON.stringify(result)}`)
     router.push('/discipline/record')
   }
 
@@ -326,23 +324,21 @@ export default function DisciplineForm() {
                     value={rows[index]['regnos']}
                     disabled={!rows[index]['classcodes'].length}
                   >
-                    {rows[index].classcodes.length ? (
-                      students
-                        .filter((s) =>
-                          rows[index].classcodes.includes(s.classcode)
-                        )
-                        .map((s) => {
-                          const classcodeAndNo = `${s.classcode}${String(s.classno).padStart(2, 0)}`
-                          const displayName = `${classcodeAndNo} ${s.cname || s.ename}`
-                          return (
-                            <option value={s.regno} key={s.regno}>
-                              {displayName}
-                            </option>
+                    {rows[index].classcodes.length
+                      ? students
+                          .filter((s) =>
+                            rows[index].classcodes.includes(s.classcode)
                           )
-                        })
-                    ) : (
-                      <></>
-                    )}
+                          .map((s) => {
+                            const classcodeAndNo = `${s.classcode}${String(s.classno).padStart(2, 0)}`
+                            const displayName = `${classcodeAndNo} ${s.cname || s.ename}`
+                            return (
+                              <option value={s.regno} key={s.regno}>
+                                {displayName}
+                              </option>
+                            )
+                          })
+                      : null}
                   </MultiSelectInput>
                 </div>
 

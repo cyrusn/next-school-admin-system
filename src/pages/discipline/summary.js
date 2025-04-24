@@ -1,8 +1,8 @@
 import DisciplineNav from './components/nav'
-import { useContext, useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { columns as defaultColumns } from './components/summary/columns'
 import DataTable from '@/components/dataTable'
-import { StudentsContext } from '@/context/studentContext'
+import { useStudentsContext } from '@/context/studentContext'
 import _ from 'lodash'
 
 import {
@@ -38,7 +38,7 @@ export default function DisciplineSummary() {
     items: [],
     term: TERM
   }
-  const { students } = useContext(StudentsContext)
+  const { students } = useStudentsContext()
   const [isShowFilters, setIsShowFilters] = useState(true)
 
   const [filters, setFilters] = useState({ ...defaultFilters })
@@ -231,9 +231,7 @@ export default function DisciplineSummary() {
             Get Data
           </button>
         </div>
-      ) : (
-        <></>
-      )}
+      ) : null}
       <div className='tags'>
         {ITEM_CODES.map((item) => {
           const { code, title } = item
@@ -251,9 +249,7 @@ export default function DisciplineSummary() {
           url={{ url, method: 'POST' }}
           options={options}
         />
-      ) : (
-        <></>
-      )}
+      ) : null}
     </>
   )
 }

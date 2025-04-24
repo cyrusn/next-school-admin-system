@@ -1,5 +1,5 @@
 // discipline record show all conduct relate to user in the given period of time
-import { useContext, useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { DateTime } from 'luxon'
 import $ from 'jquery'
@@ -12,9 +12,10 @@ import SelectInput from '@/components/form/selectInput'
 import DateInput from '@/components/form/dateInput'
 import DataTable from '@/components/dataTable'
 import DisciplineNav from './components/nav'
+import Modal from './components/modal'
 
-import { StudentsContext } from '@/context/studentContext'
-import { UsersContext } from '@/context/usersContext'
+import { useStudentsContext } from '@/context/studentContext'
+import { useUsersContext } from '@/context/usersContext'
 import { getDisplayName } from '@/lib/helper'
 import {
   TODAY,
@@ -31,8 +32,8 @@ import {
 export default function DisciplineRecord() {
   const { data: session, status } = useSession()
   const { role: ROLE, initial: INITIAL } = session.user.info
-  const { students } = useContext(StudentsContext)
-  const { users } = useContext(UsersContext)
+  const { students } = useStudentsContext()
+  const { users } = useUsersContext()
 
   const [url, setUrl] = useState('')
   const [isModalActive, setIsModalActive] = useState(false)
@@ -207,6 +208,13 @@ export default function DisciplineRecord() {
 
   const options = {
     dom: '<"level" <"level-left"l> <"level-right" B> > frtip',
+
+    layout: {
+      topStart: 'pageLength',
+      topEnd: ['buttons'],
+      bottomStart: 'info',
+      bottomEnd: 'paging'
+    },
     rowCallback: function (tr, rowData) {
       if (rowData.informedAt && ROLE_ENUM[ROLE] < ROLE_ENUM['DC_ADMIN']) {
         tr.classList.add('unselectable')
@@ -309,19 +317,19 @@ export default function DisciplineRecord() {
     // update DataTable on start
     if (isFirstRun.current) {
       handleSubmitFilter()
-    }
 
-    const events = ['select', 'deselect']
-    events.forEach((event) => {
-      tableRef.current?.dt().on(event, (e, dt, type, indexes) => {
-        selectedRows.current = dt
-          .rows({
-            selected: true
-          })
-          .data()
-          .toArray()
+      const events = ['select', 'deselect']
+      events.forEach((event) => {
+        tableRef.current?.dt().on(event, (e, dt, type, indexes) => {
+          selectedRows.current = dt
+            .rows({
+              selected: true
+            })
+            .data()
+            .toArray()
+        })
       })
-    })
+    }
   })
 
   return (
@@ -370,21 +378,19 @@ export default function DisciplineRecord() {
                 handleChange={handleChange}
                 value={filters.regnos}
               >
-                {filters.classcodes.length ? (
-                  students
-                    .filter((s) => filters.classcodes.includes(s.classcode))
-                    .map((s) => {
-                      const classcodeAndNo = `${s.classcode}${String(s.classno).padStart(2, 0)}`
-                      const displayName = `${classcodeAndNo}-${s.cname || s.ename}`
-                      return (
-                        <option value={s.regno} key={s.regno}>
-                          {displayName}
-                        </option>
-                      )
-                    })
-                ) : (
-                  <></>
-                )}
+                {filters.classcodes.length
+                  ? students
+                      .filter((s) => filters.classcodes.includes(s.classcode))
+                      .map((s) => {
+                        const classcodeAndNo = `${s.classcode}${String(s.classno).padStart(2, 0)}`
+                        const displayName = `${classcodeAndNo}-${s.cname || s.ename}`
+                        return (
+                          <option value={s.regno} key={s.regno}>
+                            {displayName}
+                          </option>
+                        )
+                      })
+                  : null}
               </MultiSelectInput>
             </div>
 
@@ -402,9 +408,7 @@ export default function DisciplineRecord() {
                     <option value={2}>Term 2</option>
                   </SelectInput>
                 </div>
-              ) : (
-                <></>
-              )}
+              ) : null}
               <div className='control'>
                 <label className='heading'>Start Date</label>
 
@@ -452,9 +456,7 @@ export default function DisciplineRecord() {
                       .value()}
                   </SelectInput>
                 </div>
-              ) : (
-                <></>
-              )}
+              ) : null}
             </div>
           </form>
 
@@ -472,71 +474,16 @@ export default function DisciplineRecord() {
             </button>
           </div>
         </div>
-      ) : (
-        <></>
-      )}
+      ) : null}
 
-      <div className={`modal ${isModalActive && 'is-active'}`}>
-        <div className='modal-background'></div>
-        <div className='modal-content' style={{ width: '70%' }}>
-          <div className='box'>
-            <h1 className='title'>Confirm to delete the selected records?</h1>
-            <table className='table is-bordered is-striped is-narrow is-hoverable is-fullwidth'>
-              <thead>
-                <tr>
-                  <th>Event Date</th>
-                  <th>Student</th>
-                  <th>Item</th>
-                  <th>Mark</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedRows.current.map((row) => {
-                  const {
-                    classcode,
-                    classno,
-                    name,
-                    cname,
-                    eventDate,
-                    itemCode,
-                    mark
-                  } = row
-                  return (
-                    <tr key={row.regno}>
-                      <td>{eventDate}</td>
-                      <td>
-                        {getDisplayName({ classcode, classno, name, cname })}
-                      </td>
-                      <td>{getFullItemCode(itemCode)}</td>
-                      <td>{mark}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-            <div className='buttons has-addons'>
-              <button
-                className='button is-info'
-                onClick={confirmDelete}
-                disabled={selectedRows.current.length == 0}
-              >
-                Confirm
-              </button>
-              <button className='button is-warning' onClick={handleCancel}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-        <button
-          className='modal-close is-large'
-          aria-label='close'
-          onClick={() => {
-            setIsModalActive(false)
-          }}
-        ></button>
-      </div>
-
+      <Modal
+        isModalActive={isModalActive}
+        selectedRows={selectedRows.current}
+        confirmDelete={confirmDelete}
+        setIsModalActive={setIsModalActive}
+        handleCancel={handleCancel}
+        helper={{ getDisplayName, getFullItemCode }}
+      />
       {url ? (
         <DataTable
           ref={tableRef}
@@ -544,9 +491,7 @@ export default function DisciplineRecord() {
           url={url}
           options={options}
         />
-      ) : (
-        <></>
-      )}
+      ) : null}
     </div>
   )
 }
