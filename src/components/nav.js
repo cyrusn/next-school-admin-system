@@ -22,7 +22,18 @@ export default function Nav({ defaultPage, paths, title }) {
       <div className='level-end'>
         <div className='tabs is-toggle is-toggle-rounded'>
           <ul>
-            {paths.map(({ href, label }, key) => {
+            {paths.map(({ href, label, isExternalLink }, key) => {
+              if (isExternalLink) {
+                return (
+                  <li key={key}>
+                    {' '}
+                    <Link href={href} target='_blank'>
+                      {' '}
+                      {label}{' '}
+                    </Link>{' '}
+                  </li>
+                )
+              }
               const segments = href.split('/')
               const name = segments[segments.length - 1]
               return (
