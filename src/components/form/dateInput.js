@@ -9,7 +9,8 @@ const DateInput = ({
   max,
   className,
   disabled = false,
-  type = 'date'
+  type = 'date',
+  helptext
 }) => {
   return (
     <div className={`control ${className}`}>
@@ -24,6 +25,7 @@ const DateInput = ({
         value={value}
       />
       <ErrorLabel error={error} />
+      {helptext ? <p className='help is-info'>{helptext} </p> : null}
     </div>
   )
 }

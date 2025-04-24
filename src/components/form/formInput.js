@@ -7,6 +7,7 @@ const FormInput = (props) => {
     error,
     name,
     placeholder,
+    helptext,
     type = 'input'
   } = props
   return (
@@ -20,6 +21,7 @@ const FormInput = (props) => {
         placeholder={placeholder}
       />
       <ErrorLabel error={error} />
+      {helptext ? <p className='help is-info'>{helptext} </p> : null}
     </div>
   )
 }

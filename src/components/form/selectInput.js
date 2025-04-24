@@ -8,7 +8,8 @@ const SelectInput = ({
   handleChange,
   value,
   placeholder,
-  disabled = false
+  disabled = false,
+  helptext
 }) => {
   return (
     <div className={`control ${className}`}>
@@ -23,13 +24,12 @@ const SelectInput = ({
             <option value='' disabled>
               {placeholder}
             </option>
-          ) : (
-            <></>
-          )}
+          ) : null}
           {children}
         </select>
       </div>
       <ErrorLabel error={error} />
+      {helptext ? <p className='help is-info'>{helptext} </p> : null}
     </div>
   )
 }

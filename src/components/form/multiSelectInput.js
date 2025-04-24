@@ -4,18 +4,19 @@ const MultiSelectInput = ({
   name,
   error,
   handleChange,
-  size,
+  size = 6,
   value,
   children,
   className,
   placeholder,
   ref,
-  disabled = false
+  disabled = false,
+  helptext
 }) => {
   return (
-    <div className='control'>
+    <div className={`control ${className || ''}`}>
       <div
-        className={`select is-multiple ${error ? 'is-danger' : ''} ${className}`}
+        className={`select is-multiple is-fullwidth ${error ? 'is-danger' : ''}`}
       >
         <select
           ref={ref}
@@ -30,13 +31,12 @@ const MultiSelectInput = ({
             <option value='' disabled>
               {placeholder}
             </option>
-          ) : (
-            <></>
-          )}
+          ) : null}
           {children}
         </select>
       </div>
       <ErrorLabel error={error} />
+      {helptext ? <p className='help is-info'>{helptext} </p> : null}
     </div>
   )
 }

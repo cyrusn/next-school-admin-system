@@ -9,7 +9,8 @@ const NumberInput = ({
   name,
   min,
   max,
-  disabled = false
+  disabled = false,
+  helptext
 }) => {
   return (
     <div className={`control ${className}`}>
@@ -25,6 +26,7 @@ const NumberInput = ({
         value={value}
       />
       <ErrorLabel error={error} />
+      {helptext ? <p className='help is-info'>{helptext} </p> : null}
     </div>
   )
 }

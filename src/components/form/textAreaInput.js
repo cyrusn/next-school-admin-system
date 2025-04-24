@@ -9,7 +9,8 @@ const FormInput = (props) => {
     name,
     placeholder,
     rows = 3,
-    disabled = false
+    disabled = false,
+    helptext
   } = props
   return (
     <div className={`control ${className || ''}`}>
@@ -24,6 +25,7 @@ const FormInput = (props) => {
         placeholder={placeholder}
       />
       <ErrorLabel error={error} />
+      {helptext ? <p className='help is-info'>{helptext} </p> : null}
     </div>
   )
 }
