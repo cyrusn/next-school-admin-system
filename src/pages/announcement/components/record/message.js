@@ -1,9 +1,9 @@
 import { useSession } from 'next-auth/react'
-import { useState, useEffect, useContext } from 'react'
-import { UsersContext } from '@/context/usersContext.js'
+import { useState, useEffect } from 'react'
+import { useUsersContext } from '@/context/usersContext.js'
 
 const Message = ({ event, index, onDelete }) => {
-  const { users } = useContext(UsersContext)
+  const { users } = useUsersContext()
   const { data: session, status } = useSession()
   const { target, pic, from, content, range, date } = event
   const found = users.find((u) => u.initial == pic)

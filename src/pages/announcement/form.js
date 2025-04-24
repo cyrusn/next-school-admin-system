@@ -55,7 +55,7 @@ export default function FormPage() {
   } = notificationWrapper(setNotification)
 
   const handleChange = (e) => {
-    const { name, value, options } = e.target
+    const { name, value, options, type } = e.target
 
     setFormData((prevData) => {
       const newFormData = { ...prevData, [name]: value } // Update the formData object
@@ -63,20 +63,22 @@ export default function FormPage() {
       // Handle multi-select for target
       if (options) {
         const selectedOptions = Array.from(options).filter((o) => o.selected)
-        if (name === 'target' && selectedOptions.length !== 0) {
-          newFormData.target = selectedOptions.map((o) => o.value).join(',')
+        if (type == 'select-multiple' && selectedOptions.length !== 0) {
+          newFormData[name] = selectedOptions.map((o) => o.value)
         }
       }
 
       // Additional logic for other fields
       if (name === 'targetType') {
         newFormData.targetType = parseInt(value)
-        newFormData.target = ''
-      }
 
-      if (name === 'targetType' && parseInt(value) == 0) {
-        newFormData.targetType = parseInt(value)
-        newFormData.target = 'all'
+        if (parseInt(value) == 0) {
+          newFormData.target = 'all'
+        } else if (parseInt(value) == 2) {
+          newFormData.target = []
+        } else {
+          newFormData.target = ''
+        }
       }
 
       if (name === 'announcedBy') {
@@ -120,7 +122,16 @@ export default function FormPage() {
       const { date, from, targetType, target, announcedBy, content } = formData
       const pic = session.user.info.initial // Assuming this is part of your session
       const values = [
-        [timestamp, date, pic, from, targetType, target, announcedBy, content]
+        [
+          timestamp,
+          date,
+          pic,
+          from,
+          targetType,
+          Array.isArray(target) ? target.join(',') : target,
+          announcedBy,
+          content
+        ]
       ]
       const range = 'A1:I' // Specify your range
 
@@ -151,6 +162,7 @@ export default function FormPage() {
 
   return (
     <>
+      <pre>{JSON.stringify(formData, null, '\t')}</pre>
       <AnnoucnementNav />
       <Notification {...notification} />
       <form id='form'>

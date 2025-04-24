@@ -8,7 +8,7 @@ const Target = (props) => {
 
   switch (parseInt(targetType)) {
     case 0:
-      return <></>
+      return null
     case 1:
       return <House {...props} />
     case 2:

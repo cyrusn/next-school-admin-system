@@ -1,4 +1,14 @@
+import RadioInput from '@/components/form/radioInput'
+
 const targetType = ({ handleChange, formData }) => {
+  const elements = [
+    { value: 0, title: 'All' },
+    { value: 1, title: 'House' },
+    { value: 2, title: 'Forms' },
+    { value: 3, title: 'Committee' },
+    { value: 4, title: 'Club' },
+    { value: 5, title: 'Others' }
+  ]
   return (
     <div className='field is-horizontal'>
       <div className='field-label'>
@@ -7,66 +17,12 @@ const targetType = ({ handleChange, formData }) => {
       <div className='field-body'>
         <div className='field is-narrow'>
           <div className='control'>
-            <label className='radio'>
-              <input
-                type='radio'
-                value='0'
-                checked={parseInt(formData.targetType) == 0}
-                name='targetType'
-                onChange={handleChange}
-              />{' '}
-              All
-            </label>{' '}
-            <label className='radio'>
-              <input
-                type='radio'
-                value='1'
-                name='targetType'
-                checked={parseInt(formData.targetType) == 1}
-                onChange={handleChange}
-              />{' '}
-              House
-            </label>{' '}
-            <label className='radio'>
-              <input
-                type='radio'
-                value='2'
-                name='targetType'
-                checked={parseInt(formData.targetType) == 2}
-                onChange={handleChange}
-              />{' '}
-              Forms
-            </label>{' '}
-            <label className='radio'>
-              <input
-                type='radio'
-                value='3'
-                name='targetType'
-                checked={parseInt(formData.targetType) == 3}
-                onChange={handleChange}
-              />{' '}
-              Committee
-            </label>{' '}
-            <label className='radio'>
-              <input
-                type='radio'
-                value='4'
-                name='targetType'
-                checked={parseInt(formData.targetType) == 4}
-                onChange={handleChange}
-              />{' '}
-              Club
-            </label>{' '}
-            <label className='radio'>
-              <input
-                type='radio'
-                value='5'
-                name='targetType'
-                checked={parseInt(formData.targetType) == 5}
-                onChange={handleChange}
-              />{' '}
-              Others
-            </label>
+            <RadioInput
+              elements={elements}
+              name='targetType'
+              handleChange={handleChange}
+              checkedValue={parseInt(formData.targetType)}
+            />
           </div>
         </div>
       </div>

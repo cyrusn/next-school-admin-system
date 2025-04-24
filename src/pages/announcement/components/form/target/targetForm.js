@@ -12,6 +12,7 @@ const TargetForm = ({ handleChange, errors, formData }) => {
             name='target'
             error={errors.target}
             size='7'
+            value={formData.target}
             handleChange={handleChange}
           >
             {forms.map((f, i) => (
