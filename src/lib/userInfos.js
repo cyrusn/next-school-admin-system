@@ -4,7 +4,7 @@ import { getSheetData } from './googleSheet'
 
 let userInfos = []
 // Create a Provider component
-export async function getUserEmails() {
+export async function getUserInfos() {
   if (userInfos.length !== 0) return userInfos
 
   const spreadsheetId = process.env.TEACHER_GOOGLE_SHEET_ID
