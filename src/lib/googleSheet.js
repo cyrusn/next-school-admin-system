@@ -1,7 +1,66 @@
 import { google } from 'googleapis'
 import { convertRowsToCollection } from './helper'
 import { getAuth } from '../lib/googleApiAuth'
+import _ from 'lodash'
 const sheets = google.sheets('v4')
+import { DateTime } from 'luxon'
+import { TIMEZONE } from '@/config/constant'
+
+export async function batchUpdateSpreadsheet(
+  spreadsheetId,
+  headerRange,
+  rowObjects
+) {
+  try {
+    const auth = await getAuth()
+    const headerResponse = await sheets.spreadsheets.values.get({
+      auth,
+      spreadsheetId,
+      range: headerRange,
+      valueRenderOption: 'UNFORMATTED_VALUE',
+      dateTimeRenderOption: 'FORMATTED_STRING'
+    })
+    const headerRow = headerResponse.data.values[0]
+
+    const data = rowObjects.map((obj) => {
+      obj.timestamp = DateTime.now().setZone(TIMEZONE).toISO()
+      return {
+        range: obj.range,
+        values: [headerRow.map((key) => obj[key])]
+      }
+    })
+    console.log(data)
+    const response = await sheets.spreadsheets.values.batchUpdate({
+      auth,
+      spreadsheetId,
+      resource: { data, valueInputOption: 'USER_ENTERED' }
+    })
+
+    return response.data.totalUpdatedRows
+  } catch (error) {
+    console.error('Error fetching data from Google Sheets:', error)
+    throw error // Rethrow the error to handle it in the calling function
+  }
+}
+
+export async function getSheetKeyValueData(spreadsheetId, range) {
+  try {
+    const auth = await getAuth()
+    const response = await sheets.spreadsheets.values.get({
+      auth,
+      spreadsheetId,
+      range,
+      valueRenderOption: 'UNFORMATTED_VALUE',
+      dateTimeRenderOption: 'FORMATTED_STRING'
+    })
+
+    const rows = response.data.values
+    return _.fromPairs(rows)
+  } catch (error) {
+    console.error('Error fetching data from Google Sheets:', error)
+    throw error // Rethrow the error to handle it in the calling function
+  }
+}
 
 export async function getSheetData(spreadsheetId, range) {
   try {
@@ -9,7 +68,9 @@ export async function getSheetData(spreadsheetId, range) {
     const response = await sheets.spreadsheets.values.get({
       auth,
       spreadsheetId,
-      range
+      range,
+      valueRenderOption: 'UNFORMATTED_VALUE',
+      dateTimeRenderOption: 'FORMATTED_STRING'
     })
 
     const rows = response.data.values
@@ -19,17 +80,56 @@ export async function getSheetData(spreadsheetId, range) {
     throw error // Rethrow the error to handle it in the calling function
   }
 }
-
-export async function batchGetSheetData(spreadsheetId, ranges) {
+export async function batchGetSheetDataByColumn(spreadsheetId, ranges) {
   try {
     const auth = await getAuth()
     const response = await sheets.spreadsheets.values.batchGet({
       auth,
       spreadsheetId,
-      ranges
+      ranges,
+      majorDimension: 'COLUMNS',
+      valueRenderOption: 'UNFORMATTED_VALUE',
+      dateTimeRenderOption: 'FORMATTED_STRING'
+    })
+    const zippedResult = _.zip(
+      ...response.data.valueRanges.reduce((prev, { values }) => {
+        prev.push(...values)
+        return prev
+      }, [])
+    )
+    return convertRowsToCollection(zippedResult)
+  } catch (error) {
+    console.error('Error fetching data from Google Sheets:', error)
+    throw error // Rethrow the error to handle it in the calling function
+  }
+}
+
+export async function batchGetSheetDataByRow(spreadsheetId, ranges) {
+  try {
+    const auth = await getAuth()
+    const response = await sheets.spreadsheets.values.batchGet({
+      auth,
+      spreadsheetId,
+      ranges,
+      valueRenderOption: 'UNFORMATTED_VALUE',
+      dateTimeRenderOption: 'FORMATTED_STRING'
     })
 
-    return response.data
+    const rows = response.data.valueRanges.reduce((prev, cur, index) => {
+      const { values, range } = cur
+
+      if (index == 0) {
+        const row = values[0]
+
+        prev.push(['range', ...row])
+        return prev
+      }
+
+      prev.push([range, ...values[0]])
+      return prev
+    }, [])
+
+    return convertRowsToCollection(rows)
   } catch (error) {
     console.error('Error fetching data from Google Sheets:', error)
     throw error // Rethrow the error to handle it in the calling function
