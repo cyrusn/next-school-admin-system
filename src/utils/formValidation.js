@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import { TIMEZONE } from '@/config/constant'
+import { isEmpty } from 'lodash'
 /**
  * Validates the form data based on the provided validation rules.
  * @param {Object} formData - The form data to validate.
@@ -23,7 +24,7 @@ export const validateForm = (formData, rules) => {
         `Value must not be less than '${rule.minLength}' character length`
     }
 
-    if (rule.required && !formData[field]) {
+    if (rule.required && isEmpty(formData[field])) {
       newErrors[field] = 'Required'
     }
 
