@@ -128,7 +128,17 @@ const Resource = () => {
       if (!response.ok) {
         throw new Error(json.error)
       }
-      setFormData({ ...defaultFormData })
+      const { resourceType, resourceEmail, picEmail } = formData
+
+      setFormData(
+        Object.assign({}, defaultFormData, {
+          resourceType,
+          resourceEmail,
+          picEmail,
+          startTime,
+          endTime
+        })
+      )
       calendarRef.current.src += ''
       clearMessage()
     } catch (error) {
