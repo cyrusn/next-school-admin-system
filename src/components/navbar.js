@@ -66,9 +66,6 @@ const Navbar = () => {
           {session ? (
             <div className='navbar-item'>
               <h2>Welcome, {session.user.name}!</h2>
-              <a className='button is-danger' onClick={() => signOut()}>
-                Sign Out
-              </a>
             </div>
           ) : (
             <div className='navbar-item'>
@@ -77,6 +74,11 @@ const Navbar = () => {
               </a>
             </div>
           )}
+          <div className='navbar-item'>
+            <a className='button is-danger' onClick={() => signOut()}>
+              Sign Out
+            </a>
+          </div>
         </div>
       </div>
     </nav>

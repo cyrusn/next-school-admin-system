@@ -12,27 +12,18 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn({ user }) {
-      // Check if the user is allowed
-
       const users = await getUserInfos()
       const found = users.find(({ email }) => email == user.email)
 
-      if (found) {
-        user.info = found
-        return true // Allow sign in
-      }
+      if (found) return true // Allow sign in
 
       return false // Deny sign in
     },
-    async jwt({ token, user }) {
-      if (user?.info) {
-        token.info = user.info // Add user info to the token
-      }
-      return token // Return the modified token
-    },
-    async session({ session, token, user }) {
-      if (token?.info) {
-        session.user.info = token.info
+    async session({ session, token }) {
+      const users = await getUserInfos()
+      const found = users.find(({ email }) => email == session.user.email)
+      if (found) {
+        session.user.info = found
       }
       return session
     }

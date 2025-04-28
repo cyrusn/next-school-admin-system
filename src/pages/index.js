@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className='message is-success'>
       <div className='message-body'>
-        Welcome Back, {session?.user.info.initial}. Please select service from
+        Welcome Back, {session?.user?.info.initial}. Please select service from
         the menu to start.
       </div>
     </div>

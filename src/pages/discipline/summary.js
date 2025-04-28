@@ -1,6 +1,6 @@
 import DisciplineNav from './components/nav'
 import { useState, useEffect, useRef } from 'react'
-import { columns as defaultColumns } from './components/summary/columns'
+import { columns as defaultColumns } from '@/lib/discipline/summary/columns'
 import DataTable from '@/components/dataTable'
 import { useStudentsContext } from '@/context/studentContext'
 import _ from 'lodash'

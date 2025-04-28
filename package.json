@@ -23,17 +23,19 @@
     "datatables.net-react": "^1.0.0",
     "datatables.net-responsive-bm": "^3.0.4",
     "datatables.net-select-bm": "^3.0.0",
+    "formidable": "^3.5.4",
     "googleapis": "^148.0.0",
     "jquery": "^3.7.1",
     "jquery-param": "^1.2.4",
     "lodash": "^4.17.21",
     "luxon": "^3.6.0",
-    "next": "15.2.4",
+    "next": "^15.3.1",
     "next-auth": "^4.24.11",
+    "next-connect": "^1.0.0",
     "pdfmake": "^0.2.18",
     "postcss": "^8.5.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

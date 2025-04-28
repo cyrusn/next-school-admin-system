@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { isEmpty } from 'lodash'
+import { isEmpty } from '@/lib/helper'
 
 import Notification, {
   notificationWrapper,
@@ -10,11 +10,11 @@ import DataTable from '@/components/dataTable'
 
 import OleNav from './components/oleNav'
 import { inputMapper } from '@/components/form/inputMapper'
-import FilterBy from './components/filterBy'
 import EditEvent from './components/editEvent'
 import ButtonGroup from './components/buttonGroup'
 import Participants from './components/participants'
-import { columns } from './components/columns'
+import FilterBy from '@/lib/ole/filterBy'
+import { columns } from '@/lib/ole/columns'
 const OleEvent = () => {
   const { data: session, status } = useSession()
   const [notification, setNotification] = useState({ ...defaultNotification })
