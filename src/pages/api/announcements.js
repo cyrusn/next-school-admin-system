@@ -2,7 +2,7 @@ import {
   getSheetData,
   batchGetSheetDataByRow,
   appendRows,
-  clearSheetData
+  batchClearData
 } from '@/lib/googleSheet'
 import { getSession } from 'next-auth/react'
 import { DateTime } from 'luxon'
@@ -28,7 +28,7 @@ const deleteHandler = async (req, res) => {
   if (!range) return res.status(404).json({ message: 'Required: range value' })
 
   try {
-    const result = await clearSheetData(spreadsheetId, range)
+    const result = await batchClearData(spreadsheetId, range)
     res.status(200).json(result)
   } catch (error) {
     console.error('Error accessing Google Sheets:', error)
