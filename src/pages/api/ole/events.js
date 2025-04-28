@@ -1,6 +1,6 @@
 // Add event, Get events
 import { getSession } from 'next-auth/react'
-import { getAuth } from '@/lib/googleApiAuth'
+import { getAuth } from '@/utils/googleApiAuth'
 import {
   getSheetData,
   appendRows,
@@ -8,9 +8,9 @@ import {
   batchGetSheetDataByRow,
   batchUpdateSpreadsheet,
   batchClearData
-} from '@/lib/googleSheet'
+} from '@/utils/googleSheet'
 
-import { createFolder } from '@/lib/googleDrive'
+import { createFolder } from '@/utils/googleDrive'
 import { DateTime } from 'luxon'
 import _, { create } from 'lodash'
 import { TIMEZONE } from '@/config/constant'

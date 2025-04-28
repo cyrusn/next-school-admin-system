@@ -1,4 +1,4 @@
-import { getSheetData } from '@/lib/googleSheet'
+import { getSheetData } from '@/utils/googleSheet'
 import { convertRowsToCollection } from '@/lib/helper'
 import { getSession } from 'next-auth/react'
 import { DateTime } from 'luxon'

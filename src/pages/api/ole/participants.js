@@ -1,12 +1,12 @@
 // Add event, Get events
 import { getSession } from 'next-auth/react'
-import { getAuth } from '@/lib/googleApiAuth'
+import { getAuth } from '@/utils/googleApiAuth'
 import {
   getSheetData,
   batchGetSheetDataByColumn,
   batchGetSheetDataByRow,
   batchUpdateSpreadsheet
-} from '@/lib/googleSheet'
+} from '@/utils/googleSheet'
 const { OLE_GOOGLE_SHEET_ID } = process.env
 
 export const putHandler = async (req, res) => {

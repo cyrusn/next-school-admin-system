@@ -1,10 +1,10 @@
 // https://developers.google.com/workspace/drive/api/guides/mime-types
 import { google } from 'googleapis'
 import fs from 'fs'
-import { getAuth } from '../lib/googleApiAuth'
 const drive = google.drive('v3')
 import { DateTime } from 'luxon'
 import { TIMEZONE } from '@/config/constant'
+import { getAuth } from '@/utils/googleApiAuth'
 
 export async function createFolder(driveId, folderId, folderName) {
   const auth = await getAuth()

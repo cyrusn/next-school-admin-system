@@ -3,7 +3,7 @@ import {
   batchGetSheetDataByRow,
   appendRows,
   batchClearData
-} from '@/lib/googleSheet'
+} from '@/utils/googleSheet'
 import { getSession } from 'next-auth/react'
 import { DateTime } from 'luxon'
 

@@ -1,6 +1,6 @@
 import { google } from 'googleapis'
-import { convertRowsToCollection } from './helper'
-import { getAuth } from '../lib/googleApiAuth'
+import { convertRowsToCollection } from '@/lib/helper'
+import { getAuth } from '@/utils/googleApiAuth'
 import _ from 'lodash'
 const sheets = google.sheets('v4')
 import { DateTime } from 'luxon'

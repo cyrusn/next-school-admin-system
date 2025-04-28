@@ -1,4 +1,3 @@
-import { fa0 } from '@fortawesome/free-solid-svg-icons'
 import param from 'jquery-param'
 
 export function isEmpty(value) {

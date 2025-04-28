@@ -1,4 +1,4 @@
-import { getSheetData } from '../../lib/googleSheet'
+import { getSheetData } from '../../utils/googleSheet'
 import { getSession } from 'next-auth/react'
 
 export default async function handler(req, res) {

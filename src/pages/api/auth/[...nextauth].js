@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 
 import GoogleProvider from 'next-auth/providers/google'
-import { getUserInfos } from '../../../lib/userInfos'
+import { getUserInfos } from '../../../utils/userInfos'
 
 export default NextAuth({
   providers: [

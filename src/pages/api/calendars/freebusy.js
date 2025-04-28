@@ -1,5 +1,5 @@
 import { getSession } from 'next-auth/react'
-import { getAuth } from '@/lib/googleApiAuth'
+import { getAuth } from '@/utils/googleApiAuth'
 import { DateTime } from 'luxon'
 
 import { google } from 'googleapis'

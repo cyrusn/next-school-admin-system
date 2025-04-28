@@ -3,9 +3,9 @@ import { google } from 'googleapis'
 import { IncomingForm } from 'formidable'
 
 import { createRouter, expressWrapper } from 'next-connect'
-import { getAuth } from '@/lib/googleApiAuth'
+import { getAuth } from '@/utils/googleApiAuth'
 import { getSession } from 'next-auth/react'
-import { uploadFiles } from '@/lib/googleDrive'
+import { uploadFiles } from '@/utils/googleDrive'
 import path from 'path'
 import { warn } from 'console'
 
