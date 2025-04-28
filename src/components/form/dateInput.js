@@ -24,8 +24,8 @@ const DateInput = ({
         onChange={handleChange}
         value={value}
       />
-      <ErrorLabel error={error} />
       {helptext ? <p className='help is-info'>{helptext} </p> : null}
+      <ErrorLabel error={error} />
     </div>
   )
 }

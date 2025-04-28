@@ -18,7 +18,7 @@ export const inputMapper = (formInfo, inputInfo) => {
           {...{
             handleChange,
             name,
-            value: formData[name],
+            value: formData[name] || '',
             error: errors[name],
             ...options
           }}
@@ -30,7 +30,7 @@ export const inputMapper = (formInfo, inputInfo) => {
           {...{
             handleChange,
             name,
-            value: formData[name],
+            value: formData[name] || '',
             error: errors[name],
             ...options
           }}
@@ -54,7 +54,7 @@ export const inputMapper = (formInfo, inputInfo) => {
           {...{
             handleChange,
             name,
-            value: formData[name],
+            value: formData[name] || '',
             error: errors[name],
             ...options
           }}
@@ -66,7 +66,7 @@ export const inputMapper = (formInfo, inputInfo) => {
           {...{
             handleChange,
             name,
-            value: formData[name],
+            value: formData[name] || '',
             error: errors[name],
 
             ...options
@@ -81,7 +81,7 @@ export const inputMapper = (formInfo, inputInfo) => {
           {...{
             handleChange,
             name,
-            value: formData[name],
+            value: formData[name] || [],
             error: errors[name],
             ...options
           }}
@@ -92,20 +92,26 @@ export const inputMapper = (formInfo, inputInfo) => {
     case 'radio':
       return (
         <RadioInput
-          name={name}
-          elements={options.elements}
-          checkedValue={formData[name]}
-          handleChange={handleChange}
+          {...{
+            handleChange,
+            name,
+            checkedValue: formData[name],
+            error: errors[name],
+            ...options
+          }}
         />
       )
 
     case 'checkbox':
       return (
         <CheckboxInput
-          name={name}
-          elements={options.elements}
-          checkedValue={formData[name]}
-          handleChange={handleChange}
+          {...{
+            handleChange,
+            name,
+            checkedValue: formData[name],
+            error: errors[name],
+            ...options
+          }}
         />
       )
   }

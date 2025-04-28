@@ -20,8 +20,8 @@ const FormInput = (props) => {
         onChange={handleChange}
         placeholder={placeholder}
       />
-      <ErrorLabel error={error} />
       {helptext ? <p className='help is-info'>{helptext} </p> : null}
+      <ErrorLabel error={error} />
     </div>
   )
 }
