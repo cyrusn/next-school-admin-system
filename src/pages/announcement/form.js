@@ -162,7 +162,6 @@ export default function FormPage() {
 
   return (
     <>
-      <pre>{JSON.stringify(formData, null, '\t')}</pre>
       <AnnoucnementNav />
       <Notification {...notification} />
       <form id='form'>
