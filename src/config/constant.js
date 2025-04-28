@@ -4,7 +4,7 @@ export const FIRST_TERM_START_DATE =
 export const SECOND_TERM_START_DATE =
   process.env.NEXT_PUBLIC_SECOND_TERM_START_DATE
 export const SCHOOL_YEAR = process.env.NEXT_PUBLIC_SCHOOL_YEAR
-export const TERM = process.env.NEXT_PUBLIC_TERM
+export const TERM = parseInt(process.env.NEXT_PUBLIC_TERM)
 export const START_TERM_DATE =
   TERM == 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE
 export const TIMEZONE = 'Asia/Hong_Kong'
@@ -365,4 +365,18 @@ export const COMMITTEES_AND_KLAS = [
   'KLA - Physical Education',
   'KLA - Science',
   'KLA - Technology Education'
+]
+
+export const AWARD_TYPES = [
+  { key: 'SCHOLARSHIP', title: 'Scholarship' },
+  { key: 'CERTIFICATE', title: 'Certificate' },
+  { key: 'TROPHY', title: 'Trophy' },
+  { key: 'MEDAL', title: 'Medal' },
+  { key: 'PLAQUE', title: 'Plaque' },
+  { key: 'OTHER', title: 'Other' }
+]
+
+export const AWARD_STATUSES = [
+  { key: 'RECEIVED', title: 'Received' },
+  { key: 'WAITING', title: 'Waiting' }
 ]
