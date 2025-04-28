@@ -5,6 +5,7 @@ import _ from 'lodash'
 const sheets = google.sheets('v4')
 import { DateTime } from 'luxon'
 import { TIMEZONE } from '@/config/constant'
+import { when } from 'jquery'
 
 export async function batchUpdateSpreadsheet(
   spreadsheetId,
@@ -26,10 +27,14 @@ export async function batchUpdateSpreadsheet(
       obj.timestamp = DateTime.now().setZone(TIMEZONE).toISO()
       return {
         range: obj.range,
-        values: [headerRow.map((key) => obj[key])]
+        values: [
+          headerRow.map((key) => {
+            const value = obj[key]
+            return Array.isArray(value) ? value.join(',') : value
+          })
+        ]
       }
     })
-    console.log(data)
     const response = await sheets.spreadsheets.values.batchUpdate({
       auth,
       spreadsheetId,
@@ -92,8 +97,14 @@ export async function batchGetSheetDataByColumn(spreadsheetId, ranges) {
       dateTimeRenderOption: 'FORMATTED_STRING'
     })
     const zippedResult = _.zip(
-      ...response.data.valueRanges.reduce((prev, { values }) => {
-        prev.push(...values)
+      ...response.data.valueRanges.reduce((prev, { range, values }) => {
+        prev.push(...values, [
+          ...values[0].map((a, index) => {
+            if (index == 0) return 'range'
+            const row = index + 1
+            return `${range.split('!')[0]}!${row}:${row}`
+          })
+        ])
         return prev
       }, [])
     )
@@ -136,13 +147,13 @@ export async function batchGetSheetDataByRow(spreadsheetId, ranges) {
   }
 }
 
-export async function clearSheetData(spreadsheetId, range) {
+export async function batchClearData(spreadsheetId, ranges) {
   try {
     const auth = await getAuth()
-    const response = await sheets.spreadsheets.values.clear({
+    const response = await sheets.spreadsheets.values.batchClear({
       auth,
       spreadsheetId,
-      range
+      resource: { ranges }
     })
     return response.data
   } catch (error) {
@@ -153,7 +164,9 @@ export async function clearSheetData(spreadsheetId, range) {
 
 export async function appendRows(spreadsheetId, range, values) {
   const resource = {
-    values
+    values: values.map((row) =>
+      row.map((v) => (Array.isArray(v) ? v.join(',') : v))
+    )
   }
 
   const auth = await getAuth()
