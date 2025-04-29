@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
+import { when } from 'jquery'
 
 const Unauthorized = () => {
   const { data: session, status } = useSession()
@@ -8,13 +9,16 @@ const Unauthorized = () => {
 
   useEffect(() => {
     // Check if the session is loading
+    console.log(session, status)
     if (status === 'loading') return
 
     // If the user is logged in, redirect to the home page
     if (session) {
       router.push('/') // Redirect to home page
     }
-  }, [session, status, router])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session, status])
 
   return (
     <div className='notification is-danger is-light'>

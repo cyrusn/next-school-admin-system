@@ -12,20 +12,30 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn({ user }) {
-      const users = await getUserInfos()
-      const found = users.find(({ email }) => email == user.email)
+      try {
+        const users = await getUserInfos()
+        const found = users.find(({ email }) => email == user.email)
 
-      if (found) return true // Allow sign in
+        if (found) return true // Allow sign in
+      } catch (error) {
+        console.error(error)
+        return false
+      }
 
       return false // Deny sign in
     },
-    async session({ session, token }) {
-      const users = await getUserInfos()
-      const found = users.find(({ email }) => email == session.user.email)
-      if (found) {
-        session.user.info = found
+    async session({ session }) {
+      try {
+        const users = await getUserInfos()
+        const found = users.find(({ email }) => email == session.user?.email)
+        if (found) {
+          session.user.info = found
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        return session
       }
-      return session
     }
   },
   pages: {
