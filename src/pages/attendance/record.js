@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { ROLE_ENUM } from '@/config/constant'
 
-const Attendance = () => {
+const AttendanceRecord = () => {
   const { data: session } = useSession()
   const router = useRouter()
 
@@ -15,8 +15,8 @@ const Attendance = () => {
   return (
     <>
       <Nav />
-      <h1>Attendance</h1>
+      <h1>Record</h1>
     </>
   )
 }
-export default Attendance
+export default AttendanceRecord

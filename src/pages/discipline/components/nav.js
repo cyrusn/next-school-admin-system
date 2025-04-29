@@ -6,7 +6,7 @@ export default function DisciplineNav() {
   const { data: session, status } = useSession()
 
   const paths = [
-    { href: '/discipline/mark', label: 'Conduct Mark' },
+    { href: '/discipline/mark', label: 'Mark' },
     { href: '/discipline/meritDemerit', label: 'Merit / Demerit' },
     { href: '/discipline/record', label: 'Record' }
   ]
@@ -16,5 +16,5 @@ export default function DisciplineNav() {
     paths.push({ href: '/discipline/summary', label: 'Summary' })
   }
 
-  return <Nav paths={paths} title='Discipline' />
+  return <Nav paths={paths} title='Conduct' />
 }

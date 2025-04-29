@@ -57,7 +57,7 @@ const Navbar = () => {
 
       <div className={`navbar-menu ${isActive ? 'is-active' : ''}`}>
         <div className='navbar-start'>
-          <Navigator />
+          <Navigator user={session?.user?.info} />
         </div>
 
         <div className='navbar-end'>

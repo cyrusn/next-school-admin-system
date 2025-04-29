@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useRef } from 'react'
+import { ROLE_ENUM } from '@/config/constant'
 
 const calenderEventUrl = process.env.NEXT_PUBLIC_CALENDAR_EVENT_SPREADSHEET_URL
 const regularActivity = process.env.NEXT_PUBLIC_REGULAR_ACTIVITY_DOCUMENT_URL
@@ -28,7 +29,7 @@ const NavbarDropdown = ({ includedPaths, title, children }) => {
   )
 }
 
-const Navigator = () => {
+const Navigator = ({ user }) => {
   return (
     <>
       <NavbarDropdown title='General'>
@@ -83,7 +84,9 @@ const Navigator = () => {
         title='Discipline'
         includedPaths={['discipline', 'attendance']}
       >
-        <PageLink title='Attendance' href='/attendance' />
+        {ROLE_ENUM[user?.role] >= ROLE_ENUM['OFFICE_STAFF'] ? (
+          <PageLink title='Attendance' href='/attendance' />
+        ) : null}
         <PageLink title='Conduct' href='/discipline' />
       </NavbarDropdown>
 
