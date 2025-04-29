@@ -15,6 +15,7 @@ import {
 } from '@/config/constant'
 import { validateForm } from '@/utils/formValidation' // Import the validation function
 import { useStudentsContext } from '@/context/studentContext'
+import { getDisplayName } from '@/lib/helper'
 
 import Notification, {
   notificationWrapper,
@@ -330,8 +331,7 @@ export default function DisciplineForm() {
                             rows[index].classcodes.includes(s.classcode)
                           )
                           .map((s) => {
-                            const classcodeAndNo = `${s.classcode}${String(s.classno).padStart(2, 0)}`
-                            const displayName = `${classcodeAndNo} ${s.cname || s.ename}`
+                            const displayName = getDisplayName(s)
                             return (
                               <option value={s.regno} key={s.regno}>
                                 {displayName}
@@ -362,8 +362,9 @@ export default function DisciplineForm() {
                 .filter(({ regno }) => {
                   return rows[index].regnos.includes(regno)
                 })
-                .map(({ regno, classcode, classno, ename, cname }) => {
-                  const displayName = `${classcode}${String(classno).padStart(2, 0)} ${cname || ename}`
+                .map((s) => {
+                  const { regno } = s
+                  const displayName = getDisplayName(s)
                   return (
                     <span className='tag is-warning' key={regno}>
                       <span>{displayName}</span>

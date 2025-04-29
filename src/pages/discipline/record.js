@@ -317,20 +317,22 @@ export default function DisciplineRecord() {
     // update DataTable on start
     if (isFirstRun.current) {
       handleSubmitFilter()
-
-      const events = ['select', 'deselect']
-      events.forEach((event) => {
-        tableRef.current?.dt().on(event, (e, dt, type, indexes) => {
-          selectedRows.current = dt
-            .rows({
-              selected: true
-            })
-            .data()
-            .toArray()
-        })
-      })
     }
-  })
+
+    const events = ['select', 'deselect']
+    events.forEach((event) => {
+      tableRef.current?.dt().on(event, (e, dt, type, indexes) => {
+        console.log('setting selectedRows')
+        selectedRows.current = dt
+          .rows({
+            selected: true
+          })
+          .data()
+          .toArray()
+      })
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div>
