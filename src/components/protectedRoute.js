@@ -8,11 +8,12 @@ const ProtectedRoute = ({ children }) => {
   const router = useRouter()
 
   useEffect(() => {
-    if (status === 'loading') return 
+    if (status === 'loading') return
     if (!session) {
       router.push('/unauthorised')
     }
-  }, [session, status, router])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session, status])
 
   if (status === 'loading') return null
 
