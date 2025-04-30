@@ -128,7 +128,8 @@ const Resource = () => {
       if (!response.ok) {
         throw new Error(json.error)
       }
-      const { resourceType, resourceEmail, picEmail } = formData
+      const { resourceType, resourceEmail, picEmail, startTime, endTime } =
+        formData
 
       setFormData(
         Object.assign({}, defaultFormData, {
