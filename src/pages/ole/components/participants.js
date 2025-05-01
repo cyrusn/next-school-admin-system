@@ -2,7 +2,7 @@ import { when } from 'jquery'
 import { fetchData } from 'next-auth/client/_utils'
 import { useState, useRef, useEffect } from 'react'
 import DataTable from '@/components/dataTable'
-import EditParticipants from '@/lib/ole/editParticipants'
+import EditParticipants from './editParticipants'
 import AddParticipants from './addParticipants'
 import { getDisplayName } from '@/lib/helper'
 

@@ -13,7 +13,7 @@ import { inputMapper } from '@/components/form/inputMapper'
 import EditEvent from './components/editEvent'
 import ButtonGroup from './components/buttonGroup'
 import Participants from './components/participants'
-import FilterBy from '@/lib/ole/filterBy'
+import FilterBy from './components/filterBy'
 import { columns } from '@/lib/ole/columns'
 const OleEvent = () => {
   const { data: session, status } = useSession()
