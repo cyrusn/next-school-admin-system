@@ -15,16 +15,22 @@ export default function SelectResource(props) {
         <div className='field'>
           <SelectInput {...props}>
             <option value=''>Please select resource</option>
-            {resources.map((resource) => {
-              const { resourceEmail, resourceId, resourceName, floorSection } =
-                resource
+            {resources
+              .sort((a, b) => a.resourceName.localeCompare(b.resourceName))
+              .map((resource) => {
+                const {
+                  resourceEmail,
+                  resourceId,
+                  resourceName,
+                  floorSection
+                } = resource
 
-              return (
-                <option value={resourceEmail} key={resourceId}>
-                  {resourceName} {floorSection ? ` (${floorSection})` : ''}
-                </option>
-              )
-            })}
+                return (
+                  <option value={resourceEmail} key={resourceId}>
+                    {resourceName} {floorSection ? ` (${floorSection})` : ''}
+                  </option>
+                )
+              })}
           </SelectInput>
         </div>
       </div>
