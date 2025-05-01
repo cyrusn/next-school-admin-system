@@ -106,7 +106,7 @@ export default function MeritDemeritForm() {
       teacher: session.user?.info.initial
     }))
 
-    const response = await fetch('/api/discipline/conducts', {
+    const response = await fetch('/api/strapi/conducts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -148,7 +148,7 @@ export default function MeritDemeritForm() {
                 name='code'
                 error={errors['code']}
                 value={formData['code']}
-                handleChange={(e) => handleChange(e)}
+                handleChange={handleChange}
                 placeholder='Choose one'
               >
                 {MERIT_DEMERIT_CODES.filter(({ code, isDcOnly }) => {
@@ -176,14 +176,14 @@ export default function MeritDemeritForm() {
                 min={LAST_MONDAY}
                 value={formData['eventDate']}
                 error={errors['eventDate']}
-                handleChange={(e) => handleChange(e)}
+                handleChange={handleChange}
               />
               <TextAreaInput
                 className='mt-2'
                 name='description'
                 value={formData['description']}
                 error={errors['description']}
-                handleChange={(e) => handleChange(e)}
+                handleChange={handleChange}
                 placeholder='Please clearly state the reason for the deduction, otherwise it will be difficult to check the records.'
                 rows='10'
               />
@@ -195,7 +195,7 @@ export default function MeritDemeritForm() {
                 className='is-fullwidth'
                 name='classcodes'
                 size='10'
-                handleChange={(e) => handleChange(e)}
+                handleChange={handleChange}
                 error={errors['classcodes']}
                 value={formData['classcodes']}
                 disabled={!formData['code']}
@@ -217,7 +217,7 @@ export default function MeritDemeritForm() {
                 size='10'
                 className='is-fullwidth'
                 error={errors['regnos']}
-                handleChange={(e) => handleChange(e)}
+                handleChange={handleChange}
                 value={formData['regnos']}
                 disabled={!formData['classcodes'].length}
               >

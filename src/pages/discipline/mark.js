@@ -182,7 +182,7 @@ export default function DisciplineForm() {
       return prev
     }, [])
 
-    const response = await fetch('/api/discipline/conducts', {
+    const response = await fetch('/api/strapi/conducts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

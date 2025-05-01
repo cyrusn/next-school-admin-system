@@ -9,9 +9,10 @@ const Authorization = `Bearer ${TOKEN}`
 const BASE_URL = 'https://careers.liping.edu.hk/strapi/api'
 
 const getHandler = async (req, res) => {
+  const { database } = req.query
   const { qs, draw } = dataTableQueryStrapiConverter(req.query)
   try {
-    const url = `${BASE_URL}/conducts?${qs}`
+    const url = `${BASE_URL}/${database}?${qs}`
     const response = await fetch(url, {
       headers: {
         Authorization
@@ -46,7 +47,7 @@ const deleteHandler = async (req, res) => {
   const qs = param(query)
 
   try {
-    const response = await fetch(`${BASE_URL}/conducts?${qs}`, {
+    const response = await fetch(`${BASE_URL}/${database}?${qs}`, {
       method: 'DELETE',
       headers: {
         Authorization
@@ -64,7 +65,7 @@ const deleteHandler = async (req, res) => {
 const postHandler = async (req, res) => {
   const { data } = req.body
   try {
-    const response = await fetch(`${BASE_URL}/conducts`, {
+    const response = await fetch(`${BASE_URL}/${datatable}`, {
       method: 'POST',
       body: JSON.stringify({ data }),
       headers: {
