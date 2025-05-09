@@ -5,7 +5,7 @@ import { faUpload } from '@fortawesome/free-solid-svg-icons'
 import { last } from 'lodash'
 
 const AddPhotos = ({ notifier, selectedEvent }) => {
-  const folderId = last(selectedEvent.imageFolderUrl?.split('/'))
+  const folderId = last(selectedEvent?.imageFolderUrl?.split('/'))
 
   const [files, setFiles] = useState([])
   const [links, setLinks] = useState([])

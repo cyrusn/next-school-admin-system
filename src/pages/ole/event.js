@@ -76,6 +76,7 @@ const OleEvent = () => {
       tableRef.current?.dt().column(3).search('').draw()
       setIsEditEvent(false)
       setIsShowParticipants(false)
+      setIsAddPhoto(false)
       return
     }
 
