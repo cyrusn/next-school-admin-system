@@ -5,7 +5,7 @@ export const columns = [
     title: 'Title',
     orderable: false,
     data(data, type) {
-      const { title, pics, organization, imageFolderUrl, timestamp } = data
+      const { title, organization, imageFolderUrl, timestamp } = data
       if (type === 'set') {
         return
       }

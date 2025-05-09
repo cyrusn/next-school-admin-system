@@ -286,7 +286,6 @@ export default function EditParticipants({
 
   return (
     <div className='box'>
-      <pre>{JSON.stringify(formData, null, '\t')}</pre>
       <div className='notification is-size-5 is-link'>Edit Participants</div>
 
       <div className='field is-horizontal'>

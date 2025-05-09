@@ -1,5 +1,3 @@
-import { when } from 'jquery'
-import { fetchData } from 'next-auth/client/_utils'
 import { useState, useRef, useEffect } from 'react'
 import DataTable from '@/components/dataTable'
 import EditParticipants from './editParticipants'
@@ -7,20 +5,11 @@ import AddParticipants from './addParticipants'
 import { getDisplayName } from '@/lib/helper'
 
 export default function Participants({ selectedEvent, notifier }) {
-  const [participants, setParticipants] = useState([])
   const [selectedParticipants, setSelectedParticipants] = useState([])
   const [isAddParticipants, setIsAddParticipants] = useState(false)
   const [isEditParticipants, setIsEditParticipants] = useState(false)
   const eventId = selectedEvent?.eventId
   const tableRef = useRef(null)
-  const containerRef = useRef(null)
-
-  const {
-    setLoadingMessage,
-    setErrorMessage,
-    setSuccessMessage,
-    clearMessage
-  } = notifier
 
   const columns = [
     {
@@ -123,7 +112,7 @@ export default function Participants({ selectedEvent, notifier }) {
   useEffect(() => {
     const events = ['select', 'deselect']
     events.forEach((event) => {
-      tableRef.current?.dt().on(event, (e, dt, type, indexes) => {
+      tableRef.current?.dt().on(event, (_, dt) => {
         const selectedParticipants = dt
           .rows({
             selected: true
@@ -134,7 +123,7 @@ export default function Participants({ selectedEvent, notifier }) {
         setSelectedParticipants(selectedParticipants)
       })
     })
-  })
+  }, [])
 
   if (!eventId) return null
 

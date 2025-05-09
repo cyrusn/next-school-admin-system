@@ -1,7 +1,6 @@
 // discipline record show all conduct relate to user in the given period of time
 import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { DateTime } from 'luxon'
 import $ from 'jquery'
 import _ from 'lodash'
 
@@ -30,7 +29,7 @@ import {
 } from '@/config/constant'
 
 export default function DisciplineRecord() {
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const { role: ROLE, initial: INITIAL } = session.user.info
   const { students } = useStudentsContext()
   const { users } = useUsersContext()
@@ -55,8 +54,6 @@ export default function DisciplineRecord() {
   const classcodes = Object.keys(groupedStudents)
   const tableRef = useRef()
   const buttonRef = useRef()
-
-  const [conductData, setConductData] = useState([])
 
   const handleChange = (e) => {
     const { name, value, type, options } = e.target
@@ -234,7 +231,7 @@ export default function DisciplineRecord() {
       {
         text: 'Delete',
         className: 'is-danger',
-        action: function (e, dt, button, config) {
+        action: function () {
           setIsModalActive(true)
         }
       },
@@ -321,7 +318,7 @@ export default function DisciplineRecord() {
 
     const events = ['select', 'deselect']
     events.forEach((event) => {
-      tableRef.current?.dt().on(event, (e, dt, type, indexes) => {
+      tableRef.current?.dt().on(event, (_, dt) => {
         console.log('setting selectedRows')
         selectedRows.current = dt
           .rows({
@@ -332,7 +329,7 @@ export default function DisciplineRecord() {
       })
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isFirstRun.current])
 
   return (
     <div>

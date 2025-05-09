@@ -43,6 +43,7 @@ const getHandler = async (req, res) => {
 }
 
 const deleteHandler = async (req, res) => {
+  const { database } = req.query
   const query = req.query
   const qs = param(query)
 
@@ -63,9 +64,10 @@ const deleteHandler = async (req, res) => {
 }
 
 const postHandler = async (req, res) => {
+  const { database } = req.query
   const { data } = req.body
   try {
-    const response = await fetch(`${BASE_URL}/${datatable}`, {
+    const response = await fetch(`${BASE_URL}/${database}`, {
       method: 'POST',
       body: JSON.stringify({ data }),
       headers: {
@@ -73,6 +75,7 @@ const postHandler = async (req, res) => {
         'Content-Type': 'application/json'
       }
     })
+    console.log(response)
 
     const json = await response.json()
     if (!response.ok) {

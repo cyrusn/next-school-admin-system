@@ -1,39 +1,28 @@
 import { useSession } from 'next-auth/react'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 
 import Notification, {
   notificationWrapper,
   defaultNotification
 } from '@/components/notification'
-import Link from 'next/link'
 
 import { DateTime } from 'luxon'
 import _ from 'lodash'
 
 import Box from './components/record/box'
 import AnnoucnementNav from './components/nav'
-import { fetchData } from 'next-auth/client/_utils'
 
 export default function Record() {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const [announcements, setAnnouncements] = useState([])
 
   const dt = DateTime.now().setZone('Asia/Hong_Kong')
   const now = dt.toFormat('yyyy-MM-dd')
   const [startDate, setStartDate] = useState(now)
 
-  const defaultNotification = {
-    className: 'is-warning',
-    message: ''
-  }
-
   const [notification, setNotification] = useState({ ...defaultNotification })
-  const {
-    setErrorMessage,
-    setLoadingMessage,
-    setSuccessMessage,
-    clearMessage
-  } = notificationWrapper(setNotification)
+  const { setErrorMessage, setLoadingMessage, clearMessage } =
+    notificationWrapper(setNotification)
 
   const onChangeDate = (e) => {
     const date = e.target.value
@@ -53,8 +42,6 @@ export default function Record() {
           `Error: ${response.status} ${response.statusText} ${response.error}`
         )
       }
-
-      const json = await response.json()
 
       _.remove(announcements[date], (event) => {
         return event.range == range

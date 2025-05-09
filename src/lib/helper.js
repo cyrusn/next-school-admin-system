@@ -19,8 +19,11 @@ export const convertRowsToCollection = (rows) => {
   })
 }
 
-export const getDisplayName = ({ classcode, classno, name, cname }) => {
-  return `${classcode}${String(classno).padStart(2, '0')} ${cname || name}`
+export const getDisplayName = (student) => {
+  if (isEmpty(student)) return ''
+  const { classcode, classno, name, cname, ename } = student
+
+  return `${classcode}${String(classno).padStart(2, '0')} ${cname || name || ename}`
 }
 
 export const getUserInfo = (email, users) => {
@@ -32,7 +35,7 @@ export const getUserInfo = (email, users) => {
 }
 
 export const dataTableQueryStrapiConverter = (query) => {
-  const newQuery = Object.keys(query).reduce((prev, key, index) => {
+  const newQuery = Object.keys(query).reduce((prev, key) => {
     const orderRegex = /order\[(?<order>\d)\]\[column\]/
     const matchOrder = orderRegex.exec(key)
 

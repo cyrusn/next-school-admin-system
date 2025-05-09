@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { isEmpty } from '@/lib/helper'
+import { last } from 'lodash'
 
 import Notification, {
   notificationWrapper,
@@ -9,28 +10,25 @@ import Notification, {
 import DataTable from '@/components/dataTable'
 
 import OleNav from './components/oleNav'
-import { inputMapper } from '@/components/form/inputMapper'
 import EditEvent from './components/editEvent'
+import AddPhotos from './components/addPhotos'
 import ButtonGroup from './components/buttonGroup'
 import Participants from './components/participants'
 import FilterBy from './components/filterBy'
 import { columns } from '@/lib/ole/columns'
 const OleEvent = () => {
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const [notification, setNotification] = useState({ ...defaultNotification })
-  const {
-    setLoadingMessage,
-    setErrorMessage,
-    setSuccessMessage,
-    clearMessage
-  } = notificationWrapper(setNotification)
+  const { setLoadingMessage, setErrorMessage, clearMessage } =
+    notificationWrapper(setNotification)
 
-  const { role: ROLE, initial: INITIAL } = session.user.info
+  const { initial: INITIAL } = session.user.info
   const defaultFilter = { type: 'pics', value: INITIAL }
 
   const [filter, setFilter] = useState(defaultFilter)
   const [events, setEvents] = useState([])
   const [isEditEvent, setIsEditEvent] = useState(false)
+  const [isAddPhoto, setIsAddPhoto] = useState(false)
   const [isShowParticipants, setIsShowParticipants] = useState(false)
   const tableRef = useRef(null)
   const [selectedEvent, setSelectEvent] = useState({})
@@ -95,14 +93,14 @@ const OleEvent = () => {
   useEffect(() => {
     const events = ['select', 'deselect']
     events.forEach((event) => {
-      tableRef.current?.dt().on(event, (e, dt, type, indexes) => {
+      tableRef.current?.dt().on(event, (_, dt) => {
         const event = dt
           .rows({
             selected: true
           })
           .data()
           .toArray()[0]
-
+        console.log(event)
         setSelectEvent(event)
       })
     })
@@ -149,13 +147,19 @@ const OleEvent = () => {
         isShowParticipants={isShowParticipants}
         handleEdit={() => {
           setIsShowParticipants(false)
+          setIsAddPhoto(false)
           setIsEditEvent(!isEditEvent)
         }}
         handleParticipants={() => {
           setIsEditEvent(false)
+          setIsAddPhoto(false)
           setIsShowParticipants(!isShowParticipants)
         }}
-        handlePhotos={() => {}}
+        handlePhotos={() => {
+          setIsAddPhoto(!isAddPhoto)
+          setIsEditEvent(false)
+          setIsShowParticipants(false)
+        }}
       />
       {isEditEvent ? (
         <EditEvent
@@ -168,6 +172,12 @@ const OleEvent = () => {
       ) : null}
       {isShowParticipants ? (
         <Participants
+          selectedEvent={selectedEvent}
+          notifier={notificationWrapper(setNotification)}
+        />
+      ) : null}
+      {isAddPhoto ? (
+        <AddPhotos
           selectedEvent={selectedEvent}
           notifier={notificationWrapper(setNotification)}
         />

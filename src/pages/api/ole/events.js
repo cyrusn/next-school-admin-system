@@ -12,7 +12,7 @@ import {
 
 import { createFolder } from '@/utils/googleDrive'
 import { DateTime } from 'luxon'
-import _, { create } from 'lodash'
+import _ from 'lodash'
 import { TIMEZONE } from '@/config/constant'
 
 const { DRIVE_ID, OLE_GOOGLE_SHEET_ID, OLE_DATA_FOLDER_ID } = process.env

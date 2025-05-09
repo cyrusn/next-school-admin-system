@@ -2,18 +2,15 @@
 import { useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUpload } from '@fortawesome/free-solid-svg-icons'
+import { last } from 'lodash'
 
-const AddPhotos = ({ notifier, folderId }) => {
+const AddPhotos = ({ notifier, selectedEvent }) => {
+  const folderId = last(selectedEvent.imageFolderUrl?.split('/'))
+
   const [files, setFiles] = useState([])
   const [links, setLinks] = useState([])
   const inputRef = useRef(null)
-  const {
-    setMessage,
-    setLoadingMessage,
-    setErrorMessage,
-    setSuccessMessage,
-    clearMessage
-  } = notifier
+  const { setLoadingMessage, setErrorMessage, setSuccessMessage } = notifier
 
   const handleFileChange = (e) => {
     setFiles(e.target.files) // Store the selected files
@@ -47,7 +44,7 @@ const AddPhotos = ({ notifier, folderId }) => {
     }
 
     try {
-      const response = await fetch('/api/ole/upload', {
+      const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData
       })
@@ -92,6 +89,9 @@ const AddPhotos = ({ notifier, folderId }) => {
         </button>
       </div>
     )
+  }
+  if (!folderId) {
+    return <div className='is-danger message'>Invalid Folder Id</div>
   }
 
   return (

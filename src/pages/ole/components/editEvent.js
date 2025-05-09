@@ -1,4 +1,5 @@
 import CheckboxInput from '@/components/form/checkboxInput'
+import AddPhotos from './addPhotos'
 import { useState, useEffect } from 'react'
 import { validateForm } from '@/utils/formValidation' // Import the validation function
 import { inputMapper } from '@/components/form/inputMapper'

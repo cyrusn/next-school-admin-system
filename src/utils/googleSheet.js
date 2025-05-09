@@ -5,7 +5,6 @@ import _ from 'lodash'
 const sheets = google.sheets('v4')
 import { DateTime } from 'luxon'
 import { TIMEZONE } from '@/config/constant'
-import { when } from 'jquery'
 
 export async function batchUpdateSpreadsheet(
   spreadsheetId,

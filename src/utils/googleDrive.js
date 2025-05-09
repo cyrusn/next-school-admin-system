@@ -2,8 +2,6 @@
 import { google } from 'googleapis'
 import fs from 'fs'
 const drive = google.drive('v3')
-import { DateTime } from 'luxon'
-import { TIMEZONE } from '@/config/constant'
 import { getAuth } from '@/utils/googleApiAuth'
 
 export async function createFolder(driveId, folderId, folderName) {
@@ -13,16 +11,18 @@ export async function createFolder(driveId, folderId, folderName) {
     parents: [folderId],
     mimeType: 'application/vnd.google-apps.folder'
   }
+
   const response = await drive.files.create({
     auth,
     resource: metaData,
-    fields: 'id,webViewLink',
+    fields: 'id,webViewLink,name',
     supportsAllDrives: true, // Allow operations on shared drives
     driveId, // Specify the shared drive ID
     includeItemsFromAllDrives: true // Include items from shared drives
   })
   return response.data
 }
+
 export async function uploadFiles(driveId, folderId, files) {
   const auth = await getAuth()
   const data = []
@@ -30,7 +30,7 @@ export async function uploadFiles(driveId, folderId, files) {
   for (const file of files) {
     const { originalFilename: filename, filepath, mimetype } = file // Get the uploaded file info
 
-    const fileMetadata = {
+    const metadata = {
       name: filename,
       parents: [folderId] // Replace with your target folder ID
     }
@@ -42,7 +42,7 @@ export async function uploadFiles(driveId, folderId, files) {
 
     const response = await drive.files.create({
       auth,
-      resource: fileMetadata,
+      resource: metadata,
       media: media,
       fields: 'id,webViewLink,name',
       driveId,
