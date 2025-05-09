@@ -300,8 +300,8 @@ export const EARLY_LEAVE_TYPES = [
   { key: 'earlyLeave', title: 'Early Leave', cTitle: '早退' }
 ]
 export const ATTENDANCE_TYPES = [
-  ...ABSENCE_TYPES,
   ...LATE_TYPES,
+  ...ABSENCE_TYPES,
   ...EARLY_LEAVE_TYPES
 ]
 
