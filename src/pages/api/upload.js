@@ -1,16 +1,10 @@
 // https://www.npmjs.com/package/formidable
-import { google } from 'googleapis'
 import { IncomingForm } from 'formidable'
 
-import { createRouter, expressWrapper } from 'next-connect'
-import { getAuth } from '@/utils/googleApiAuth'
-import { getSession } from 'next-auth/react'
 import { uploadFiles } from '@/utils/googleDrive'
-import path from 'path'
-import { warn } from 'console'
 
 // Set up multer for file uploads
-const { DRIVE_ID, OLE_DATA_FOLDER_ID } = process.env
+const { DRIVE_ID } = process.env
 
 // API route handler
 export const config = {
@@ -21,8 +15,9 @@ export const config = {
 
 // Function to parse the form data using formidable
 const parseForm = async (req) => {
+  const { multiples = true } = req.query
   return new Promise((resolve, reject) => {
-    const form = new IncomingForm({ multiples: true, uploadDir: './uploads' })
+    const form = new IncomingForm({ multiples, uploadDir: './uploads' })
     form.parse(req, (err, fields, files) => {
       if (err) {
         return reject(err) // Reject the promise if there's an error
@@ -47,28 +42,13 @@ export const postHandler = async (req, res) => {
 export default async function handler(req, res) {
   {
     const { method } = req
-    //const body = { ...req.body }
-    //delete req.body
-    //const session = await getSession({ req, method: 'GET' })
-    //if (!session) {
-    //  return res.status(401).json({ error: 'Unauthorized' })
-    //}
-    //
-    //req.body = body
     switch (method) {
-      case 'GET':
-        //await getHandler(req, res)
-        break
       case 'POST':
         await postHandler(req, res)
         break
-      case 'PUT':
-        //await putHandler(req, res)
-        break
-      case 'DELETE':
-      //await deleteHandler(req, res)
       default:
-      //await getHandler(req, res)
+        res.status(405).json({ error: 'Invalid Method' })
+        break
     }
   }
 }
