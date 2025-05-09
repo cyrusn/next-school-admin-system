@@ -13,7 +13,7 @@ const NumberInput = ({
   helptext
 }) => {
   return (
-    <div className={`control ${className}`}>
+    <div className={`control ${className || ''}`}>
       <input
         disabled={disabled}
         placeholder={placeholder}

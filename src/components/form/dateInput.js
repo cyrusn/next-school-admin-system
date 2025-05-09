@@ -13,7 +13,7 @@ const DateInput = ({
   helptext
 }) => {
   return (
-    <div className={`control ${className}`}>
+    <div className={`control ${className || ''}`}>
       <input
         name={name}
         disabled={disabled}

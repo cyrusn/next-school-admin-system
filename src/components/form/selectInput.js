@@ -9,16 +9,18 @@ const SelectInput = ({
   value,
   placeholder,
   disabled = false,
-  helptext
+  helptext,
+  tabIndex
 }) => {
   return (
-    <div className={`control ${className}`}>
+    <div className={`control ${className || ''}`}>
       <div className={`select is-fullwidth ${error ? 'is-danger' : ''}`}>
         <select
           name={name}
           onChange={handleChange}
           value={value}
           disabled={disabled}
+          tabIndex={tabIndex}
         >
           {placeholder ? (
             <option value='' disabled>
