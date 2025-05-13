@@ -1,7 +1,7 @@
 import { REASON_TYPES, ATTENDANCE_TYPES } from '@/config/constant'
 import { getDisplayName } from '@/lib/helper'
 import { camelCase } from 'lodash'
-import { useState } from 'react'
+import { useRef } from 'react'
 
 function CustomSelect({ handleChange, value }) {
   return (
@@ -22,14 +22,21 @@ function CustomSelect({ handleChange, value }) {
   )
 }
 
-function CustomFileInput({ handleFileChange}) {
+function CustomFileInput({ handleFileChange, files, row }) {
+  // if same regno, file can be share
+
   return (
     <>
       <div className='field has-addons'>
         <div className='control'>
           <div className='file has-name is-fullwidth'>
             <label className='file-label' />
-            <input className='file-input' type='file' accept='image/*,.pdf' />
+            <input
+              className='file-input'
+              type='file'
+              accept='image/*,.pdf'
+              onChange={handleFileChange}
+            />
             <span className='file-cta'>
               <span className='file-label'> 選擇檔案 </span>
             </span>
@@ -37,9 +44,11 @@ function CustomFileInput({ handleFileChange}) {
         </div>
         <div className='control'>
           <div className='select is-expanded'>
-            <select>
+            <select onChange={handleSelectFile}>
               <option value=''>不適用</option>
-              <option></option>
+              {files?.map((file, key) => {
+                return <option key={key}>{file.name}</option>
+              })}
             </select>
           </div>
         </div>
@@ -70,6 +79,15 @@ export default function EditModal({
   const handleConfirm = () => {
     tableRef?.current.dt().ajax.reload()
     setIsModalActive(false)
+  }
+
+  const getFilenameFromRow = (row) => {
+    const { id, eventDate, regno, classcode, classno, name, cname, type } = row
+    return `${id}|${eventDate}_${regno}_${classcode}${String(classno).padStart(2, 0)}_${cname || name}`
+  }
+  const handleFileChange = (e, idx) => {
+    const filename = getFilenameFromRow(rows[idx])
+    const files = e.target.files
   }
 
   if (!isModalActive) return null
@@ -107,15 +125,18 @@ export default function EditModal({
                           return `${cTitle} - ${title}`
                         })()}
                       </td>
+
                       <td>{getDisplayName(row)}</td>
                       <td>
                         <CustomSelect
                           value={row.reasonForAbsence}
                           handleChange={(e) => handleChange(e, index)}
-                        />row row 
+                        />
                       </td>
                       <td>
-                        <CustomFileInput />
+                        <CustomFileInput
+                          handleFileChange={(e) => handleFileChange(e, index)}
+                        />
                       </td>
                     </tr>
                   )
