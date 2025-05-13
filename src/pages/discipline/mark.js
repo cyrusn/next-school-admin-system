@@ -357,10 +357,12 @@ export default function DisciplineForm() {
               To select / deselect multiple classes or students, press and hold
               down Ctrl (Window) or ⌘ (macOS) key and click the items.
             </p>
-            <div className='tags'>
+            <div className='tags mt-2'>
               {students
                 .filter(({ regno }) => {
-                  return rows[index].regnos.includes(regno)
+                  return rows[index].regnos
+                    .map((regno) => parseInt(regno))
+                    .includes(regno)
                 })
                 .map((s) => {
                   const { regno } = s

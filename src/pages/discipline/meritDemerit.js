@@ -128,7 +128,7 @@ export default function MeritDemeritForm() {
   }
 
   const removeSelectedStudent = (regno) => {
-    const newForm = [...formData]
+    const newForm = { ...formData }
     newForm.regnos = newForm.regnos.filter((r) => r != regno)
     setFormData(newForm)
   }
@@ -229,7 +229,7 @@ export default function MeritDemeritForm() {
                       .map((student) => {
                         const displayName = getDisplayName(student)
                         return (
-                          <option value={s.regno} key={s.regno}>
+                          <option value={student.regno} key={student.regno}>
                             {displayName}
                           </option>
                         )
@@ -246,7 +246,9 @@ export default function MeritDemeritForm() {
         <div className='tags'>
           {students
             .filter(({ regno }) => {
-              return formData.regnos.includes(regno)
+              return formData.regnos
+                .map((regno) => parseInt(regno))
+                .includes(regno)
             })
             .map((student) => {
               const { regno } = student

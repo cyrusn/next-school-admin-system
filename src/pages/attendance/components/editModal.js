@@ -22,7 +22,7 @@ function CustomSelect({ handleChange, value }) {
   )
 }
 
-function CustomFileInput({}) {
+function CustomFileInput({ handleFileChange}) {
   return (
     <>
       <div className='field has-addons'>
@@ -37,7 +37,7 @@ function CustomFileInput({}) {
         </div>
         <div className='control'>
           <div className='select is-expanded'>
-            <select x-model='uploadStatus[row.id]'>
+            <select>
               <option value=''>不適用</option>
               <option></option>
             </select>
@@ -112,7 +112,7 @@ export default function EditModal({
                         <CustomSelect
                           value={row.reasonForAbsence}
                           handleChange={(e) => handleChange(e, index)}
-                        />
+                        />row row 
                       </td>
                       <td>
                         <CustomFileInput />
