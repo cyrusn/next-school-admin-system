@@ -221,16 +221,16 @@ export default function DisciplineRecord() {
       switch (itemCodeType) {
         case 1:
         case 2:
-          tr.classList.add('has-background-danger')
+          tr.classList.add('has-background-danger-soft')
           break
         case 3:
-          tr.classList.add('has-background-info')
+          tr.classList.add('has-background-info-soft')
           break
         case 6:
-          tr.classList.add('has-background-primary')
+          tr.classList.add('has-background-primary-soft')
           break
         case 9:
-          tr.classList.add('has-background-warning')
+          tr.classList.add('has-background-warning-soft')
           break
       }
     },
