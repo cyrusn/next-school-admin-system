@@ -175,7 +175,7 @@ export default function DisciplineForm() {
         eventDate,
         itemCode,
         description,
-        mark: String(itemCode)[3] ? mark : -mark,
+        mark: String(itemCode)[0] == 3 ? mark : -mark,
         teacher: TEACHER_INITIAL
       }))
       prev.push(...records)

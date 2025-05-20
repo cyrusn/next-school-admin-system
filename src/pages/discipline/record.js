@@ -216,6 +216,23 @@ export default function DisciplineRecord() {
       if (rowData.informedAt && ROLE_ENUM[ROLE] < ROLE_ENUM['DC_ADMIN']) {
         tr.classList.add('unselectable')
       }
+
+      const itemCodeType = Math.floor(rowData.itemCode / 100)
+      switch (itemCodeType) {
+        case 1:
+        case 2:
+          tr.classList.add('has-background-danger')
+          break
+        case 3:
+          tr.classList.add('has-background-info')
+          break
+        case 6:
+          tr.classList.add('has-background-primary')
+          break
+        case 9:
+          tr.classList.add('has-background-warning')
+          break
+      }
     },
     select: {
       items: 'row',
@@ -257,25 +274,6 @@ export default function DisciplineRecord() {
         targets: [3, 5, 7]
       }
     ],
-    fnRowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-      // set different color for merit and demerit
-      const itemCodeType = Math.floor(aData.itemCode / 100)
-      switch (itemCodeType) {
-        case 1:
-        case 2:
-          $('td', nRow).addClass('has-background-danger-light')
-          break
-        case 3:
-          $('td', nRow).addClass('has-background-success-light')
-          break
-        case 6:
-          $('td', nRow).addClass('has-background-success')
-          break
-        case 9:
-          $('td', nRow).addClass('has-background-danger has-text-light')
-          break
-      }
-    },
     order: [
       [4, 'desc'],
       [1, 'asc'],
@@ -444,10 +442,10 @@ export default function DisciplineRecord() {
 
                     {_(users)
                       .orderBy('initial')
-                      .map((user) => {
+                      .map((user, index) => {
                         const { initial } = user
                         return (
-                          <option value={initial} key={initial}>
+                          <option value={initial} key={index}>
                             {initial}
                           </option>
                         )
