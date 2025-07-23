@@ -86,7 +86,9 @@ const Navigator = ({ user }) => {
       >
         {ROLE_ENUM[user?.role] >= ROLE_ENUM['OFFICE_STAFF'] ? (
           <PageLink title='Attendance' href='/attendance' />
-        ) : null}
+        ) : (
+          <PageLink title='Attendance' href='/attendance/record' />
+        )}
         <PageLink title='Conduct' href='/discipline' />
       </NavbarDropdown>
 
