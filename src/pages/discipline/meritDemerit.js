@@ -22,13 +22,14 @@ import Notification, {
   defaultNotification
 } from '@/components/notification'
 import SelectInput from '@/components/form/selectInput'
-import NumberInput from '@/components/form/numberInput'
+// import NumberInput from '@/components/form/numberInput'
 import DateInput from '@/components/form/dateInput'
 import MultiSelectInput from '@/components/form/multiSelectInput'
 import TextAreaInput from '@/components/form/textAreaInput'
 import DisciplineNav from './components/nav'
 
 export default function MeritDemeritForm() {
+  const NEXT_PUBLIC_IS_DC_DOWN = process.env['NEXT_PUBLIC_IS_DC_DOWN']
   const router = useRouter()
   const defaultForm = {
     code: '',
@@ -39,17 +40,20 @@ export default function MeritDemeritForm() {
   }
   const [formData, setFormData] = useState({ ...defaultForm })
 
-  const { data: session, status } = useSession()
+  const {
+    data: session
+    // status
+  } = useSession()
   const ROLE = session.user.info.role
-  const TEACHER_INITIAL = session.user.info.initial
+  // const TEACHER_INITIAL = session.user.info.initial
 
   const now = DateTime.now().setZone(TIMEZONE)
   const WEEKDAY = now.weekday
   const LAST_MONDAY = now
     .minus({ weeks: 1, days: WEEKDAY - 1 })
     .toFormat('yyyy-MM-dd')
-  const MIN_DATE =
-    ROLE_ENUM[ROLE] == ROLE_ENUM['DC_ADMIN'] ? START_TERM_DATE : LAST_MONDAY
+  // const MIN_DATE =
+  //   ROLE_ENUM[ROLE] == ROLE_ENUM['DC_ADMIN'] ? START_TERM_DATE : LAST_MONDAY
 
   const { students } = useStudentsContext()
   const groupedStudents = _.groupBy(students, 'classcode')
@@ -67,8 +71,12 @@ export default function MeritDemeritForm() {
   }
 
   const [notification, setNotification] = useState({ ...defaultNotification })
-  const { setMessage, setLoadingMessage, setErrorMessage, setSuccessMessage } =
-    notificationWrapper(setNotification)
+  const {
+    // setMessage,
+    setLoadingMessage,
+    setErrorMessage,
+    setSuccessMessage
+  } = notificationWrapper(setNotification)
 
   const handleChange = (e) => {
     const { name, value, options, type } = e.target
@@ -133,6 +141,21 @@ export default function MeritDemeritForm() {
     setFormData(newForm)
   }
 
+  if (
+    NEXT_PUBLIC_IS_DC_DOWN == 'true' &&
+    ROLE_ENUM[ROLE] < ROLE_ENUM['DC_ADMIN']
+  ) {
+    return (
+      <article className='message is-danger'>
+        <div className='message-body'>
+          Sorry, we&apos;re down for the preparation of the DC report for this
+          semesters, should you have any enquires, please contact DC head. Thank
+          you.
+        </div>
+      </article>
+    )
+  }
+
   return (
     <>
       <DisciplineNav />
@@ -151,7 +174,7 @@ export default function MeritDemeritForm() {
                 handleChange={handleChange}
                 placeholder='Choose one'
               >
-                {MERIT_DEMERIT_CODES.filter(({ code, isDcOnly }) => {
+                {MERIT_DEMERIT_CODES.filter(({ isDcOnly }) => {
                   if (!isDcOnly) return true
 
                   const isDCTeam = ROLE_ENUM[ROLE] >= ROLE_ENUM['DC_TEAM']

@@ -29,6 +29,7 @@ import TextAreaInput from '@/components/form/textAreaInput'
 import DisciplineNav from './components/nav'
 
 export default function DisciplineForm() {
+  const NEXT_PUBLIC_IS_DC_DOWN = process.env['NEXT_PUBLIC_IS_DC_DOWN']
   const router = useRouter()
   const defaultRow = {
     itemCode: '',
@@ -207,6 +208,21 @@ export default function DisciplineForm() {
     const newRows = [...rows]
     newRows[index].regnos = newRows[index].regnos.filter((r) => r != regno)
     setRows(newRows)
+  }
+
+  if (
+    NEXT_PUBLIC_IS_DC_DOWN == 'true' &&
+    ROLE_ENUM[ROLE] < ROLE_ENUM['DC_ADMIN']
+  ) {
+    return (
+      <article className='message is-danger'>
+        <div className='message-body'>
+          Sorry, we&apos;re down for the preparation of the DC report for this
+          semesters, should you have any enquires, please contact DC head. Thank
+          you.
+        </div>
+      </article>
+    )
   }
 
   return (

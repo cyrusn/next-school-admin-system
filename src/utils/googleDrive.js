@@ -28,10 +28,10 @@ export async function uploadFiles(driveId, folderId, files) {
   const data = []
 
   for (const file of files) {
-    const { originalFilename: filename, filepath, mimetype } = file // Get the uploaded file info
+    const { originalFilename, filepath, mimetype } = file // Get the uploaded file info
 
     const metadata = {
-      name: filename,
+      name: originalFilename,
       parents: [folderId] // Replace with your target folder ID
     }
 
