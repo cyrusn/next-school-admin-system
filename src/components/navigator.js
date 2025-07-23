@@ -69,7 +69,7 @@ const Navigator = ({ user }) => {
         <PageLink title='Announcement' href='/announcement' />
         <PageLink title='Resource Booking' href='/resource' />
         <PageLink title='Student Profile' href='/profile' />
-        <PageLink title='Student Photos' href='/photos' />
+        <PageLink title='Student Photos' href='/photo' />
         <PageLink title='CPD Record' href='/cpd' />
       </NavbarDropdown>
       <NavbarDropdown title='ITAV'>

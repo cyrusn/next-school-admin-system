@@ -58,4 +58,25 @@ export async function uploadFiles(driveId, folderId, files) {
   return data
 }
 
+export async function getImageUrls(DRIVE_ID, FOLDER_ID, filenames) {
+  const auth = await getAuth()
+  let q = `mimeType contains 'image/' and '${FOLDER_ID}' in parents`
+  if (filenames) {
+    q += ` and (${filenames})`
+  }
+  console.log(q)
+  const response = await drive.files.list({
+    auth,
+    corpora: 'drive',
+    driveId: DRIVE_ID,
+    pageSize: 1000,
+    includeItemsFromAllDrives: 'true',
+    supportsAllDrives: 'true',
+    q,
+    fields: 'files(id,name,thumbnailLink,webContentLink)'
+  })
+
+  return response.data
+}
+
 export async function getFiles(folderId) {}
