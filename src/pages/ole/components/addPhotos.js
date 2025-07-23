@@ -6,7 +6,6 @@ import { last } from 'lodash'
 
 const AddPhotos = ({ notifier, selectedEvent }) => {
   const folderId = last(selectedEvent?.imageFolderUrl?.split('/'))
-
   const [files, setFiles] = useState([])
   const [links, setLinks] = useState([])
   const inputRef = useRef(null)
