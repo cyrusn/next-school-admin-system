@@ -14,11 +14,6 @@ import DataTable from '@/components/dataTable'
 import { getColumns } from '@/lib/attendance/columns'
 
 import { getAttendanceSummary } from '@/utils/attendanceSummary'
-import Notification, {
-  notificationWrapper,
-  defaultNotification
-} from '@/components/notification'
-
 export async function getServerSideProps() {
   // Fetch data from an API or database
 
@@ -34,7 +29,6 @@ export async function getServerSideProps() {
 const AttendanceRecord = ({ attendanceSummary }) => {
   const { data: session } = useSession()
   const { students } = useStudentsContext()
-  const router = useRouter()
   const defaultForm = {
     startDate: TODAY,
     endDate: TODAY,
@@ -124,6 +118,9 @@ const AttendanceRecord = ({ attendanceSummary }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirstRun.current])
 
+  const ROLE = session.user?.info?.role
+  const CLASS_MASTER = session.user?.info?.classMaster
+
   const options = {
     layout: {
       topStart: 'pageLength',
@@ -135,43 +132,46 @@ const AttendanceRecord = ({ attendanceSummary }) => {
     searching: false,
     processing: true,
     serverSide: true,
-    select: true,
+    select: {
+      selectable: (rowData) => {
+        if (ROLE_ENUM[ROLE] >= ROLE_ENUM['OFFICE_STAFF']) {
+          return true
+        }
+
+        return rowData.classcode == CLASS_MASTER
+      }
+    },
     order: [
       [7, 'desc'],
       [8, 'asc'],
       [9, 'asc']
-    ],
-    buttons: ['copy', 'print']
-  }
-  const ROLE = session.user?.info?.role
-  if (ROLE_ENUM[ROLE] >= ROLE_ENUM['OFFICE_STAFF']) {
-    options.buttons = [
-      {
-        text: 'Edit',
-        className: 'is-info',
-        action: function () {
-          setEditModalActive(true)
-        }
-      },
-      {
-        text: 'Delete',
-        className: 'is-danger',
-        action: function () {
-          setDeleteModalActive(true)
-        }
-      },
-      ...options.buttons
     ]
   }
 
-  if (ROLE_ENUM[ROLE] < ROLE_ENUM['OFFICE_STAFF']) {
-    router.push('/') // Redirect to home page
-    return null
+  options.buttons = [
+    {
+      text: 'Edit',
+      className: 'is-info',
+      action: function () {
+        setEditModalActive(true)
+      }
+    }
+  ]
+
+  if (ROLE_ENUM[ROLE] >= ROLE_ENUM['OFFICE_STAFF']) {
+    options.buttons.push({
+      text: 'Delete',
+      className: 'is-danger',
+      action: function () {
+        setDeleteModalActive(true)
+      }
+    })
   }
+  options.buttons.push('copy', 'print')
 
   return (
     <>
-      <Nav />
+      <Nav role={ROLE} />
       <div className='field is-horizontal'>
         <div className='field-body'>
           {recordFilterInputMapper(formData, students).map((inputInfo, key) => {

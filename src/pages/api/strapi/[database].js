@@ -91,6 +91,34 @@ const postHandler = async (req, res) => {
   }
 }
 
+const putHandler = async (req, res) => {
+  const { database } = req.query
+  const { data } = req.body
+  try {
+    const response = await fetch(`${BASE_URL}/${database}`, {
+      method: 'PUT',
+      body: JSON.stringify({ data }),
+      headers: {
+        Authorization,
+        'Content-Type': 'application/json'
+      }
+    })
+    console.log(response)
+
+    const json = await response.json()
+    if (!response.ok) {
+      return res.status(500).json({
+        error: 'Error accessing strapi server:' + JSON.stringify(json)
+      }) // Handle errors
+    }
+
+    res.status(200).json(json) // Send back the response
+  } catch (error) {
+    console.error('Error accessing strapi server:', error)
+    res.status(500).json({ error }) // Handle errors
+  }
+}
+
 export default async function handler(req, res) {
   const { method } = req
   const body = { ...req.body }
@@ -107,6 +135,10 @@ export default async function handler(req, res) {
     case 'POST':
       req.body = body
       await postHandler(req, res)
+      break
+    case 'PUT':
+      req.body = body
+      await putHandler(req, res)
       break
     default:
       await getHandler(req, res)
