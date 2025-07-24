@@ -1,10 +1,7 @@
-// discipline record show all conduct relate to user in the given period of time
-import { useState, useEffect, useRef } from 'react'
-import { useSession } from 'next-auth/react'
+import { useState, useEffect } from 'react'
 import _ from 'lodash'
 import Image from 'next/image'
 
-import SelectInput from '@/components/form/selectInput'
 import { useStudentsContext } from '@/context/studentContext'
 
 export default function StudentPhoto() {
@@ -42,30 +39,35 @@ export default function StudentPhoto() {
     '6E'
   ]
 
-  const handleChange = (e) => {
-    setFilter(e.target.value)
+  const fetchData = async (filter) => {
+    console.log(filter)
+    const filenames = students
+      .filter((s) => {
+        console.log(s.classcode, filter)
+        return s.classcode == filter
+      })
+      .map((s) => `lp${s.regno}`)
+      .join("' or name contains '")
+
+    try {
+      const url = `/api/photos?filenames=name contains '${filenames}'`
+
+      const response = await fetch(url)
+      const json = await response.json()
+      setFiles(json.files)
+    } catch (e) {
+      console.error(e)
+    }
   }
 
-  useEffect(() => {
-    const fetchData = async (filter) => {
-      const filenames = students
-        .filter((s) => {
-          return s.classcode == filter
-        })
-        .map((s) => `lp${s.regno}`)
-        .join("' or name contains '")
-      try {
-        const response = await fetch(
-          `/api/photos?filename=name contains '${filenames}'`
-        )
-        const json = await response.json()
-        setFiles(json.files)
-      } catch (e) {
-        console.error(e)
-      }
-    }
-    fetchData(filter)
-  }, [filter, students])
+  const handleChange = (e) => {
+    setFilter(e.target.value)
+    fetchData(e.target.value)
+  }
+
+  if (files.length == 0 && filter !== '') {
+    return <div className='notification is-warning'>Loading ...</div>
+  }
 
   return (
     <>
@@ -79,9 +81,7 @@ export default function StudentPhoto() {
             <div className='control'>
               <div className='select is-fullwidth'>
                 <select onChange={handleChange}>
-                  <option value='' selected={filter == ''}>
-                    Select class
-                  </option>
+                  <option value={''}>Select class</option>
                   {classcodes.map((classcode) => {
                     return (
                       <option key={classcode} value={classcode}>
@@ -114,13 +114,15 @@ export default function StudentPhoto() {
                     {cname ? <p>{cname}</p> : <></>}
                     <p>{name}</p>
                     <div className='is-flex is-justify-content-center'>
-                      <figure className='is-128x128'>
+                      <figure className='is-3by4'>
                         {found ? (
                           <Image
                             alt={regno}
                             src={found.thumbnailLink}
-                            width={180}
-                            height={180}
+                              width='0'
+                              height='0'
+                              sizes='250vw'
+                              style={{ width: '100%', height: 'auto' }}
                           />
                         ) : (
                           <></>

@@ -9,6 +9,7 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
   const { filenames } = req.query
+
   try {
     const result = await getImageUrls(
       DRIVE_ID,
