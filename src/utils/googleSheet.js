@@ -47,6 +47,25 @@ export async function batchUpdateSpreadsheet(
   }
 }
 
+export async function getArrayData(spreadsheetId, range) {
+  try {
+    const auth = await getAuth()
+    const response = await sheets.spreadsheets.values.get({
+      auth,
+      spreadsheetId,
+      range,
+      valueRenderOption: 'UNFORMATTED_VALUE',
+      dateTimeRenderOption: 'FORMATTED_STRING'
+    })
+
+    const rows = response.data.values
+    return rows.map((row) => row[0])
+  } catch (error) {
+    console.error('Error fetching data from Google Sheets:', error)
+    throw error // Rethrow the error to handle it in the calling function
+  }
+}
+
 export async function getSheetKeyValueData(spreadsheetId, range) {
   try {
     const auth = await getAuth()
