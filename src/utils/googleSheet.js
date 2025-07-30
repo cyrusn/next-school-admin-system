@@ -3,37 +3,17 @@ import { convertRowsToCollection } from '@/lib/helper'
 import { getAuth } from '@/utils/googleApiAuth'
 import _ from 'lodash'
 const sheets = google.sheets('v4')
-import { DateTime } from 'luxon'
-import { TIMEZONE } from '@/config/constant'
+
+import { convertRangeObjectsToRows } from '@/lib/helper'
 
 export async function batchUpdateSpreadsheet(
   spreadsheetId,
-  headerRange,
-  rowObjects
+  headerKeys,
+  rangeObjects
 ) {
   try {
     const auth = await getAuth()
-    const headerResponse = await sheets.spreadsheets.values.get({
-      auth,
-      spreadsheetId,
-      range: headerRange,
-      valueRenderOption: 'UNFORMATTED_VALUE',
-      dateTimeRenderOption: 'FORMATTED_STRING'
-    })
-    const headerRow = headerResponse.data.values[0]
-
-    const data = rowObjects.map((obj) => {
-      obj.timestamp = DateTime.now().setZone(TIMEZONE).toISO()
-      return {
-        range: obj.range,
-        values: [
-          headerRow.map((key) => {
-            const value = obj[key]
-            return Array.isArray(value) ? value.join(',') : value
-          })
-        ]
-      }
-    })
+    const data = convertRangeObjectsToRows(rangeObjects, headerKeys)
     const response = await sheets.spreadsheets.values.batchUpdate({
       auth,
       spreadsheetId,
@@ -85,7 +65,7 @@ export async function getSheetKeyValueData(spreadsheetId, range) {
   }
 }
 
-export async function getSheetData(spreadsheetId, range) {
+export async function getSheetData(spreadsheetId, range, rangeFunc) {
   try {
     const auth = await getAuth()
     const response = await sheets.spreadsheets.values.get({
@@ -97,7 +77,7 @@ export async function getSheetData(spreadsheetId, range) {
     })
 
     const rows = response.data.values
-    return convertRowsToCollection(rows)
+    return convertRowsToCollection(rows, rangeFunc)
   } catch (error) {
     console.error('Error fetching data from Google Sheets:', error)
     throw error // Rethrow the error to handle it in the calling function

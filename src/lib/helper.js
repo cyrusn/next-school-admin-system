@@ -1,4 +1,6 @@
 import param from 'jquery-param'
+import { TIMEZONE } from '@/config/constant'
+import { DateTime } from 'luxon'
 
 export function isEmpty(value) {
   return (
@@ -10,12 +12,36 @@ export function isEmpty(value) {
   )
 }
 
-export const convertRowsToCollection = (rows) => {
+export const convertRangeObjectsToRows = (rangeObjects, headerKeys) => {
+  return rangeObjects.map((obj) => {
+    obj.timestamp = DateTime.now()
+      .setZone(TIMEZONE)
+      .toFormat("yyyy-MM-dd'T'HH:mm:ss")
+
+    return {
+      range: obj.range,
+      values: [
+        headerKeys.map((key) => {
+          const value = obj[key]
+          return Array.isArray(value) ? value.join(',') : value
+        })
+      ]
+    }
+  })
+}
+
+export const convertRowsToCollection = (rows, rangeFunc) => {
   const headers = rows.shift()
-  return rows.map((row) => {
+  return rows.map((row, index) => {
+    const rowNo = index + 2
+    let initRowData = {}
+    if (rangeFunc) {
+      const range = rangeFunc(rowNo)
+      initRowData.range = range
+    }
     return row.reduce((prev, cell, n) => {
       return { ...prev, [headers[n]]: cell }
-    }, {})
+    }, initRowData)
   })
 }
 
