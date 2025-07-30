@@ -103,7 +103,7 @@ export default function EditParticipants({
   }
 
   const handleSubmit = async () => {
-    const rowObjects = selectedParticipants.map((rowObj) => {
+    const rangeObjects = selectedParticipants.map((rowObj) => {
       return Object.keys(rowObj).reduce((prev, key) => {
         if (key in formData) {
           prev[key] = formData[key]
@@ -121,7 +121,7 @@ export default function EditParticipants({
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ rowObjects })
+        body: JSON.stringify({ rangeObjects })
       })
       const result = await response.json()
       if (!response.ok) {

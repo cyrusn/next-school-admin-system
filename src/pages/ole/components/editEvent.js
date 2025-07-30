@@ -64,7 +64,7 @@ export default function EditModal({
   }
 
   const handleSubmit = async () => {
-    const rowObject = Object.keys(selectedEvent).reduce((prev, key) => {
+    const rangeObject = Object.keys(selectedEvent).reduce((prev, key) => {
       let value
       if (key in formData) {
         value = formData[key]
@@ -76,12 +76,12 @@ export default function EditModal({
     }, {})
     try {
       setLoadingMessage()
-      const response = await fetch(`/api/ole/events/${selectedEvent.eventId}`, {
+      const response = await fetch(`/api/ole/events`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ rowObjects: [rowObject] })
+        body: JSON.stringify({ rangeObjects: [rangeObject] })
       })
       const result = await response.json()
       if (!response.ok) {
