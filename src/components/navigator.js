@@ -5,6 +5,9 @@ import { ROLE_ENUM } from '@/config/constant'
 
 const calenderEventUrl = process.env.NEXT_PUBLIC_CALENDAR_EVENT_SPREADSHEET_URL
 const regularActivity = process.env.NEXT_PUBLIC_REGULAR_ACTIVITY_DOCUMENT_URL
+const itavBooking = process.env.NEXT_PUBLIC_ITAV_BOOKING
+const itavRepair = process.env.NEXT_PUBLIC_ITAV_REPAIR
+const gotYourBackUrl = process.env.NEXT_PUBLIC_GOT_YOUR_BACK
 
 const PageLink = ({ href, title }) => {
   return (
@@ -70,13 +73,12 @@ const Navigator = ({ user }) => {
         <PageLink title='Resource Booking' href='/resource' />
         <PageLink title='Student Profile' href='/profile' />
         <PageLink title='Student Photos' href='/photo' />
-        <PageLink title='CPD Record' href='/cpd' />
       </NavbarDropdown>
       <NavbarDropdown title='ITAV'>
-        <Link href='#' target='_blank' className='navbar-item'>
+        <Link href={itavBooking} target='_blank' className='navbar-item'>
           ITAV Booking (Green Form)
         </Link>
-        <Link href='#' target='_blank' className='navbar-item'>
+        <Link href={itavRepair} target='_blank' className='navbar-item'>
           ITAV Repair Service
         </Link>
       </NavbarDropdown>
@@ -101,7 +103,7 @@ const Navigator = ({ user }) => {
         >
           Subject Selection System
         </Link>
-        <Link href='#' target='_blank' className='navbar-item'>
+        <Link href={gotYourBackUrl} target='_blank' className='navbar-item'>
           Got Your Back Record
         </Link>
       </NavbarDropdown>
@@ -115,8 +117,8 @@ const Navigator = ({ user }) => {
         title='ECA'
         includedPaths={['registration', 'membership', 'postExam']}
       >
-        <PageLink title='Club registration' href='/registration' />
-        <PageLink title='Membership Record' href='/membership' />
+        <PageLink title='Club registration' href='/eca/registration' />
+        <PageLink title='Membership Record' href='/eca/membership' />
         <PageLink title='Post Exam Activity' href='/postExam' />
       </NavbarDropdown>
     </>
