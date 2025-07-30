@@ -80,7 +80,7 @@ export const postHandler = async (req, res) => {
 
           const now = DateTime.now()
             .setZone(TIMEZONE)
-            .toISO('yyyy-MM-ddTHH:mm:ss')
+            .toFormat("yyyy-MM-dd'T'HH:mm:ss")
 
           return [
             now,
