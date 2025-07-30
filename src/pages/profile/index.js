@@ -164,7 +164,7 @@ function CreateComment({
 
   return (
     <>
-      <div className='mt-2'>
+      <div className='mb-4'>
         <div className='field'>
           <div className='control'>
             <div className='select is-fullwidth'>
@@ -399,13 +399,6 @@ export default function StudentProfile() {
                       </div>
                     </div>
                     <div className='column'>
-                      <DisplayComment
-                        comments={groupedComments[regno]}
-                        initial={initial}
-                        setComments={setComments}
-                        setLoadingMessage={setLoadingMessage}
-                        clearMessage={clearMessage}
-                      />
                       {isEdit ? (
                         <CreateComment
                           regno={regno}
@@ -417,6 +410,14 @@ export default function StudentProfile() {
                       ) : (
                         <></>
                       )}
+
+                      <DisplayComment
+                        comments={groupedComments[regno]}
+                        initial={initial}
+                        setComments={setComments}
+                        setLoadingMessage={setLoadingMessage}
+                        clearMessage={clearMessage}
+                      />
                     </div>
                   </div>
                 </div>
