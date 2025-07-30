@@ -1,8 +1,7 @@
 // Add event, Get events
 import { getSession } from 'next-auth/react'
-import { getAuth } from '@/utils/googleApiAuth'
+
 import {
-  getSheetData,
   appendRows,
   batchGetSheetDataByColumn,
   batchGetSheetDataByRow,
@@ -68,7 +67,10 @@ export const postHandler = async (req, res) => {
     'events!A:A'
   )
 
-  const timestamp = DateTime.now().setZone(TIMEZONE).toISO()
+  const timestamp = DateTime.now()
+    .setZone(TIMEZONE)
+    .toISO()
+    .toFormat("yyyy-MM-dd'T'HH:mm:ss")
   const {
     title,
     description,
@@ -126,11 +128,32 @@ export const postHandler = async (req, res) => {
 
 export const putHandler = async (req, res) => {
   try {
-    const { rowObjects } = req.body
+    const { rangeObjects } = req.body
+    // console.log(rangeObjects)
+    const headerKeys = [
+      'eventId',
+      'title',
+      'description',
+      'objective',
+      'efficacy',
+      'pics',
+      'category',
+      'organization',
+      'components',
+      'committeeAndKla',
+      'imageFolderUrl',
+      'isLocked',
+      'timestamp',
+      'markedTimestamp',
+      'isUpdated'
+    ]
+
+    // console.log(JSON.stringify(data, null, '\t'))
+
     const totalUpdatedRows = await batchUpdateSpreadsheet(
       OLE_GOOGLE_SHEET_ID,
-      'events!A1:O1',
-      rowObjects
+      headerKeys,
+      rangeObjects
     )
     res.status(200).json({ totalUpdatedRows })
   } catch (error) {

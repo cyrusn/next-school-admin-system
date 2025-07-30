@@ -1,8 +1,6 @@
 // Add event, Get events
 import { getSession } from 'next-auth/react'
-import { getAuth } from '@/utils/googleApiAuth'
 import {
-  getSheetData,
   batchGetSheetDataByColumn,
   batchGetSheetDataByRow,
   batchUpdateSpreadsheet
@@ -11,11 +9,35 @@ const { OLE_GOOGLE_SHEET_ID } = process.env
 
 export const putHandler = async (req, res) => {
   try {
-    const { rowObjects } = req.body
+    const { rangeObjects } = req.body
+    const headerKeys = [
+      'participantId',
+      'eventId',
+      'regno',
+      'classcode',
+      'classno',
+      'name',
+      'startDate',
+      'endDate',
+      'term',
+      'role',
+      'achievement',
+      'hours',
+      'isHighlight',
+      'isAward',
+      'awardName',
+      'awardType',
+      'awardStatus',
+      'timestamp',
+      'markedTimestamp',
+      'isUpdated',
+      'generatedReport'
+    ]
+
     const totalUpdatedRows = await batchUpdateSpreadsheet(
       OLE_GOOGLE_SHEET_ID,
-      'participants!A1:U1',
-      rowObjects
+      headerKeys,
+      rangeObjects
     )
     res.status(200).json({ totalUpdatedRows })
   } catch (error) {
