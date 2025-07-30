@@ -1,5 +1,4 @@
 import {
-  getSheetData,
   getArrayData,
   batchGetSheetDataByRow,
   appendRows,

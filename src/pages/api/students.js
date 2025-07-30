@@ -11,7 +11,11 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
   try {
-    const studentData = await getSheetData(spreadsheetId, 'A1:I')
+    const studentData = await getSheetData(
+      spreadsheetId,
+      'A1:I',
+      (rowNo) => `A${rowNo}:I${rowNo}`
+    )
 
     res.status(200).json(studentData.filter(({ isSkip }) => !isSkip))
   } catch (error) {

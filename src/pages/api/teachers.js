@@ -10,7 +10,11 @@ export default async function handler(req, res) {
 
   try {
     const spreadsheetId = process.env.TEACHER_GOOGLE_SHEET_ID
-    const data = await getSheetData(spreadsheetId, 'A1:G')
+    const data = await getSheetData(
+      spreadsheetId,
+      'A1:G',
+      (rowNo) => `A${rowNo}:G${rowNo}`
+    )
     res.status(200).json(data)
   } catch (error) {
     console.error('Error accessing Google Sheets:', error)
