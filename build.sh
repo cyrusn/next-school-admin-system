@@ -1,4 +1,4 @@
 #!/bin/bash
-docker build -t next-school-admin-system .
+docker build -t cyrusn/next-school-admin-system:latest .
 
 

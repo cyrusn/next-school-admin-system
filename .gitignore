@@ -41,3 +41,4 @@ yarn-error.log*
 next-env.d.ts
 src/pages/api/test*.js
 uploads/*
+app.tar
