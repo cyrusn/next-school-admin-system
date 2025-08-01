@@ -1,6 +1,12 @@
 import { MODE_TYPES, ACTIVITY_TYPES } from './constant.js'
 
-export default function NextPage({ selectedClub, regInfo, setView }) {
+export default function NextPage({
+  selectedClub,
+  regInfo,
+  setView,
+  ref,
+  fetchClubs
+}) {
   const { cname, category, pic, associates, location } = selectedClub
   const {
     range,
@@ -54,6 +60,9 @@ export default function NextPage({ selectedClub, regInfo, setView }) {
       if (!response.ok) {
         throw new Error(result)
       }
+      ref.current = true
+      setView('next')
+      fetchClubs()
     } catch (e) {
       console.error(e)
     }

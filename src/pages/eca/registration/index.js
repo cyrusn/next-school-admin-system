@@ -16,36 +16,33 @@ export default function EcaRegistration() {
   const { data: session } = useSession()
   const { initial } = session.user.info
 
-  // TODO: Do not update after setView to this page, do not use setView, use nav like discipline instead
-  // or request to fetch club information again
-  useEffect(() => {
-    async function fetchClubs() {
-      try {
-        const clubResponse = await fetch(`/api/eca/clubs?initial=${initial}`)
-        const clubsResult = await clubResponse.json()
-        if (!clubResponse.ok) {
-          throw new Error(clubsResult.message)
-        }
-
-        const regInfosResponse = await fetch(`/api/eca/registration`)
-        const regInfoResult = await regInfosResponse.json()
-        if (!regInfosResponse.ok) {
-          throw new Error(regInfoResult.message)
-        }
-
-        setClubs(clubsResult)
-        setRegInfos(regInfoResult)
-        isFirstLoadRef.current = false
-      } catch (e) {
-        console.error(e)
+  async function fetchClubs() {
+    try {
+      const clubResponse = await fetch(`/api/eca/clubs?initial=${initial}`)
+      const clubsResult = await clubResponse.json()
+      if (!clubResponse.ok) {
+        throw new Error(clubsResult.message)
       }
-    }
-    fetchClubs()
 
+      const regInfosResponse = await fetch(`/api/eca/registration`)
+      const regInfoResult = await regInfosResponse.json()
+      if (!regInfosResponse.ok) {
+        throw new Error(regInfoResult.message)
+      }
+
+      setClubs(clubsResult)
+      setRegInfos(regInfoResult)
+      isFirstLoadRef.current = false
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  useEffect(() => {
+    fetchClubs()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (isFirstLoadRef.current && view == 'init') {
+  if (isFirstLoadRef.current) {
     return (
       <>
         <h1 className='title has-text-centered'>聯課活動學會註冊</h1>
@@ -73,6 +70,8 @@ export default function EcaRegistration() {
         selectedClub={selectedClub}
         regInfo={selectedRegInfo}
         setView={setView}
+        ref={isFirstLoadRef}
+        fetchClubs={fetchClubs}
       />
     )
   }
@@ -84,6 +83,8 @@ export default function EcaRegistration() {
         selectedClub={selectedClub}
         regInfo={selectedRegInfo}
         setView={setView}
+        ref={isFirstLoadRef}
+        fetchClubs={fetchClubs}
       />
     )
   }
@@ -95,6 +96,8 @@ export default function EcaRegistration() {
         selectedClub={selectedClub}
         regInfo={selectedRegInfo}
         setView={setView}
+        ref={isFirstLoadRef}
+        fetchClubs={fetchClubs}
       />
     )
   }

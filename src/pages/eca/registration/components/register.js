@@ -4,7 +4,14 @@ import { compact } from 'lodash'
 import { DateTime } from 'luxon'
 import { TIMEZONE } from '@/config/constant.js'
 
-export default function EcaRegister({ selectedClub, mode, setView, regInfo }) {
+export default function EcaRegister({
+  selectedClub,
+  mode,
+  setView,
+  regInfo,
+  fetchClubs,
+  ref
+}) {
   const [info, setInfo] = useState(regInfo || {})
   const { cname, category, pic, associates, location } = selectedClub
 
@@ -41,7 +48,9 @@ export default function EcaRegister({ selectedClub, mode, setView, regInfo }) {
       await onEdit()
     }
 
-    setView('init')
+    ref.current = true
+    setView('next')
+    fetchClubs()
   }
   const onEdit = async () => {
     const rangeObjects = [
@@ -140,7 +149,7 @@ export default function EcaRegister({ selectedClub, mode, setView, regInfo }) {
 
   const onChange = (e) => {
     const { name, value, type } = e.target
-    console.log(name, value, type)
+    // console.log(name, value, type)
     const RESET_FIELDS = [{ name: 'modeType', target: 'modeValue' }]
 
     setInfo((prev) => {
@@ -322,6 +331,7 @@ export default function EcaRegister({ selectedClub, mode, setView, regInfo }) {
               type='number'
               name='fee'
               value={fee}
+              onChange={onChange}
             />
           </div>
           <p className='help is-info'>

@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { isEmpty } from '@/lib/helper'
-import { last } from 'lodash'
 
 import Notification, {
   notificationWrapper,
