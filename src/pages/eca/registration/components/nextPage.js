@@ -151,7 +151,7 @@ export default function NextPage({
                   </th>
                   <td className='has-text-centered'>
                     <div className='field is-grouped is-grouped-multiline is-justify-content-center'>
-                      {activityType?.split(',').forEach((type, key) => {
+                      {activityType?.split(',').map((type, key) => {
                         return (
                           <div className='control' key={key}>
                             <div className='tags is-info has-addons'>
