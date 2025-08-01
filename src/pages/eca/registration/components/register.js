@@ -1,4 +1,4 @@
-import { WEEKDAYS, MODE_TYPES, ACTIVITY_TYPES } from './constant.js'
+import { WEEKDAYS, MODE_TYPES, ACTIVITY_TYPES } from '@/lib/eca/constant'
 import { useState } from 'react'
 import { compact } from 'lodash'
 import { DateTime } from 'luxon'

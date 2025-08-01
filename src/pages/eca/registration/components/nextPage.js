@@ -1,4 +1,4 @@
-import { MODE_TYPES, ACTIVITY_TYPES } from './constant.js'
+import { MODE_TYPES, ACTIVITY_TYPES } from '@/lib/eca/constant'
 
 export default function NextPage({
   selectedClub,
