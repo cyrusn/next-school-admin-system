@@ -5,4 +5,4 @@ DEST='root@calp'
 
 ssh $DEST "mkdir -p ~/$LOCATION"
 
-rsync -rv .env.key.json .env.local app.tar $DEST:~/$LOCATION/
+rsync -rvvvv  app.tar load.sh start.sh $DEST:~/$LOCATION/

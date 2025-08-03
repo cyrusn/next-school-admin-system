@@ -6,7 +6,7 @@ WORKDIR /app
 # Copy package.json and package-lock.json (if available)
 COPY package*.json ./
 COPY jsconfig.json ./
-COPY .env.local ./
+COPY .env.production ./
 COPY .env.key.json ./
 
 # Install dependencies
