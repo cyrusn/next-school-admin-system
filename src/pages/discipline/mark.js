@@ -200,8 +200,10 @@ export default function DisciplineForm() {
 
       return
     }
-    setSuccessMessage(`Data submitted successfully: ${JSON.stringify(result)}`)
-    router.push('/discipline/record')
+    setSuccessMessage(
+      `Data submitted successfully: ${JSON.stringify(result)}`,
+      () => router.push('/discipline/record')
+    )
   }
 
   const removeSelectedStudent = (index, regno) => {

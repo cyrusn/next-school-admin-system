@@ -1,7 +1,6 @@
 // discipline record show all conduct relate to user in the given period of time
 import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import $ from 'jquery'
 import _ from 'lodash'
 
 import HideformButton from '@/components/hideFormButton'

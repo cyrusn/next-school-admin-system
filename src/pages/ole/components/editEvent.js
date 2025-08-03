@@ -1,11 +1,13 @@
 import CheckboxInput from '@/components/form/checkboxInput'
-import AddPhotos from './addPhotos'
 import { useState, useEffect } from 'react'
 import { validateForm } from '@/utils/formValidation' // Import the validation function
 import { inputMapper } from '@/components/form/inputMapper'
 import { useUsersContext } from '@/context/usersContext'
-
-import { COMPONENTS, CATEGORIES, COMMITTEES_AND_KLAS } from '@/config/constant'
+import {
+  inputInfoMapper,
+  mappers,
+  elements
+} from '@/lib/ole/editEventInputMapper'
 
 export default function EditModal({
   selectedEvent,
@@ -18,16 +20,11 @@ export default function EditModal({
   const [errors, setErrors] = useState({})
   const [isDisabled, setIsDisabled] = useState(true)
   const [validationRules, setValidationRules] = useState({})
-  const {
-    setLoadingMessage,
-    setErrorMessage,
-    setSuccessMessage,
-    clearMessage
-  } = notifier
+  const { setLoadingMessage, setErrorMessage, setSuccessMessage } = notifier
   const { users } = useUsersContext()
 
   const handleSelectAction = (e) => {
-    const { name, value, type, options } = e.target
+    const { value } = e.target
 
     setActions((prevActions) => {
       const newActions = prevActions.filter((a) => a != 'DELETE')
@@ -71,6 +68,7 @@ export default function EditModal({
       } else {
         value = selectedEvent[key]
       }
+
       prev[key] = Array.isArray(value) ? value.join(',') : value
       return prev
     }, {})
@@ -101,95 +99,37 @@ export default function EditModal({
     }
   }
 
-  const handleDelete = () => {
-    console.log('delete')
-  }
+  const handleDelete = async () => {
+    // console.log(selectedEvent)
+    // console.log('delete')
 
-  const elements = [
-    {
-      value: 'TITLE',
-      title: 'Title'
-    },
-    {
-      value: 'DESCRIPTION',
-      title: 'Description'
-    },
-    {
-      value: 'OBJECTIVE',
-      title: 'Objective'
-    },
-    {
-      value: 'EFFICACY',
-      title: 'Efficacy'
-    },
-    { value: 'PICS', title: 'PIC(s)' },
-    {
-      value: 'COMPONENTS',
-      title: 'Components'
-    },
-    {
-      value: 'CATEGORY',
-      title: 'Category'
-    },
-    {
-      value: 'COMMITTEES_AND_KLAS',
-      title: 'Committees & KLA'
-    },
-    {
-      value: 'ORGANIZATION',
-      title: 'Organization'
-    },
-    { value: 'DELETE', title: 'Delete event and participants' }
-  ]
+    const { range, eventId, imageFolderUrl } = selectedEvent
+    try {
+      setLoadingMessage()
+      const response = await fetch(`/api/ole/events`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ranges: [range], eventId, imageFolderUrl })
+      })
 
-  const inputInfoMapper = {
-    TITLE: { type: 'text', name: 'title' },
-    DESCRIPTION: { type: 'textarea', name: 'description' },
-    OBJECTIVE: { type: 'textarea', name: 'objective' },
-    EFFICACY: { type: 'textarea', name: 'efficacy' },
-    PICS: {
-      title: 'Pics',
-      type: 'multi-select',
-      name: 'pics',
-      children: users.map(({ initial }) => (
-        <option value={initial} key={initial}>
-          {initial}
-        </option>
-      )),
-      options: { placeholder: 'Please select' }
-    },
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result.error)
+      }
+      setSuccessMessage(`Record is updated`)
+      fetchEvents()
+      setIsEditEvent(false)
 
-    COMPONENTS: {
-      type: 'multi-select',
-      name: 'components',
-      children: COMPONENTS.map(({ name, code }) => (
-        <option key={code} value={code}>
-          {name}
-        </option>
-      )),
-      options: { placeholder: 'Please select' }
-    },
-    CATEGORY: {
-      type: 'select',
-      name: 'category',
-      children: CATEGORIES.map(({ name, code }) => (
-        <option key={code} value={code}>
-          {name}
-        </option>
-      )),
-      options: { placeholder: 'Please select' }
-    },
-    COMMITTEES_AND_KLAS: {
-      type: 'select',
-      name: 'committeeAndKla',
-      children: COMMITTEES_AND_KLAS.map((name, index) => (
-        <option key={index} value={name}>
-          {name}
-        </option>
-      )),
-      options: { placeholder: 'Please select' }
-    },
-    ORGANIZATION: { type: 'text', name: 'organization' }
+      setActions([])
+      setFormData({})
+      setErrors({})
+      setIsDisabled(true)
+      setValidationRules({})
+    } catch (error) {
+      setErrorMessage(error.message)
+    }
   }
 
   const updateErrorsAndIsDisable = (formData, actions) => {
@@ -209,53 +149,6 @@ export default function EditModal({
   }, [validationRules])
 
   useEffect(() => {
-    const mappers = {
-      TITLE: {
-        name: 'title',
-        defaultValue: selectedEvent.title,
-        rules: { required: true }
-      },
-      DESCRIPTION: {
-        name: 'description',
-        defaultValue: selectedEvent.description,
-        rules: { required: true }
-      },
-      OBJECTIVE: {
-        name: 'objective',
-        defaultValue: selectedEvent.objective,
-        rules: { required: true }
-      },
-      EFFICACY: {
-        name: 'efficacy',
-        defaultValue: selectedEvent.efficacy,
-        rules: { required: true }
-      },
-      PICS: {
-        name: 'pics',
-        defaultValue: selectedEvent.pics.split(','),
-        rules: { required: true }
-      },
-      CATEGORY: {
-        name: 'category',
-        defaultValue: selectedEvent.category,
-        rules: { required: true }
-      },
-      COMPONENTS: {
-        name: 'components',
-        defaultValue: selectedEvent.components.split(','),
-        rules: { required: true }
-      },
-      COMMITTEES_AND_KLAS: {
-        name: 'committeeAndKla',
-        defaultValue: selectedEvent.committeeAndKla,
-        rules: { required: true }
-      },
-      ORGANIZATION: {
-        name: 'organization',
-        defaultValue: selectedEvent.organization,
-        rules: { required: true }
-      }
-    }
     const updateFormDataKey = () => {
       Object.keys(mappers).forEach((action) => {
         const { name, defaultValue, rules } = mappers[action]
