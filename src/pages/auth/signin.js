@@ -1,10 +1,10 @@
 import { signIn } from 'next-auth/react'
 
 export default function SignIn() {
-  return (
-    <div>
-      <h1>Sign In</h1>
-      <button onClick={() => signIn('google')}>Sign in with Google</button>
-    </div>
-  )
+  return {
+    redirect: {
+      destination: '/', // Change this to the desired route
+      permanent: false // Set to true for a permanent redirect (301)
+    }
+  }
 }
