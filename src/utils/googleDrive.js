@@ -23,6 +23,24 @@ export async function createFolder(driveId, folderId, folderName) {
   return response.data
 }
 
+export async function trashFolder(driveId, folderId) {
+  const auth = await getAuth()
+  const metaData = {
+    trashed: true
+  }
+
+  const response = await drive.files.update({
+    auth,
+    fileId: folderId,
+    resource: metaData,
+    fields: 'id,webViewLink,name',
+    supportsAllDrives: true, // Allow operations on shared drives
+    driveId, // Specify the shared drive ID
+    includeItemsFromAllDrives: true // Include items from shared drives
+  })
+  return response.data
+}
+
 export async function uploadFiles(driveId, folderId, files) {
   const auth = await getAuth()
   const data = []

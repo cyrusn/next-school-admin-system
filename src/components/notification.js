@@ -6,11 +6,12 @@ export const defaultNotification = {
 }
 
 export const notificationWrapper = (setNotification) => {
-  const setMessage = (message = '', className = 'is-warning', duration) => {
+  const setMessage = (message = '', className = 'is-warning', duration, cb) => {
     setNotification({ className, message })
     if (duration) {
       setTimeout(() => {
         setNotification({ ...defaultNotification })
+        if (cb) cb()
       }, 5000)
     }
   }
@@ -23,8 +24,8 @@ export const notificationWrapper = (setNotification) => {
     setLoadingMessage() {
       setMessage('Loading ...', 'is-warning')
     },
-    setSuccessMessage(message, duration = 5000) {
-      setMessage(message, 'is-success', duration)
+    setSuccessMessage(message, cb, duration = 5000) {
+      setMessage(message, 'is-success', duration, cb)
     },
     clearMessage() {
       setMessage()

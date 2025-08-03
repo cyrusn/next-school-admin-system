@@ -1,6 +1,6 @@
 import { COMPONENTS, CATEGORIES, COMMITTEES_AND_KLAS } from '@/config/constant'
 
-export const createInputInfoMappers = (users) => ({
+export const createEventInputInfoMapper = (users) => ({
   TITLE: {
     title: 'Title',
     type: 'text',

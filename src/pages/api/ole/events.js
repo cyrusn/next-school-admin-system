@@ -9,7 +9,7 @@ import {
   batchClearData
 } from '@/utils/googleSheet'
 
-import { createFolder } from '@/utils/googleDrive'
+import { createFolder, trashFolder } from '@/utils/googleDrive'
 import { DateTime } from 'luxon'
 import _ from 'lodash'
 import { TIMEZONE } from '@/config/constant'
@@ -19,7 +19,7 @@ const { DRIVE_ID, OLE_GOOGLE_SHEET_ID, OLE_DATA_FOLDER_ID } = process.env
 export const getHandler = async (req, res) => {
   try {
     const { filter } = req.query
-    const [type, value] = filter.split(':')
+    const [type, value] = filter?.split(':')
 
     const filterRanges = ['events!A:A']
     switch (type) {
@@ -60,7 +60,7 @@ export const getHandler = async (req, res) => {
 export const postHandler = async (req, res) => {
   const { formData } = req.body // Extract data from the request body
   if (!formData) {
-    return res.status(404).json({ error: 'Required: range value' })
+    return res.status(404).json({ error: 'Required: FormData' })
   }
   const oldEventIds = await batchGetSheetDataByColumn(
     OLE_GOOGLE_SHEET_ID,
@@ -69,8 +69,8 @@ export const postHandler = async (req, res) => {
 
   const timestamp = DateTime.now()
     .setZone(TIMEZONE)
-    .toISO()
     .toFormat("yyyy-MM-dd'T'HH:mm:ss")
+
   const {
     title,
     description,
@@ -90,7 +90,7 @@ export const postHandler = async (req, res) => {
   const folderName =
     `${eventId}`.padStart(3, '0') + ` [${committeeAndKla}] ${title} @${pics}`
 
-  const { id: folderId, webViewLink: imageFolderUrl } = await createFolder(
+  const { webViewLink: imageFolderUrl } = await createFolder(
     DRIVE_ID,
     OLE_DATA_FOLDER_ID,
     folderName
@@ -116,6 +116,7 @@ export const postHandler = async (req, res) => {
   ]
 
   const values = [row]
+  console.log(values)
 
   try {
     const result = await appendRows(OLE_GOOGLE_SHEET_ID, range, values) // Call the appendRow function
@@ -164,7 +165,8 @@ export const putHandler = async (req, res) => {
 
 export const deleteHandler = async (req, res) => {
   try {
-    const { ranges, eventId } = req.body
+    const { ranges, eventId, imageFolderUrl } = req.body
+    const folderId = imageFolderUrl.split('/').pop()
 
     const participantsData = await batchGetSheetDataByColumn(
       OLE_GOOGLE_SHEET_ID,
@@ -186,7 +188,11 @@ export const deleteHandler = async (req, res) => {
     const { clearedRanges: clearedEventRanges } = eventData
     const { clearedRanges: clearedParticipantRanges } = participantsDataResponse
 
-    res.status(200).json({ clearedEventRanges, clearedParticipantRanges })
+    const folderResponse = await trashFolder(OLE_DATA_FOLDER_ID, folderId)
+
+    res
+      .status(200)
+      .json({ clearedEventRanges, clearedParticipantRanges, folderResponse })
   } catch (error) {
     console.error('Error accessing Spreadsheet:', error)
     res.status(500).json({ error: error.message })
@@ -215,7 +221,5 @@ export default async function handler(req, res) {
       break
     case 'DELETE':
       await deleteHandler(req, res)
-    default:
-      await getHandler(req, res)
   }
 }
