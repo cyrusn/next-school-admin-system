@@ -2,12 +2,6 @@ import { useState, useEffect } from 'react'
 import CheckboxInput from '@/components/form/checkboxInput'
 import { inputMapper } from '@/components/form/inputMapper'
 
-import FormInput from '@/components/form/formInput'
-import SelectInput from '@/components/form/selectInput'
-import NumberInput from '@/components/form/numberInput'
-import RadioInput from '@/components/form/radioInput'
-import DateInput from '@/components/form/dateInput'
-
 import { getDisplayName } from '@/lib/helper'
 import { validateForm } from '@/utils/formValidation' // Import the validation function
 
@@ -91,7 +85,9 @@ export default function EditParticipants({
       return newFormData // Return the updated formData
     })
   }
+
   const updateErrorsAndIsDisable = (formData, actions) => {
+    console.log(actions)
     if (actions.filter((a) => a !== 'DELETE').length == 0) {
       setIsDisabled(true)
       setErrors({})
@@ -115,6 +111,7 @@ export default function EditParticipants({
     })
 
     try {
+      // TODO: handle delete
       setLoadingMessage()
       const response = await fetch('/api/ole/participants', {
         method: 'PUT',
@@ -124,10 +121,43 @@ export default function EditParticipants({
         body: JSON.stringify({ rangeObjects })
       })
       const result = await response.json()
+
       if (!response.ok) {
         throw new Error(result.error)
       }
       setSuccessMessage(`${result.totalUpdatedRows} records are updated`)
+      tableRef.current?.dt().ajax.reload()
+      tableRef.current.scrollTop = tableRef.current?.scrollHeight
+
+      setActions([])
+      setFormData({})
+      setErrors({})
+      setIsDisabled(true)
+      setValidationRules({})
+    } catch (error) {
+      setErrorMessage(error.message)
+    }
+  }
+
+  const handleDelete = async () => {
+    const ranges = selectedParticipants.map(({ range }) => range)
+    try {
+      setLoadingMessage()
+      const response = await fetch('/api/ole/participants', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ranges })
+      })
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error)
+      }
+      setSuccessMessage(
+        `${result.clearedParticipantRanges.length} records are deleted`
+      )
       tableRef.current?.dt().ajax.reload()
       tableRef.current.scrollTop = tableRef.current?.scrollHeight
 
@@ -342,13 +372,19 @@ export default function EditParticipants({
         <div className='field-body'>
           <div className='field'>
             <div className='field is-grouped'>
-              <button
-                className='button is-danger'
-                disabled={isDisabled}
-                onClick={handleSubmit}
-              >
-                Save changes
-              </button>
+              {actions.includes('DELETE') ? (
+                <button className='button is-danger' onClick={handleDelete}>
+                  Confirm
+                </button>
+              ) : (
+                <button
+                  className='button is-danger'
+                  disabled={isDisabled}
+                  onClick={handleSubmit}
+                >
+                  Save changes
+                </button>
+              )}
               <button
                 className='button is-info'
                 onClick={() => {

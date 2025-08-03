@@ -1,6 +1,7 @@
 // Add event, Get events
 import { getSession } from 'next-auth/react'
 import {
+  batchClearData,
   batchGetSheetDataByColumn,
   batchGetSheetDataByRow,
   batchUpdateSpreadsheet
@@ -81,6 +82,50 @@ export const getHandler = async (req, res) => {
     res.status(500).json({ error: error.message })
   }
 }
+export const postHandler = async (req, res) => {
+  try {
+    const { rows } = req.body
+
+    const participantsIds = await batchGetSheetDataByColumn(
+      OLE_GOOGLE_SHEET_ID,
+      'participants!A:A'
+    )
+
+    const ids = participantsIds.map(({ participantId }) =>
+      parseInt(participantId)
+    )
+
+    const maxId = _.max(ids)
+    const modifiedRows = rows.map((row, index) => [maxId + index + 1, ...row])
+
+    const response = await appendRows(
+      OLE_GOOGLE_SHEET_ID,
+      'participants!A1:A1',
+      modifiedRows
+    )
+    res.status(200).json({ response })
+  } catch (error) {
+    console.error('Error accessing Spreadsheet:', error)
+    res.status(500).json({ error: error.message })
+  }
+}
+
+export const deleteHandler = async (req, res) => {
+  try {
+    const { ranges } = req.body
+
+    const participantsDataResponse = await batchClearData(
+      OLE_GOOGLE_SHEET_ID,
+      ranges
+    )
+    const { clearedRanges: clearedParticipantRanges } = participantsDataResponse
+
+    res.status(200).json({ clearedParticipantRanges })
+  } catch (error) {
+    console.error('Error accessing Spreadsheet:', error)
+    res.status(500).json({ error: error.message })
+  }
+}
 
 export default async function handler(req, res) {
   const { method } = req
@@ -104,6 +149,7 @@ export default async function handler(req, res) {
       await putHandler(req, res)
       break
     case 'DELETE':
+      req.body = body
       await deleteHandler(req, res)
       break
     default:
