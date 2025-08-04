@@ -1,4 +1,5 @@
 export const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
 export const MODE_TYPES = {
   exact: {
     cname: '恆常',
@@ -13,6 +14,7 @@ export const MODE_TYPES = {
     example: '2024年12月,\n 2025年3月5、7日'
   }
 }
+
 export const ACTIVITY_TYPES = {
   course: {
     cname: '興趣班'

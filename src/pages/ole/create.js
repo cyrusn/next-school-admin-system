@@ -94,7 +94,6 @@ const OleCreate = () => {
       return
     }
     setSuccessMessage(`Data submitted successfully: ${JSON.stringify(result)}`)
-    router.push('/ole/event')
   }
 
   const inputInfoMappers = createEventInputInfoMapper(users)
