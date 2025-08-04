@@ -158,7 +158,13 @@ export default function Participants({ selectedEvent, notifier }) {
           </button>
         ) : null}
       </div>
-      {isAddParticipants ? <AddParticipants /> : null}
+      {isAddParticipants ? (
+        <AddParticipants
+          notifier={notifier}
+          tableRef={tableRef}
+          selectedEvent={selectedEvent}
+        />
+      ) : null}
       {isEditParticipants ? (
         <EditParticipants
           selectedParticipants={selectedParticipants}

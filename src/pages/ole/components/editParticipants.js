@@ -111,7 +111,6 @@ export default function EditParticipants({
     })
 
     try {
-      // TODO: handle delete
       setLoadingMessage()
       const response = await fetch('/api/ole/participants', {
         method: 'PUT',

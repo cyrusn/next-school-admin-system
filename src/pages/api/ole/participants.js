@@ -1,11 +1,15 @@
 // Add event, Get events
 import { getSession } from 'next-auth/react'
 import {
+  appendRows,
   batchClearData,
   batchGetSheetDataByColumn,
   batchGetSheetDataByRow,
   batchUpdateSpreadsheet
 } from '@/utils/googleSheet'
+
+import _ from 'lodash'
+
 const { OLE_GOOGLE_SHEET_ID } = process.env
 
 export const putHandler = async (req, res) => {
@@ -103,7 +107,7 @@ export const postHandler = async (req, res) => {
       'participants!A1:A1',
       modifiedRows
     )
-    res.status(200).json({ response })
+    res.status(200).json(response)
   } catch (error) {
     console.error('Error accessing Spreadsheet:', error)
     res.status(500).json({ error: error.message })
