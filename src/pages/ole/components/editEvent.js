@@ -209,9 +209,10 @@ export default function EditModal({
       </div>
 
       {elements.map(({ value, title }, index) => {
-        if (!actions.includes(value) || !inputInfoMapper[value]) return null
+        if (!actions.includes(value) || !inputInfoMapper(users)[value])
+          return null
         const formInfo = { formData, errors, handleChange }
-        const inputInfo = inputInfoMapper[value]
+        const inputInfo = inputInfoMapper(users)[value]
 
         const input = inputMapper(formInfo, inputInfo)
         return (
