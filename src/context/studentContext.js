@@ -10,10 +10,10 @@ export const StudentsContext = createContext()
 
 export const StudentsContextProvider = ({ children }) => {
   const [students, setStudents] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const storedStudents = localStorage.getItem('students')
-      return storedStudents ? JSON.parse(storedStudents) : []
-    }
+    // if (typeof window !== 'undefined') {
+    //   const storedStudents = localStorage.getItem('students')
+    //   return storedStudents ? JSON.parse(storedStudents) : []
+    // }
     return []
   })
 

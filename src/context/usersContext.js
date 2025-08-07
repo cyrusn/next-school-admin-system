@@ -10,10 +10,10 @@ export const UsersContext = createContext()
 
 export const UsersContextProvider = ({ children }) => {
   const [users, setUsers] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const storedUsers = localStorage.getItem('users')
-      return storedUsers ? JSON.parse(storedUsers) : []
-    }
+    // if (typeof window !== 'undefined') {
+    //   const storedUsers = localStorage.getItem('users')
+    //   return storedUsers ? JSON.parse(storedUsers) : []
+    // }
     return []
   })
 

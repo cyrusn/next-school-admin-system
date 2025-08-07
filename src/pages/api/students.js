@@ -13,8 +13,8 @@ export default async function handler(req, res) {
   try {
     const studentData = await getSheetData(
       spreadsheetId,
-      'A1:I',
-      (rowNo) => `A${rowNo}:I${rowNo}`
+      'A1:R',
+      (rowNo) => `A${rowNo}:R${rowNo}`
     )
 
     res.status(200).json(studentData.filter(({ isSkip }) => !isSkip))
