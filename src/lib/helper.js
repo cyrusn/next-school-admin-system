@@ -14,9 +14,7 @@ export function isEmpty(value) {
 
 export const convertRangeObjectsToRows = (rangeObjects, headerKeys) => {
   return rangeObjects.map((obj) => {
-    obj.timestamp = DateTime.now()
-      .setZone(TIMEZONE)
-      .toFormat("yyyy-MM-dd'T'HH:mm:ss")
+    obj.timestamp = getTimestamp()
 
     return {
       range: obj.range,
@@ -113,4 +111,8 @@ export const dataTableQueryStrapiConverter = (query) => {
   const qs = decodeURI(param(newQuery))
 
   return { draw: query.draw || 1, qs }
+}
+
+export const getTimestamp = () => {
+  return DateTime.now().setZone(TIMEZONE).toFormat("yyyy-MM-dd'T'HH:mm:ss")
 }

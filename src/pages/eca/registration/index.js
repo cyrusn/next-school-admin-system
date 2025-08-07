@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react'
 
 import NextPage from './components/nextPage.js'
 import Register from './components/register.js'
+import NoClubAndTeamMessage from '../components/noClubAndTeamMessage.js'
 
 export default function EcaRegistration() {
   const [clubs, setClubs] = useState([])
@@ -59,7 +60,7 @@ export default function EcaRegistration() {
     return (
       <>
         <h1 className='title has-text-centered'>聯課活動學會註冊</h1>
-        <h1 className='subtitle'>你未有相關負責的學會／校隊</h1>
+        <NoClubAndTeamMessage />
       </>
     )
   }

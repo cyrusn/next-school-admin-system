@@ -66,6 +66,31 @@ export default function EditModal({
     })
   }
 
+  const handleDelete = async () => {
+    const ranges = selectedMembers.current.map(({ range }) => range)
+    console.log(ranges)
+    try {
+      setLoadingMessage()
+      const response = await fetch('/api/eca/members', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ranges })
+      })
+      const json = await response.json()
+      if (!response.ok) {
+        throw new Error(json.error)
+      }
+      fetchSearch()
+      selectedMembers.current = []
+      handleCancel()
+      clearMessage()
+    } catch (error) {
+      setErrorMessage(error.message)
+    }
+  }
+
   const handleCancel = () => {
     setFilters([])
     setFormData({ ...defaultFormData })
@@ -115,16 +140,14 @@ export default function EditModal({
             {selectedMembers.current.map((member, index) => {
               const { classcodeAndNo, studentName } = member
               return (
-                <span className='tag' key={index}>
+                <span className='tag is-warning' key={index}>
                   {`${classcodeAndNo}${studentName}`}
                 </span>
               )
             })}
           </div>
           <div className='field is-horizontal'>
-            <div className='field-label is-normal'>
-              <label className='label'>Fields</label>
-            </div>
+            <div className='field-label is-normal'></div>
             <div className='field-body'>
               <div className='field'>
                 <CheckboxInput
@@ -137,6 +160,7 @@ export default function EditModal({
                   handleChange={handleFilters}
                   selectedBoxes={filters}
                 />
+                <span className='help is-info'>Select fields to update</span>
               </div>
             </div>
           </div>
@@ -222,6 +246,9 @@ export default function EditModal({
               onClick={handleConfirm}
             >
               Confirm
+            </button>
+            <button className='button is-danger' onClick={handleDelete}>
+              Delete
             </button>
             <button className='button is-warning' onClick={handleCancel}>
               Cancel

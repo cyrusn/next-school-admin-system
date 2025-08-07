@@ -14,6 +14,7 @@ import EditModal from './components/editModal'
 export default function EcaMembershipRecord() {
   const { students } = useStudentsContext()
   const [clubs, setClubs] = useState([])
+
   const defaultFilter = {
     clubId: '',
     classcode: '',
