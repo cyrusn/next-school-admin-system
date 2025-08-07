@@ -118,7 +118,7 @@ export default function FormPage() {
     setLoadingMessage()
 
     try {
-      const timestamp = now.toISO()
+      const timestamp = now.toFormat("yyyy-MM-dd'T'HH:mm:ss")
       const { date, from, targetType, target, announcedBy, content } = formData
       const pic = session.user.info.initial // Assuming this is part of your session
       const values = [

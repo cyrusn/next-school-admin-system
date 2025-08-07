@@ -1,5 +1,6 @@
 // Add event, Get events
 import { getSession } from 'next-auth/react'
+import { getTimestamp } from '@/lib/helper'
 
 import {
   appendRows,
@@ -67,9 +68,7 @@ export const postHandler = async (req, res) => {
     'events!A:A'
   )
 
-  const timestamp = DateTime.now()
-    .setZone(TIMEZONE)
-    .toFormat("yyyy-MM-dd'T'HH:mm:ss")
+  const timestamp = getTimestamp()
 
   const {
     title,

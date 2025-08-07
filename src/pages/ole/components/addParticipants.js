@@ -1,14 +1,10 @@
 import { createParticipantsInputInfoMapper } from '@/lib/ole/createParticipantsInputMapper'
 import { inputMapper } from '@/components/form/inputMapper'
 import { useStudentsContext } from '@/context/studentContext'
-// import { useSession } from 'next-auth/react'
-import { DateTime } from 'luxon'
-import {
-  useState
-  // useEffect
-} from 'react'
-import { TODAY, TERM, TIMEZONE } from '@/config/constant'
+import { useState } from 'react'
+import { TODAY, TERM } from '@/config/constant'
 import { validateForm } from '@/utils/formValidation' // Import the validation function
+import { getTimestamp } from '@/lib/helper'
 
 export default function AddParticipants({ notifier, tableRef, selectedEvent }) {
   // const { data: session, status } = useSession()
@@ -90,9 +86,7 @@ export default function AddParticipants({ notifier, tableRef, selectedEvent }) {
       awardStatus
     } = formData
 
-    const timestamp = DateTime.now()
-      .setZone(TIMEZONE)
-      .toFormat("yyyy-MM-dd'T'HH:mm:ss")
+    const timestamp = getTimestamp()
 
     const rows = students
       .filter((s) => regnos.includes(String(s.regno)))
