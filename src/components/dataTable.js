@@ -1,6 +1,3 @@
-import { useEffect, useState } from 'react'
-import pdfmake from 'pdfmake'
-
 import DataTable from 'datatables.net-react'
 import DT from 'datatables.net-bm' // Import DataTables CSS
 
@@ -10,6 +7,10 @@ import 'datatables.net-buttons/js/buttons.html5'
 import 'datatables.net-buttons/js/buttons.print'
 import 'datatables.net-fixedcolumns-bm'
 import 'datatables.net-fixedheader-bm'
+import 'datatables.net-searchbuilder-bm'
+import 'datatables.net-searchpanes-bm'
+import 'datatables.net-columncontrol-bm'
+import 'datatables.net-datetime'
 
 const DataTableInstance = ({
   id,

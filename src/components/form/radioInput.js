@@ -1,10 +1,11 @@
-import { when } from 'jquery'
+import ErrorLabel from '@/components/form/errorLabel'
 
 const RadioInput = ({
   name,
   elements = [],
   checkedValue = '',
   handleChange,
+  error,
   helptext
 }) => {
   return (
@@ -24,6 +25,7 @@ const RadioInput = ({
         )
       })}
       {helptext ? <p className='help is-info'>{helptext} </p> : null}
+      <ErrorLabel error={error} />
     </div>
   )
 }

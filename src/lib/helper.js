@@ -31,7 +31,7 @@ export const convertRangeObjectsToRows = (rangeObjects, headerKeys) => {
 }
 
 export const convertRowsToCollection = (rows, rangeFunc) => {
-  const headers = rows.shift()
+  const headerRow = rows.shift()
   return rows.map((row, index) => {
     const rowNo = index + 2
     let initRowData = {}
@@ -39,8 +39,8 @@ export const convertRowsToCollection = (rows, rangeFunc) => {
       const range = rangeFunc(rowNo)
       initRowData.range = range
     }
-    return row.reduce((prev, cell, n) => {
-      return { ...prev, [headers[n]]: cell }
+    return headerRow.reduce((prev, key, n) => {
+      return { ...prev, [key]: row[n] || '' }
     }, initRowData)
   })
 }
