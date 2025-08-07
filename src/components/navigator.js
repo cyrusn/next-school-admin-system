@@ -69,6 +69,7 @@ const Navigator = ({ user }) => {
         title='School Admin'
         includedPaths={['announcement', 'resource']}
       >
+        <PageLink title='Namelist' href='/namelist' />
         <PageLink title='Announcement' href='/announcement' />
         <PageLink title='Resource Booking' href='/resource' />
         <PageLink title='Student Profile' href='/profile' />
