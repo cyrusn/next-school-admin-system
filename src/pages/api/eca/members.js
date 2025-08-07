@@ -3,6 +3,8 @@ import { getSession } from 'next-auth/react'
 import {
   appendRows,
   getSheetData,
+  batchGetSheetDataByColumn,
+  batchGetSheetDataByRow,
   batchUpdateSpreadsheet
 } from '@/utils/googleSheet'
 const spreadsheetId = process.env.ECA_EVALUATION_SSID
@@ -11,7 +13,8 @@ export const putHandler = async (req, res) => {
   try {
     const { rangeObjects } = req.body
     const headerKeys = [
-      'timestampid',
+      'timestamp',
+      'id',
       'clubId',
       'category',
       'information',
@@ -54,22 +57,45 @@ export const getHandler = async (req, res) => {
   if (!session) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
+
   try {
-    const data = await getSheetData(
+    const { filter } = req.query
+    const [type, value] = filter?.split(':')
+    const filterRanges = ['record!B:B']
+    switch (type) {
+      case 'clubId':
+        filterRanges.push('record!C:C')
+        break
+      case 'regno':
+        filterRanges.push('record!F:F')
+        break
+    }
+
+    const filterData = await batchGetSheetDataByColumn(
       spreadsheetId,
-      'record!A:N',
-      function (rowNo) {
-        return `record!A${rowNo}:N${rowNo}`
-      }
+      filterRanges
     )
 
+    const ranges = filterData.reduce((prev, record, index) => {
+      const rowNo = index + 2
+      console.log(record)
+      if (record[type] == Number(value)) {
+        prev.push(`record!A${rowNo}:N${rowNo}`)
+      }
+      return prev
+    }, [])
+
+    const finalRanges = ['record!A1:N1', ...ranges]
+
+    const data = await batchGetSheetDataByRow(spreadsheetId, finalRanges)
     res.status(200).json(data)
   } catch (error) {
-    console.error('Error accessing Google Sheets:', error)
-    res.status(500).json({ error })
+    console.error('Error accessing spreadsheet:', error)
+    res.status(500).json({ error: error.message })
   }
 }
 
+export const deleteHandler = async (req, res) => {}
 export default async function handler(req, res) {
   const { method } = req
   const body = { ...req.body }

@@ -12,6 +12,11 @@ export default async function handler(req, res) {
   try {
     const data = await getSheetData(spreadsheetId, 'club!A:H')
 
+    if (!initial) {
+      res.status(200).json(data)
+      return
+    }
+
     res.status(200).json(
       data.filter(({ pic, associates }) => {
         const allPics = [...pic?.split(', '), ...associates?.split(',')]

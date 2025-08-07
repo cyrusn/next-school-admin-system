@@ -1,7 +1,10 @@
+import Nav from './components/nav.js'
+
 export default function EcaPeformances() {
   return (
     <>
-      <h1>ECA Performances</h1>
+      <Nav />
+      <h1>ECA Membership Evaluation</h1>
     </>
   )
 }
