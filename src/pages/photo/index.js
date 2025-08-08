@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import _ from 'lodash'
 import Image from 'next/image'
 
@@ -9,41 +9,11 @@ export default function StudentPhoto() {
   const [filter, setFilter] = useState('')
   const { students } = useStudentsContext()
 
-  const classcodes = [
-    '1A',
-    '1B',
-    '1C',
-    '1D',
-    '2A',
-    '2B',
-    '2C',
-    '2D',
-    '3A',
-    '3B',
-    '3C',
-    '3D',
-    '4A',
-    '4B',
-    '4C',
-    '4D',
-    '4E',
-    '5A',
-    '5B',
-    '5C',
-    '5D',
-    '5E',
-    '6A',
-    '6B',
-    '6C',
-    '6D',
-    '6E'
-  ]
+  const classcodes = _(students).map('classcode').uniq().value()
 
   const fetchData = async (filter) => {
-    console.log(filter)
     const filenames = students
       .filter((s) => {
-        console.log(s.classcode, filter)
         return s.classcode == filter
       })
       .map((s) => `lp${s.regno}`)
@@ -111,24 +81,22 @@ export default function StudentPhoto() {
                   key={regno}
                 >
                   <div className='box'>
-                    {cname ? <p>{cname}</p> : <></>}
-                    <p>{name}</p>
                     <div className='is-flex is-justify-content-center'>
                       <figure className='is-3by4'>
-                        {found ? (
+                        {found && (
                           <Image
                             alt={regno}
                             src={found.thumbnailLink}
-                              width='0'
-                              height='0'
-                              sizes='250vw'
-                              style={{ width: '100%', height: 'auto' }}
+                            width='0'
+                            height='0'
+                            sizes='250vw'
+                            style={{ width: '100%', height: 'auto' }}
                           />
-                        ) : (
-                          <></>
                         )}
                       </figure>
                     </div>
+                    {cname && <p>{cname}</p>}
+                    <p>{name}</p>
                     <div className='tags is-justify-content-center'>
                       <span className='tag is-dark'>{classcodeAndNo}</span>
                       <span className='tag is-success'>{regno}</span>
