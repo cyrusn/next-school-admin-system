@@ -35,10 +35,10 @@ const Navbar = () => {
               <FontAwesomeIcon icon={faHome} />
             </span>
             SKHLPSS{' '}
-            {session ? (
-              <span className='has-text-weight-light'>{session.user.name}</span>
-            ) : (
-              ''
+            {session && (
+              <span className='has-text-weight-light'>
+                <small>{session?.user?.info?.initial}</small>
+              </span>
             )}
           </span>
         </Link>
@@ -65,7 +65,7 @@ const Navbar = () => {
 
           {session ? (
             <div className='navbar-item'>
-              <h2>Welcome, {session.user.name}!</h2>
+              <h2>Welcome back, {session.user?.info?.initial}!</h2>
             </div>
           ) : (
             <div className='navbar-item'>
