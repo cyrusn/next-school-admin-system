@@ -1,6 +1,8 @@
 import { useSession } from 'next-auth/react'
+import packageInfo from '../../package.json'
 
 export default function Home() {
+  console.log(packageInfo.version)
   const { data: session } = useSession()
   return (
     <div className='message is-success'>

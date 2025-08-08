@@ -7,7 +7,6 @@ import { StudentsContextProvider } from '@/context/studentContext'
 import { UsersContextProvider } from '@/context/usersContext'
 
 import Navbar from '../components/navbar'
-
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SessionProvider session={session}>
