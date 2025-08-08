@@ -82,18 +82,16 @@ export default function StudentPhoto() {
                 >
                   <div className='box'>
                     <div className='is-flex is-justify-content-center'>
-                      <figure className='is-3by4'>
-                        {found && (
+                      {found && (
+                        <figure>
                           <Image
                             alt={regno}
                             src={found.thumbnailLink}
-                            width='0'
-                            height='0'
-                            sizes='250vw'
-                            style={{ width: '100%', height: 'auto' }}
+                            width='160'
+                            height='320'
                           />
-                        )}
-                      </figure>
+                        </figure>
+                      )}
                     </div>
                     {cname && <p>{cname}</p>}
                     <p>{name}</p>
