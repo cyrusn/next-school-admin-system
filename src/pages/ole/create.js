@@ -105,9 +105,7 @@ const OleCreate = () => {
 
     setSuccessMessage(
       `Data submitted successfully: ${JSON.stringify(result)}`,
-      () => {
-        router('/ole/event')
-      }
+      () => router.push('/ole/event')
     )
   }
 

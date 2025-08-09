@@ -252,9 +252,9 @@ const Attendance = ({ attendanceSummary }) => {
     }
     const { count } = result
     setSuccessMessage(
-      `${count} ${count == 1 ? 'record is' : 'records are'} submitted successfully`
+      `${count} ${count == 1 ? 'record is' : 'records are'} submitted successfully`,
+      () => router.push('/attendance/record')
     )
-    router.push('/attendance/record')
   }
 
   if (session.user?.info?.role < ROLE_ENUM['OFFICE_STAFF']) {

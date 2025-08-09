@@ -149,12 +149,14 @@ export default function FormPage() {
       }
 
       setSuccessMessage(
-        `Data submitted successfully: ${JSON.stringify(result)}`
+        `Data submitted successfully: ${JSON.stringify(result)}`,
+        () => {
+          router.push('/announcement/record')
+        }
       )
+      setFormData({ ...defaultFormDataState })
 
       // Clear form fields
-      setFormData({ ...defaultFormDataState })
-      router.push('/announcement/record')
     } catch (error) {
       setErrorMessage(`Failed to submit data: ${error.message}`)
     }
