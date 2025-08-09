@@ -25,6 +25,7 @@ const OleCreate = () => {
     components: [],
     category: '',
     committeeAndKla: '',
+    isOrganizedBySchool: false,
     organization: ''
   }
 
@@ -45,6 +46,16 @@ const OleCreate = () => {
 
     setFormData((prevData) => {
       const newFormData = { ...prevData, [name]: value } // Update the formData object
+
+      if (name == 'isOrganizedBySchool') {
+        if (value == 'true') {
+          newFormData.organization = '本校'
+          newFormData.isOrganizedBySchool = true
+        } else {
+          newFormData.organization = ''
+          newFormData.isOrganizedBySchool = false
+        }
+      }
 
       if (options) {
         const selectedOptions = Array.from(options).filter((o) => o.selected)
@@ -72,8 +83,6 @@ const OleCreate = () => {
   }
 
   const handleSubmit = async () => {
-    console.log(formData)
-
     setLoadingMessage()
 
     const response = await fetch('/api/ole/events', {
@@ -93,7 +102,13 @@ const OleCreate = () => {
 
       return
     }
-    setSuccessMessage(`Data submitted successfully: ${JSON.stringify(result)}`)
+
+    setSuccessMessage(
+      `Data submitted successfully: ${JSON.stringify(result)}`,
+      () => {
+        router('/ole/event')
+      }
+    )
   }
 
   const inputInfoMappers = createEventInputInfoMapper(users)

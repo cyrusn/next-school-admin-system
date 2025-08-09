@@ -65,13 +65,25 @@ export const createEventInputInfoMapper = (users) => ({
       helptext: 'Please update this after the event is completed'
     }
   },
+  IS_ORGANIZIED_BY_SCHOOL: {
+    type: 'radio',
+    name: 'isOrganizedBySchool',
+    title: 'Organzied by school',
+    options: {
+      elements: [
+        { value: true, title: 'Yes' },
+        { value: false, title: 'No' }
+      ],
+      helptext: '如校內舉辦活動，請選 Yes'
+    }
+  },
   ORGANIZATION: {
     title: 'Organization',
     type: 'text',
     name: 'organization',
     options: {
       placeholder: 'Organization',
-      helptext: 'e.g. 本校、香港學界體育聯會、香港學校音樂及朗誦協會 ...'
+      helptext: 'e.g. 香港學界體育聯會、香港學校音樂及朗誦協會 ...'
     }
   },
   PICS: {

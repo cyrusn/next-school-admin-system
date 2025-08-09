@@ -37,6 +37,7 @@ const OleEvent = () => {
     setFilter((prevFilter) => {
       const newFilter = { ...prevFilter, [name]: value }
       tableRef.current?.dt().rows().deselect()
+
       if (name !== 'type') return newFilter
 
       if (value == 'pics') {
