@@ -3,6 +3,7 @@ import _ from 'lodash'
 import Image from 'next/image'
 
 import { useStudentsContext } from '@/context/studentContext'
+import Loading from '@/components/loading'
 
 export default function StudentPhoto() {
   const [files, setFiles] = useState([])
@@ -36,7 +37,7 @@ export default function StudentPhoto() {
   }
 
   if (files.length == 0 && filter !== '') {
-    return <div className='notification is-warning'>Loading ...</div>
+    return <Loading />
   }
 
   return (

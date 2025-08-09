@@ -1,8 +1,8 @@
 import { useStudentsContext } from '@/context/studentContext'
 import DataTable from '@/components/dataTable'
-import { useState, useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import Nav from './components/nav'
-import Loading from './components/loading'
+import Loading from '@/components/loading'
 
 const Namelist = () => {
   const { students } = useStudentsContext()

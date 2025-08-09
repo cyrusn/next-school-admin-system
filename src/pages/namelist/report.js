@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react'
 import Nav from './components/nav'
 import MainTable from './components/mainTable'
 import ClasslevelTables from './components/classlevelTables.js'
-import Loading from './components/loading'
+import Loading from '@/components/loading'
 
 export default function NamelistReport() {
   const { students } = useStudentsContext()

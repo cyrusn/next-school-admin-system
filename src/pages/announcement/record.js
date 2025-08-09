@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
 import Notification, {
@@ -11,10 +10,10 @@ import _ from 'lodash'
 
 import Box from './components/record/box'
 import AnnoucnementNav from './components/nav'
+import Loading from '@/components/loading'
 
 export default function Record() {
-  const { status } = useSession()
-  const [announcements, setAnnouncements] = useState([])
+  const [announcements, setAnnouncements] = useState({})
 
   const dt = DateTime.now().setZone('Asia/Hong_Kong')
   const now = dt.toFormat('yyyy-MM-dd')
@@ -87,7 +86,6 @@ export default function Record() {
 
   return (
     <>
-      {status === 'loading' && <p>Loading...</p>}
       <AnnoucnementNav />
       <Notification {...notification} />
 
