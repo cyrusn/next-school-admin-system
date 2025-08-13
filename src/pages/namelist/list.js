@@ -114,7 +114,7 @@ const Namelist = () => {
     {
       title: 'Groups',
       data(row) {
-        return row.groups?.split(',').sort() || []
+        return row.groups?.sort() || []
       },
       render: {
         _: '[, ]',

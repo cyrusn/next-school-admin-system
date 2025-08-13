@@ -1,6 +1,7 @@
 import { TERM, HOMEBASES } from '@/config/constant/'
 
 export default function HouseReport({ report, classlevel }) {
+  console.log(report)
   const houses = ['R', 'Y', 'B', 'G']
   const sexes = ['F', 'M']
 
@@ -26,13 +27,13 @@ export default function HouseReport({ report, classlevel }) {
               {houses.map((house) => {
                 return (
                   <td key={house}>
-                    {report.houses[house][classlevel.title].sexes[s]}
+                    {report.houses[house][classlevel.title]?.sexes[s]}
                   </td>
                 )
               })}
               <td>
                 {houses.reduce((prev, house) => {
-                  prev += report.houses[house][classlevel.title].sexes[s]
+                  prev += report.houses[house][classlevel.title]?.sexes[s]
                   return prev
                 }, 0)}
               </td>
@@ -46,13 +47,13 @@ export default function HouseReport({ report, classlevel }) {
           {houses.map((house) => {
             return (
               <td key={house}>
-                {report.houses[house][classlevel.title].total}
+                {report.houses[house][classlevel.title]?.total}
               </td>
             )
           })}
           <td>
             {houses.reduce((prev, house) => {
-              prev += report.houses[house][classlevel.title].total
+              prev += report.houses[house][classlevel.title]?.total
               return prev
             }, 0)}
           </td>
