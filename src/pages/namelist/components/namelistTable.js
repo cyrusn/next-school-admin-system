@@ -82,6 +82,12 @@ export default function NamelistTable({
             </tr>
           )
         })}
+        <tr>
+          <td
+            colSpan='8'
+            className='has-text-right'
+          >{`No of students: ${students.length}`}</td>
+        </tr>
       </tbody>
     </table>
   )

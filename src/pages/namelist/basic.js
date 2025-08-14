@@ -8,7 +8,7 @@ import { useReactToPrint } from 'react-to-print'
 import NamelistTable from './components/namelistTable.js'
 import { HOMEBASES, TERM } from '@/config/constant'
 
-export default function ClassList() {
+export default function BasicList() {
   const defaultFilters = {
     classlevels: [],
     groups: [],
@@ -87,26 +87,6 @@ export default function ClassList() {
 
   return (
     <>
-      <style>
-        {`
-@media all {
-  .page-break {
-    display: none; /* Hide the element in screen view */
-  }
-}
-
-@media print {
-  .page-break {
-    display: block; /* Make the element visible for printing */
-    page-break-before: always; /* Force a page break before this element */
-    margin-top: 1rem; /* Optional: Add some space before the new page content */
-  }
-
-  .not-print {
-    display: none;
-  }
-}`}
-      </style>
       <div className='not-print'>
         <Nav />
         {Object.keys(filterData).map((key, index) => {
@@ -119,10 +99,12 @@ export default function ClassList() {
                   <CheckboxInput
                     name={key}
                     elements={
-                      filterData[key].map((v) => ({
-                        title: v,
-                        value: v
-                      })) || []
+                      filterData[key]
+                        .map((v) => ({
+                          title: v,
+                          value: v
+                        }))
+                        .sort((a, b) => a.title.localeCompare(b.title)) || []
                     }
                     selectedBoxes={filters[key] || []}
                     handleChange={handleChange}

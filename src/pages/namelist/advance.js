@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import Nav from './components/nav'
 import Loading from '@/components/loading'
 
-const Namelist = () => {
+const AdvanceList = () => {
   const { students } = useStudentsContext()
   const ref = useRef(null)
   const id = 'namelistTable'
@@ -78,6 +78,7 @@ const Namelist = () => {
       data: 'dob',
       target: 7,
       width: '10%',
+      visible: false,
       searchPanes: { show: false },
       searchBuilder: {
         defaultCondition: '<'
@@ -89,6 +90,7 @@ const Namelist = () => {
       target: 8,
       data: 'x1',
       width: '5%',
+      visible: false,
       searchBuilder: {
         defaultCondition: '='
       }
@@ -98,6 +100,7 @@ const Namelist = () => {
       data: 'x2',
       target: 9,
       width: '5%',
+      visible: false,
       searchBuilder: {
         defaultCondition: '='
       }
@@ -107,6 +110,7 @@ const Namelist = () => {
       data: 'x3',
       target: 10,
       width: '5%',
+      visible: false,
       searchBuilder: {
         defaultCondition: '='
       }
@@ -122,6 +126,7 @@ const Namelist = () => {
         sp: '[]'
       },
       width: '10%',
+      visible: false,
       searchBuilder: {
         orthogonal: 'sb',
         defaultCondition: 'contains'
@@ -230,4 +235,4 @@ const Namelist = () => {
     </>
   )
 }
-export default Namelist
+export default AdvanceList

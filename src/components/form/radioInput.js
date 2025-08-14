@@ -16,7 +16,11 @@ const RadioInput = ({
             <input
               type='radio'
               value={el.value}
-              checked={checkedValue == el.value}
+              checked={
+                typeof checkedValue == 'string'
+                  ? checkedValue == el.value
+                  : checkedValue.includes(el.value)
+              }
               onChange={handleChange}
               name={name}
             />{' '}

@@ -21,7 +21,7 @@ const Navbar = () => {
   }, [pathname])
 
   return (
-    <nav className='navbar is-transparent has-shadow'>
+    <nav className='navbar is-transparent has-shadow not-print'>
       <div className='navbar-brand'>
         <Link href='/' className='navbar-item has-text-weight-bold'>
           <span className='is-hidden-touch icon-text'>
