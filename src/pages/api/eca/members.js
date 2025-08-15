@@ -106,6 +106,9 @@ export const getHandler = async (req, res) => {
       case 'clubId':
         filterRanges.push('record!C:C')
         break
+      case 'classcode':
+        filterRanges.push('record!G:G')
+        break
       case 'regno':
         filterRanges.push('record!F:F')
         break
@@ -119,6 +122,10 @@ export const getHandler = async (req, res) => {
     const ranges = filterData.reduce((prev, record, index) => {
       const rowNo = index + 2
       console.log(record)
+      if (type == 'classcode' && record['classcodeAndNo'].slice(0, 2) == value) {
+        prev.push(`record!A${rowNo}:N${rowNo}`)
+      }
+
       if (record[type] == Number(value)) {
         prev.push(`record!A${rowNo}:N${rowNo}`)
       }

@@ -29,10 +29,7 @@ export default function TimetableElement({ timetable, isLast }) {
   const periodKeyNames = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8']
 
   const breakSessions = {
-    0: [
-      { title: 'Assembly', time: '08:00 - 08:20' },
-      { title: 'Reading Period', time: '08:20 - 08:45' }
-    ],
+    0: [{ title: 'Assembly', time: '08:00 - 08:20' }],
     3: [{ title: 'Recess', time: '10:35 - 10:55' }],
     5: [{ title: 'Lunch', time: '12:45 - 13:55' }]
   }
@@ -146,8 +143,8 @@ export default function TimetableElement({ timetable, isLast }) {
                                     return (
                                       <>
                                         {splited.length > 1 && k == 0 && <br />}
-                                        <span key={k} className=''>
-                                          #{t}{' '}
+                                        <span key={k} className='tag is-italic has-text-black'>
+                                          {t}{' '}
                                         </span>
                                       </>
                                     )

@@ -68,7 +68,10 @@ export default function EcaMembershipRecord() {
     setLoadingMessage()
     const filterText = filter.clubId
       ? `clubId:${filter.clubId}`
-      : `regno:${filter.regno}`
+      : filter.regno
+        ? `regno:${filter.regno}`
+        : `classcode:${filter.classcode}`
+
     try {
       const response = await fetch(`/api/eca/members?filter=${filterText}`)
       if (!response.ok) throw new Error('Fail to fetch members data')
@@ -263,9 +266,9 @@ export default function EcaMembershipRecord() {
             </div>
             <p className='control'>
               <button
-                className={`button ${filter.regno ? 'is-info' : 'is-dark'}`}
+                className={`button ${filter.regno || filter.classcode ? 'is-info' : 'is-dark'}`}
                 onClick={handleSearch}
-                disabled={!filter.regno}
+                disabled={!filter.regno && !filter.classcode}
               >
                 Search
               </button>
