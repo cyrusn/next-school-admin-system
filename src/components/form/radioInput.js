@@ -17,9 +17,9 @@ const RadioInput = ({
               type='radio'
               value={el.value}
               checked={
-                typeof checkedValue == 'string'
-                  ? checkedValue == el.value
-                  : checkedValue.includes(el.value)
+                Array.isArray(checkedValue)
+                  ? checkedValue.includes(el.value)
+                  : checkedValue == el.value
               }
               onChange={handleChange}
               name={name}
