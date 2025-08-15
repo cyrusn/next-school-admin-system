@@ -24,6 +24,13 @@ export default function NamelistReport() {
 
     prev.houses ??= {}
     prev.houses[house] ??= {}
+
+    prev.houses[house].total ??= 0
+    prev.houses[house].sexes ??= {}
+    prev.houses[house].sexes[sex] ??= 0
+    prev.houses[house].total += 1
+    prev.houses[house].sexes[sex] += 1
+
     prev.houses[house][classlevel] ??= {}
     prev.houses[house][classlevel].total ??= 0
     prev.houses[house][classlevel].sexes ??= {}

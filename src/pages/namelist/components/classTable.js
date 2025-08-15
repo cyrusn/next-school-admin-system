@@ -8,12 +8,18 @@ export default function ClassReport({ report, classlevel, classMasters }) {
     >
       <thead>
         <tr>
-          <th className='has-text-centered'>Class</th>
+          <th className='has-text-centered' style={{ width: '16%' }}>
+            Class
+          </th>
           {Object.keys(report.classcodes)
             .filter((classcode) => classcode[0] == classlevel.title[1])
             .map((classcode) => {
               return (
-                <th className='has-text-centered' key={classcode}>
+                <th
+                  className='has-text-centered'
+                  style={{ width: '14%' }}
+                  key={classcode}
+                >
                   {classcode}
                 </th>
               )

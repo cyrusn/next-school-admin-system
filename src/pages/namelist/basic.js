@@ -4,7 +4,6 @@ import { useUsersContext } from '@/context/usersContext'
 import { groupBy, intersection, upperFirst } from 'lodash'
 import CheckboxInput from '@/components/form/checkboxInput'
 import Nav from './components/nav'
-import { useReactToPrint } from 'react-to-print'
 import NamelistTable from './components/namelistTable.js'
 import { HOMEBASES, TERM } from '@/config/constant'
 
@@ -29,7 +28,6 @@ export default function BasicList() {
     x2: [],
     x3: []
   }
-  const reactToPrintFn = useReactToPrint({ contentRef })
 
   const studentsByLevel = students.reduce((prev, s) => {
     const classlevel = `S${s.classcode[0]}`
@@ -114,17 +112,6 @@ export default function BasicList() {
             </div>
           )
         })}
-
-        <div className='field is-horizontal'>
-          <div className='field-label'></div>
-          <div className='field-body'>
-            <div className='field'>
-              <button className='button is-info' onClick={reactToPrintFn}>
-                Print
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div ref={contentRef}>
@@ -155,25 +142,29 @@ export default function BasicList() {
                     <h1 className='title not-print'>{`${classlevel}`}</h1>
                     <div className='fixed-grid has-1-cols-mobile'>
                       <div className='grid is-gap-8'>
-                        {Object.keys(groupedStudents).map((key, index) => {
-                          if (!key) return <></>
-                          return (
-                            <div className='cell' key={key}>
-                              <NamelistTable
-                                key={index}
-                                classTitle={`${classlevel}-${key}`}
-                                students={groupedStudents[key]}
-                                teacher={
-                                  usersByClassMaster[key]
-                                    ?.map((t) => t.initial)
-                                    ?.join(', ') || ''
-                                }
-                                location={HOMEBASES[TERM][key]}
-                              />
-                              <div className='page-break' />
-                            </div>
-                          )
-                        })}
+                        {Object.keys(groupedStudents).map(
+                          (key, index, array) => {
+                            if (!key) return <></>
+                            return (
+                              <div className='cell' key={key}>
+                                <NamelistTable
+                                  key={index}
+                                  classTitle={`${classlevel}-${key}`}
+                                  students={groupedStudents[key]}
+                                  teacher={
+                                    usersByClassMaster[key]
+                                      ?.map((t) => t.initial)
+                                      ?.join(', ') || ''
+                                  }
+                                  location={HOMEBASES[TERM][key]}
+                                />
+                                {array.length !== index + 1 && (
+                                  <div className='page-break' />
+                                )}
+                              </div>
+                            )
+                          }
+                        )}
                       </div>
                     </div>
                   </div>
