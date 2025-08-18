@@ -102,6 +102,7 @@ export default function BasicList() {
                           title: v,
                           value: v
                         }))
+                        .filter(({ value }) => value)
                         .sort((a, b) => a.title.localeCompare(b.title)) || []
                     }
                     selectedBoxes={filters[key] || []}

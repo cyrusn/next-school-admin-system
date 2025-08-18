@@ -69,20 +69,24 @@ export default function Timetable() {
           <>
             {sheetName.includes('teacher') && (
               <RadioInput
-                elements={tableNames.map((tableName) => ({
-                  title: tableName,
-                  value: tableName
-                }))}
+                elements={tableNames
+                  .map((tableName) => ({
+                    title: tableName,
+                    value: tableName
+                  }))
+                  .sort((a, b) => a.title.localeCompare(b.title))}
                 checkedValue={selectedTableNames}
                 handleChange={handleSelect}
               />
             )}
             {sheetName.includes('class') && (
               <CheckboxInput
-                elements={tableNames.map((tableName) => ({
-                  title: tableName,
-                  value: tableName
-                }))}
+                elements={tableNames
+                  .map((tableName) => ({
+                    title: tableName,
+                    value: tableName
+                  }))
+                  .sort((a, b) => a.title.localeCompare(b.title))}
                 selectedBoxes={selectedTableNames}
                 handleChange={handleSelect}
               />
@@ -92,7 +96,6 @@ export default function Timetable() {
       </div>
       {sheetName &&
         selectedTableNames
-          .sort()
           .reduce((prev, selectedTableName) => {
             const found = timetables[sheetName]?.find(
               (t) => t.ShortName == selectedTableName

@@ -41,6 +41,7 @@ export default function NamelistReport() {
     return prev
   }, {})
 
+  console.log(report)
   const classlevels = [
     { title: 'S1', vacancy: 132 },
     { title: 'S2', vacancy: 132 },

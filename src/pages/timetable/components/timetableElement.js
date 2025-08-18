@@ -79,7 +79,7 @@ export default function TimetableElement({ timetable, isLast }) {
                     </tr>
                   ))}
                 <tr key={idx}>
-                  <td className='has-text-centered'>
+                  <td className='has-text-centered' style={{ height: '80px' }}>
                     {periodMappers[periodKey]}
                   </td>
                   {dayKeyNames.map((dayKey, idx) => {
@@ -143,8 +143,8 @@ export default function TimetableElement({ timetable, isLast }) {
                                     return (
                                       <>
                                         {splited.length > 1 && k == 0 && <br />}
-                                        <span key={k} className='tag is-italic has-text-black'>
-                                          {t}{' '}
+                                        <span key={k} className='is-italic'>
+                                          #{t}{' '}
                                         </span>
                                       </>
                                     )

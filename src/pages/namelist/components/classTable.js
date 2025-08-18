@@ -8,18 +8,12 @@ export default function ClassReport({ report, classlevel, classMasters }) {
     >
       <thead>
         <tr>
-          <th className='has-text-centered' style={{ width: '16%' }}>
-            Class
-          </th>
+          <th className='has-text-centered'>Class</th>
           {Object.keys(report.classcodes)
             .filter((classcode) => classcode[0] == classlevel.title[1])
             .map((classcode) => {
               return (
-                <th
-                  className='has-text-centered'
-                  style={{ width: '14%' }}
-                  key={classcode}
-                >
+                <th className='has-text-centered' key={classcode}>
                   {classcode}
                 </th>
               )
@@ -37,7 +31,7 @@ export default function ClassReport({ report, classlevel, classMasters }) {
                 .map((classcode) => {
                   return (
                     <td key={classcode}>
-                      {report.classcodes[classcode].sexes[s]}
+                      {report.classcodes[classcode].sexes[s] || 0}
                     </td>
                   )
                 })}
@@ -45,7 +39,7 @@ export default function ClassReport({ report, classlevel, classMasters }) {
                 {Object.keys(report.classcodes)
                   .filter((classcode) => classcode[0] == classlevel.title[1])
                   .reduce((prev, classcode) => {
-                    prev += report.classcodes[classcode].sexes[s]
+                    prev += report.classcodes[classcode].sexes[s] || 0
                     return prev
                   }, 0)}
               </td>
@@ -60,14 +54,16 @@ export default function ClassReport({ report, classlevel, classMasters }) {
             .filter((classcode) => classcode[0] == classlevel.title[1])
             .map((classcode) => {
               return (
-                <td key={classcode}>{report.classcodes[classcode].total}</td>
+                <td key={classcode}>
+                  {report.classcodes[classcode].total || 0}
+                </td>
               )
             })}
           <td>
             {Object.keys(report.classcodes)
               .filter((classcode) => classcode[0] == classlevel.title[1])
               .reduce((prev, classcode) => {
-                prev += report.classcodes[classcode].total
+                prev += report.classcodes[classcode].total || 0
                 return prev
               }, 0)}
           </td>

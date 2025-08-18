@@ -12,23 +12,15 @@ export default function HouseReport({ report, classlevel }) {
     >
       <thead>
         <tr>
-          <th className='has-text-centered' style={{ width: '10%' }}>
-            House
-          </th>
+          <th className='has-text-centered'>House</th>
           {houses.map((house) => {
             return (
-              <th
-                key={house}
-                className='has-text-centered'
-                style={{ width: '18%' }}
-              >
+              <th key={house} className='has-text-centered'>
                 {house}
               </th>
             )
           })}
-          <th className='has-text-centered' style={{ width: '18%' }}>
-            Total
-          </th>
+          <th className='has-text-centered'>Total</th>
         </tr>
       </thead>
       <tbody>

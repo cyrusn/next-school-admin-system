@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useRef } from 'react'
 import { ROLE_ENUM } from '@/config/constant'
 
 const calenderEventUrl = process.env.NEXT_PUBLIC_CALENDAR_EVENT_SPREADSHEET_URL
@@ -11,7 +10,13 @@ const gotYourBackUrl = process.env.NEXT_PUBLIC_GOT_YOUR_BACK
 
 const PageLink = ({ href, title }) => {
   return (
-    <Link href={href} className='navbar-item'>
+    <Link
+      href={href}
+      className='navbar-item'
+      onClick={(e) => {
+        e.target.blur()
+      }}
+    >
       {title}
     </Link>
   )
@@ -67,7 +72,14 @@ const Navigator = ({ user }) => {
 
       <NavbarDropdown
         title='School Admin'
-        includedPaths={['announcement', 'resource']}
+        includedPaths={[
+          'announcement',
+          'resource',
+          'timetable',
+          'namelist',
+          'profile',
+          'photo'
+        ]}
       >
         <PageLink title='Namelist' href='/namelist' />
         <PageLink title='Timetable' href='/timetable' />
@@ -76,6 +88,7 @@ const Navigator = ({ user }) => {
         <PageLink title='Student Profile' href='/profile' />
         <PageLink title='Student Photos' href='/photo' />
       </NavbarDropdown>
+
       <NavbarDropdown title='ITAV'>
         <Link href={itavBooking} target='_blank' className='navbar-item'>
           ITAV Booking (Green Form)
@@ -117,7 +130,7 @@ const Navigator = ({ user }) => {
       }
       <NavbarDropdown
         title='ECA'
-        includedPaths={['registration', 'membership', 'postExam']}
+        includedPaths={['registration', 'membership', 'postExam', 'eca']}
       >
         <PageLink title='Club registration' href='/eca/registration' />
         <PageLink title='Membership Record' href='/eca/membership' />
