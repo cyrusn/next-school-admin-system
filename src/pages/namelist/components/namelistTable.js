@@ -2,17 +2,13 @@ import { HOMEBASES, TERM, SCHOOL_YEAR } from '@/config/constant'
 import _ from 'lodash'
 
 export default function NamelistTable({
-  key,
   students,
   teacher,
   location,
   classTitle
 }) {
   return (
-    <table
-      key={key}
-      className='table is-bordered is-narrow is-hoverable is-fullwidth print-table'
-    >
+    <table className='table is-bordered is-narrow is-hoverable is-fullwidth print-table'>
       <thead>
         <tr>
           <td style={{ border: 'none' }} colSpan='8' className='underline'>
@@ -69,24 +65,22 @@ export default function NamelistTable({
           <td style={{ width: '5%' }}></td>
           <td style={{ width: '5%' }}></td>
         </tr>
-        {_(students)
-          .sortBy(['classcode', 'classno'])
-          .map((s) => {
-            return (
-              <tr key={s.regno}>
-                <td>{`${s.classcode}${String(s.classno).padStart(2, 0)}`}</td>
-                <td className={s.ename?.length > 15 && 'is-size-7'}>
-                  {s.ename || ''}
-                </td>
-                <td>{s.cname}</td>
-                <td>{s.sex}</td>
-                <td>{s.house}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            )
-          })}
+        {_.sortBy(students, ['classcode', 'classno']).map((s) => {
+          return (
+            <tr key={s.regno}>
+              <td>{`${s.classcode}${String(s.classno).padStart(2, 0)}`}</td>
+              <td className={s.ename?.length > 15 ? 'is-size-7' : ''}>
+                {s.ename || ''}
+              </td>
+              <td>{s.cname}</td>
+              <td>{s.sex}</td>
+              <td>{s.house}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          )
+        })}
         <tr>
           <td
             colSpan='8'

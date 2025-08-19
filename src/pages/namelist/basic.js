@@ -88,7 +88,7 @@ export default function BasicList() {
       <div className='not-print'>
         <Nav />
         {Object.keys(filterData).map((key, index) => {
-          if (filterData[key]?.length == 0) return <></>
+          if (filterData[key]?.length == 0) return null
           return (
             <div className='field is-horizontal' key={index}>
               <div className='field-label'>{upperFirst(key)}</div>
@@ -145,11 +145,11 @@ export default function BasicList() {
                       <div className='grid is-gap-2'>
                         {Object.keys(groupedStudents).map(
                           (key, index, array) => {
-                            if (!key) return <></>
+                            if (!key) return null
                             return (
                               <div className='cell' key={key}>
                                 <NamelistTable
-                                  key={index}
+                                  key={key}
                                   classTitle={`${classlevel}-${key}`}
                                   students={groupedStudents[key]}
                                   teacher={
