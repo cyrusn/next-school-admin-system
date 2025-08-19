@@ -36,7 +36,7 @@ export default function TimetableElement({ timetable, isLast }) {
 
   return (
     <>
-      <table className='table is-bordered is-narrow is-hoverable is-fullwidth'>
+      <table className='table is-bordered is-narrow is-hoverable is-fullwidth print-table'>
         <caption className='mb-1'>
           <h1 className='title'>
             {ShortName} {HomeRoom_ShortName || ''}
@@ -47,7 +47,7 @@ export default function TimetableElement({ timetable, isLast }) {
         </caption>
         <thead>
           <tr>
-            <th className='has-text-centered' style={{ width: '10%' }}></th>
+            <th className='has-text-centered ' style={{ width: '10%' }}></th>
             <th className='has-text-centered' style={{ width: '18%' }}>
               Mon
             </th>
@@ -79,7 +79,10 @@ export default function TimetableElement({ timetable, isLast }) {
                     </tr>
                   ))}
                 <tr key={idx}>
-                  <td className='has-text-centered' style={{ height: '80px' }}>
+                  <td
+                    className='has-text-centered is-dark-border'
+                    style={{ height: '80px' }}
+                  >
                     {periodMappers[periodKey]}
                   </td>
                   {dayKeyNames.map((dayKey, idx) => {

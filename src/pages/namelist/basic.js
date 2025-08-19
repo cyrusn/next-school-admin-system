@@ -139,10 +139,10 @@ export default function BasicList() {
               )
               return (
                 <div key={key} className='hero'>
-                  <div className='hero-body'>
+                  <div className='hero-body p-0 m-0'>
                     <h1 className='title not-print'>{`${classlevel}`}</h1>
                     <div className='fixed-grid has-1-cols-mobile'>
-                      <div className='grid is-gap-8'>
+                      <div className='grid is-gap-2'>
                         {Object.keys(groupedStudents).map(
                           (key, index, array) => {
                             if (!key) return <></>

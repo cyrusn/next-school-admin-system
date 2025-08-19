@@ -1,4 +1,5 @@
 import { HOMEBASES, TERM, SCHOOL_YEAR } from '@/config/constant'
+import _ from 'lodash'
 
 export default function NamelistTable({
   key,
@@ -10,7 +11,7 @@ export default function NamelistTable({
   return (
     <table
       key={key}
-      className='table is-bordered is-narrow is-hoverable is-fullwidth'
+      className='table is-bordered is-narrow is-hoverable is-fullwidth print-table'
     >
       <thead>
         <tr>
@@ -19,21 +20,21 @@ export default function NamelistTable({
           </td>
         </tr>
         <tr>
-          <td style={{ border: 'none' }} colSpan='2' className='underline'>
+          <td style={{ border: 'none' }} colSpan='6' className='underline'>
             <span className='is-underlined content'>
               科目：&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
             </span>
           </td>
         </tr>
         <tr>
-          <td style={{ border: 'none' }} colSpan='2'>
+          <td style={{ border: 'none' }} colSpan='6'>
             <span className='is-underlined content'>
               任教老師：&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
             </span>
           </td>
         </tr>
         <tr>
-          <td style={{ border: 'none' }} colSpan='2'>
+          <td style={{ border: 'none' }} colSpan='6'>
             <span className='is-underlined content'>
               收回功課總數：&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
             </span>
@@ -68,20 +69,24 @@ export default function NamelistTable({
           <td style={{ width: '5%' }}></td>
           <td style={{ width: '5%' }}></td>
         </tr>
-        {students.map((s) => {
-          return (
-            <tr key={s.regno}>
-              <td>{`${s.classcode}${String(s.classno).padStart(2, 0)}`}</td>
-              <td>{s.ename}</td>
-              <td>{s.cname}</td>
-              <td>{s.sex}</td>
-              <td>{s.house}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          )
-        })}
+        {_(students)
+          .sortBy(['classcode', 'classno'])
+          .map((s) => {
+            return (
+              <tr key={s.regno}>
+                <td>{`${s.classcode}${String(s.classno).padStart(2, 0)}`}</td>
+                <td className={s.ename?.length > 15 && 'is-size-7'}>
+                  {s.ename || ''}
+                </td>
+                <td>{s.cname}</td>
+                <td>{s.sex}</td>
+                <td>{s.house}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            )
+          })}
         <tr>
           <td
             colSpan='8'

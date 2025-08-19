@@ -7,16 +7,36 @@
 @media print {
   @page {
     size: A4; /* Sets the page size to A4 */
-    margin: 10mm; /* Sets a 10mm margin on all sides */
+    margin: 5mm; /* Sets a 10mm margin on all sides */
   }
 
   .page-break {
     display: block; /* Make the element visible for printing */
     page-break-before: always; /* Force a page break before this element */
-    margin-top: 1rem; /* Optional: Add some space before the new page content */
   }
 
   .not-print {
     display: none;
+  }
+
+  .print-table {
+    border-collapse: collapse; /* Collapses borders between cells */
+    margin-top: 0px !important;
+    padding: 0px !important;
+  }
+
+  .print-table th,
+  .print-table td {
+    border: 1px solid black;
+    padding: 2px !important;
+  }
+
+  .container,
+  section,
+  table,
+  tr,
+  td {
+    margin-top: 0px !important;
+    padding: 0px !important;
   }
 }
