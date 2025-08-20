@@ -69,7 +69,13 @@ export default function NamelistTable({
           return (
             <tr key={s.regno}>
               <td>{`${s.classcode}${String(s.classno).padStart(2, 0)}`}</td>
-              <td className={s.ename?.length > 15 ? 'is-size-7' : ''}>
+              <td
+                className={
+                  s.ename?.length > 15
+                    ? 'is-size-7 is-align-content-center'
+                    : ''
+                }
+              >
                 {s.ename || ''}
               </td>
               <td>{s.cname}</td>

@@ -12,7 +12,7 @@
 
   .page-break {
     display: block; /* Make the element visible for printing */
-    page-break-before: always; /* Force a page break before this element */
+    break-after: always; /* Force a page break before this element */
   }
 
   .not-print {
@@ -32,7 +32,7 @@
   }
 
   .container,
-  section,
+  .section,
   table,
   tr,
   td {
