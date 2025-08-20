@@ -142,7 +142,7 @@ export default function BasicList() {
                   <div className='hero-body p-0 m-0'>
                     <h1 className='title not-print'>{`${classlevel}`}</h1>
                     <div className='fixed-grid has-1-cols-mobile'>
-                      <div className='grid is-gap-4'>
+                      <div className='grid is-gap-6'>
                         {Object.keys(groupedStudents).map(
                           (key, index, array) => {
                             if (!key) return null

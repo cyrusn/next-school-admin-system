@@ -16,9 +16,9 @@ export default async function handler(req, res) {
   try {
     const auth = await getAuth()
     const ranges = [
-      '1st_teacher!A1:FI',
+      '1st_teacher!A1:FS',
       '1st_class!A1:FO',
-      '2nd_teacher!A1:FI',
+      '2nd_teacher!A1:FS',
       '2nd_class!A1:FO'
     ]
     const response = await sheets.spreadsheets.values.batchGet({

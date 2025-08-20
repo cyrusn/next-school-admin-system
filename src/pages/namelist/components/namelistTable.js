@@ -71,7 +71,7 @@ export default function NamelistTable({
               <td>{`${s.classcode}${String(s.classno).padStart(2, 0)}`}</td>
               <td
                 className={
-                  s.ename?.length > 15
+                  s.ename?.length > 14
                     ? 'is-size-7 is-align-content-center'
                     : ''
                 }

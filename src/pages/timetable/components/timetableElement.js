@@ -22,11 +22,12 @@ export default function TimetableElement({ timetable, isLast }) {
     P5: '11:50 -12:45',
     P6: '13:55 -14:50',
     P7: '14:50 -15:45',
-    P8: '15:45 -16:10'
+    P8: '15:45 -16:10',
+    AF: 'After School'
   }
 
   const dayKeyNames = ['D1', 'D2', 'D3', 'D4', 'D5']
-  const periodKeyNames = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8']
+  const periodKeyNames = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'AF']
 
   const breakSessions = {
     0: [{ title: 'Assembly', time: '08:00 - 08:20' }],
@@ -86,7 +87,9 @@ export default function TimetableElement({ timetable, isLast }) {
                     {periodMappers[periodKey]}
                   </td>
                   {dayKeyNames.map((dayKey, idx) => {
-                    const cl = String(timetable[`${dayKey}${periodKey}Cl`])
+                    const cl = String(
+                      timetable[`${dayKey}${periodKey}Cl`] || ''
+                    )
                       .split('/')
                       .map((c) => {
                         const regex =
@@ -98,13 +101,13 @@ export default function TimetableElement({ timetable, isLast }) {
                         return c
                       })
                     const su = String(
-                      timetable[`${dayKey}${periodKey}Su`]
+                      timetable[`${dayKey}${periodKey}Su`] || ''
                     ).split('/')
                     const rm = String(
-                      timetable[`${dayKey}${periodKey}Rm`]
+                      timetable[`${dayKey}${periodKey}Rm`] || ''
                     ).split('/')
                     const te = String(
-                      timetable[`${dayKey}${periodKey}Te`]
+                      timetable[`${dayKey}${periodKey}Te`] || ''
                     ).split('/')
 
                     let zipContents
