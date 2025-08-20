@@ -5,6 +5,13 @@ import { DateTime } from 'luxon'
 import { validateForm } from '@/utils/formValidation' // Import the validation function
 import { TIMEZONE } from '@/config/constant'
 
+const EXCLUDED_DATES = process.env['NEXT_PUBLIC_ANNOUNCEMENT_EXCLUDED_DATES']
+  .split(',')
+  .map((s) => {
+    const [date, reason] = s.split(':')
+    return { date, reason }
+  })
+
 import Notification, {
   notificationWrapper,
   defaultNotification
@@ -94,7 +101,20 @@ export default function FormPage() {
 
       // Validate the form after updating formData
       const validationRules = {
-        date: { required: true, weekday: true },
+        date: {
+          required: true,
+          weekday: true,
+          custom({ date }, field) {
+            const found = EXCLUDED_DATES.find((e) => {
+              const eDateDT = DateTime.fromISO(e.date)
+              const cDateDT = DateTime.fromISO(date)
+              return eDateDT.hasSame(cDateDT, 'day')
+            })
+
+            if (found)
+              return `No announcements on ${found.date} (${found.reason})`
+          }
+        },
         from: { required: true },
         target: { required: true },
         content: { required: true }
