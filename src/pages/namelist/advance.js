@@ -144,6 +144,7 @@ const AdvanceList = () => {
         const result = []
         if (row.isNcs) result.push('NCS')
         if (row.isNewlyArrived) result.push('Newly-Arrived')
+        if (row.isSen) result.push('SEN')
         return result
       },
       width: '8%',
@@ -154,6 +155,7 @@ const AdvanceList = () => {
             .map((type) => {
               if (type == 'NCS') return '🌎'
               if (type == 'Newly-Arrived') return '🇨🇳'
+              if (type == 'SEN') return '❤️'
             })
             .join(' ')
         }
@@ -175,6 +177,13 @@ const AdvanceList = () => {
             label: 'Newly-Arrived',
             value: function (rowData) {
               return rowData.isNewlyArrived == true
+            }
+          },
+
+          {
+            label: 'SEN',
+            value: function (rowData) {
+              return rowData.isSen == true
             }
           }
         ]

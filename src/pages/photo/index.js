@@ -64,7 +64,8 @@ export default function StudentPhoto() {
                   </select>
                   <div className='help is-info'>
                     If you want to print the photos, remember to adjust the
-                    margins and scaling settings for optimal viewing quality. e.g. set the scale to 50%
+                    margins and scaling settings for optimal viewing quality.
+                    e.g. set the scale to 50%
                   </div>
                 </div>
               </div>
@@ -78,7 +79,7 @@ export default function StudentPhoto() {
           <h1 className='title has-text-centered'>{filter}</h1>
           <div className='grid is-col-min-8'>
             {students
-              .filter((s) => s.classcode == filter)
+              .filter((s) => s.classcode == filter && (s.ename || s.cname))
               .map((student) => {
                 const { regno, name, cname, sex, classcode, classno } = student
                 const classcodeAndNo = `${classcode}${String(classno).padStart(2, 0)}`
