@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react'
 import NextPage from './components/nextPage.js'
 import Register from './components/register.js'
 import NoClubAndTeamMessage from '../components/noClubAndTeamMessage.js'
+import { SCHOOL_YEAR } from '@/config/constant.js'
 
 export default function EcaRegistration() {
   const [clubs, setClubs] = useState([])
@@ -108,7 +109,9 @@ export default function EcaRegistration() {
       <h1 className='title has-text-centered'>聯課活動學會註冊</h1>
       <div>
         <h2 className='subtitle'>
-          以下為2024-25年度閣下負責的聯課活動學會，請選擇：
+          以下為{SCHOOL_YEAR}-
+          {String(parseInt(SCHOOL_YEAR) + 1 - 2000).padStart(2, 0)}
+          年度閣下負責的聯課活動學會，請選擇：
         </h2>
         <div className='field has-addons'>
           <div className='control is-expanded'>
