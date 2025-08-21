@@ -128,7 +128,7 @@ export default function EcaRegistration() {
                     <option
                       value={club.id}
                       key={key}
-                    >{`${cname}${category}`}</option>
+                    >{`${cname} - ${category}`}</option>
                   )
                 })}
               </select>
