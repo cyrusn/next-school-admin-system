@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   }
   try {
     const auth = await getAuth()
-    const ranges = ['students!A1:S', 'groups!A1:G']
+    const ranges = ['students!A1:T', 'groups!A1:G']
     const response = await sheets.spreadsheets.values.batchGet({
       auth,
       spreadsheetId,
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
     const studentData = students.map((s, index) => {
       const groups_ = groupsbyRegno[s.regno] || []
       const rowNo = index + 2
-      s.range = `students!A${rowNo}:S${rowNo}`
+      s.range = `students!A${rowNo}:T${rowNo}`
       s.groups = groups_.map(({ groupName }) => groupName)
       return s
     })

@@ -76,11 +76,11 @@ export default function NamelistTable({
                     : ''
                 }
               >
-                {s.ename || ''}
+                {s.isHidden ? '' : s.ename}
               </td>
-              <td>{s.cname}</td>
-              <td>{s.sex}</td>
-              <td>{s.house}</td>
+              <td>{s.isHidden ? '' : s.cname || ''}</td>
+              <td>{s.isHidden ? '' : s.sex}</td>
+              <td>{s.isHidden ? '' : s.house}</td>
               <td></td>
               <td></td>
               <td></td>

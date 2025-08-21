@@ -83,6 +83,7 @@ const Navigator = ({ user }) => {
       >
         <PageLink title='Namelist' href='/namelist' />
         <PageLink title='Timetable' href='/timetable' />
+        <PageLink title='Teacher List' href='/teachers' />
         <PageLink title='Announcement' href='/announcement' />
         <PageLink title='Resource Booking' href='/resource' />
         <PageLink title='Student Profile' href='/profile' />
