@@ -39,7 +39,7 @@ export default function EcaRegister({
     isConfirmed
   } = info
 
-  const modeValues = modeValue.split(',').map((v) => v.trim())
+  const modeValues = (modeValue || '').split(',').map((v) => v.trim())
 
   const onSubmit = async () => {
     if (mode == 'register') {
@@ -207,7 +207,7 @@ export default function EcaRegister({
                     name='activityType'
                     type='checkbox'
                     value={type}
-                    checked={activityType.split(',').includes(type)}
+                    checked={(activityType || '').split(',').includes(type)}
                     onChange={onChange}
                   />
                   <span>{ACTIVITY_TYPES[type].cname}</span>
@@ -217,7 +217,7 @@ export default function EcaRegister({
           </div>
         </div>
 
-        {activityType.split(',').includes('others') && (
+        {activityType?.split(',').includes('others') && (
           <div className='field'>
             <label className='label'>如選其他，請詳述</label>
             <div className='control'>

@@ -176,7 +176,7 @@ export default function NextPage({
                     <div>{MODE_TYPES[modeType]?.cname}</div>
                     {modeType == 'exact' && (
                       <span>
-                        {modeValue
+                        {(modeValue || '')
                           .split(',')
                           .map((s) => s.trim())
                           ?.join(', ')}
@@ -246,11 +246,12 @@ export default function NextPage({
           <p className='card-footer-item'>
             {isConfirmed && <a onClick={() => setView('edit')}> 修改</a>}
 
-            {!isConfirmed && (
+            {!isConfirmed && regInfo && (
               <a className='has-text-success' onClick={() => setView('edit')}>
                 修改並確定資料
               </a>
             )}
+
             {!regInfo && <a onClick={() => setView('register')}> 登記 </a>}
           </p>
           {!isConfirmed && (
