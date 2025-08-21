@@ -18,8 +18,12 @@ export default async function handler(req, res) {
     }
 
     res.status(200).json(
-      data.filter(({ pic, associates }) => {
-        const allPics = [...pic?.split(', '), ...associates?.split(',')]
+      data.filter(({ pic, associates, admininstrators }) => {
+        const allPics = [
+          ...pic?.split(',').map((a) => a.trim()),
+          ...associates?.split(',').map((a) => a.trim()),
+          ...admininstrators?.split(',').map((a) => a.trim())
+        ]
         return allPics.includes(initial)
       })
     )

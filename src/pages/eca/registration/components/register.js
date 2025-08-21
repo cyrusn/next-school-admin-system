@@ -50,7 +50,7 @@ export default function EcaRegister({
 
     ref.current = true
     setView('next')
-    fetchClubs()
+    await fetchClubs()
   }
   const onEdit = async () => {
     const rangeObjects = [
@@ -112,7 +112,7 @@ export default function EcaRegister({
     } = info
 
     const row = [
-      clubId,
+      selectedClub.id,
       String(activityType),
       activityTypeValue,
       modeType,
@@ -172,6 +172,19 @@ export default function EcaRegister({
         return newInfo
       }
 
+      if (name == 'activityType') {
+        let newValue = ''
+        const activityTypes = newInfo?.activityType?.split(',') || []
+        if (activityTypes?.includes(value)) {
+          newValue = activityTypes.filter((a) => a != value).join(',')
+        } else {
+          activityTypes.push(value)
+          newValue = activityTypes.join(',')
+        }
+        newInfo = { ...newInfo, [name]: newValue }
+        return newInfo
+      }
+
       if (name == 'requireRegularAnnoucement') {
         newInfo = { ...newInfo, [name]: !newInfo[name] }
         return newInfo
@@ -207,7 +220,7 @@ export default function EcaRegister({
                     name='activityType'
                     type='checkbox'
                     value={type}
-                    checked={(activityType || '').split(',').includes(type)}
+                    checked={activityType?.split(',').includes(type)}
                     onChange={onChange}
                   />
                   <span>{ACTIVITY_TYPES[type].cname}</span>
@@ -370,7 +383,7 @@ export default function EcaRegister({
         </div>
 
         <div className='field'>
-          <label className='label' for='sessionPlan1'>
+          <label className='label' htmlFor='sessionPlan1'>
             9-10月活動計劃
           </label>
           <div className='control'>
@@ -385,7 +398,7 @@ export default function EcaRegister({
         </div>
 
         <div className='field'>
-          <label className='label' for='sessionPlan2'>
+          <label className='label' htmlFor='sessionPlan2'>
             11-12月活動計劃
           </label>
           <div className='control'>
@@ -400,7 +413,7 @@ export default function EcaRegister({
         </div>
 
         <div className='field'>
-          <label className='label' for='sessionPlan3'>
+          <label className='label' htmlFor='sessionPlan3'>
             1-2月活動計劃
           </label>
           <div className='control'>
@@ -415,7 +428,7 @@ export default function EcaRegister({
         </div>
 
         <div className='field'>
-          <label className='label' for='sessionPlan4'>
+          <label className='label' htmlFor='sessionPlan4'>
             3-4月活動計劃
           </label>
           <div className='control'>
@@ -430,7 +443,7 @@ export default function EcaRegister({
         </div>
 
         <div className='field'>
-          <label className='label' for='sessionPlan5'>
+          <label className='label' htmlFor='sessionPlan5'>
             5-7月活動計劃
           </label>
           <div className='control'>
