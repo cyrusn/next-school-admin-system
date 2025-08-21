@@ -18,8 +18,10 @@ export default async function handler(req, res) {
     const ranges = [
       '1st_teacher!A1:FS',
       '1st_class!A1:FO',
+      '1st_location!A1:DS',
       '2nd_teacher!A1:FS',
-      '2nd_class!A1:FO'
+      '2nd_class!A1:FO',
+      '2nd_location!A1:DS'
     ]
     const response = await sheets.spreadsheets.values.batchGet({
       auth,

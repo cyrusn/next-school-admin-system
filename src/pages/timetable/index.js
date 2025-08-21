@@ -11,7 +11,8 @@ export default function Timetable() {
   const [timetables, setTimetables] = useState({})
 
   const sheetNames = Object.keys(timetables)
-  const tableNames = timetables[sheetName]?.map((t) => t.ShortName) || []
+  const tableNames =
+    timetables[sheetName]?.map((t) => String(t.ShortName)) || []
 
   const handleChangeType = (e) => {
     const { value } = e.target
@@ -67,7 +68,8 @@ export default function Timetable() {
         />
         {tableNames?.length > 0 && (
           <>
-            {sheetName.includes('teacher') && (
+            {(sheetName.includes('teacher') ||
+              sheetName.includes('location')) && (
               <RadioInput
                 elements={tableNames
                   .map((tableName) => ({
