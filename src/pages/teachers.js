@@ -7,24 +7,24 @@ function CustomTable({ type }) {
     TEACHING_STAFF: '教職員',
     SOCIAL_WORKER: '社工'
   }
+  const filteredUsers = users.filter((u) => u.type == type)
+
   return (
-    <table className='table is-bordered is-striped is-narrow is-hoverable is-fullwidth print-table'>
-      {' '}
-      <caption className='title'>{mappers[type]}</caption>
+    <table className='table is-bordered is-striped is-narrow is-hoverable is-fullwidth print-table print-font-small'>
+      <caption className='is-size-4'>{mappers[type]}</caption>
       <thead>
         <tr>
           <th>Initial</th>
           <th>Email</th>
           <th>Name</th>
           <th>姓名</th>
-          <th>班主任</th>
+          {type == 'TEACHING_STAFF' && <th>班主任</th>}
         </tr>
       </thead>
       <tbody>
-        {users
-          .filter((u) => u.type == type)
-          .map((u, key) => {
-            return (
+        {filteredUsers.map((u, key) => {
+          return (
+            <>
               <tr key={key}>
                 <td>{u.initial}</td>
                 <td>
@@ -35,10 +35,16 @@ function CustomTable({ type }) {
                   {u.cname}
                   {u.title}
                 </td>
-                <td>{u.classMaster}</td>
+                {type == 'TEACHING_STAFF' && <td>{u.classMaster}</td>}
               </tr>
-            )
-          })}
+            </>
+          )
+        })}
+        <tr>
+          <td colSpan='5' className='has-text-right'>
+            Total: {filteredUsers.length}
+          </td>
+        </tr>
       </tbody>
     </table>
   )
@@ -46,7 +52,7 @@ function CustomTable({ type }) {
 
 export default function Teacher() {
   return (
-    <div className='columns'>
+    <div className='columns print-50'>
       <div class='column'>
         <CustomTable type='TEACHING_STAFF' />
       </div>

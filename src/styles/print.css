@@ -31,6 +31,10 @@
     padding: 2px !important;
   }
 
+  .print-font-small {
+    font-size: 10px;
+  }
+
   .container,
   .section,
   table,
