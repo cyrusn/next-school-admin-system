@@ -100,7 +100,7 @@ const Navigator = ({ user }) => {
       </NavbarDropdown>
       <NavbarDropdown
         title='Discipline'
-        includedPaths={['discipline', 'attendance']}
+        includedPaths={['discipline', 'attendance', 'ipad']}
       >
         {ROLE_ENUM[user?.role] >= ROLE_ENUM['OFFICE_STAFF'] ? (
           <PageLink title='Attendance' href='/attendance' />
@@ -108,6 +108,7 @@ const Navigator = ({ user }) => {
           <PageLink title='Attendance' href='/attendance/record' />
         )}
         <PageLink title='Conduct' href='/discipline' />
+        <PageLink title='iPad' href='/ipad' />
       </NavbarDropdown>
 
       <NavbarDropdown title='Careers' includedPaths={['ole']}>
