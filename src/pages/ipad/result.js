@@ -1,14 +1,12 @@
 import DataTable from '@/components/dataTable'
 import { useEffect, useState, useRef } from 'react'
 import { getDisplayName, getTimestamp } from '@/lib/helper'
-import { useStudentsContext } from '@/context/studentContext.js'
 import Loading from '@/components/loading'
 import { useSession } from 'next-auth/react'
 import { ROLE_ENUM } from '@/config/constant'
 import IpadNav from './nav.js'
 
 export default function IPadResult() {
-  const { students } = useStudentsContext()
   const [records, setRecords] = useState([])
   const [isModalActive, setIsModalActive] = useState(false)
   const [selectedRecords, setSelectedRecords] = useState([])
