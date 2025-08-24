@@ -81,7 +81,17 @@ export default function StudentPhoto() {
             {students
               .filter((s) => s.classcode == filter && (s.ename || s.cname))
               .map((student) => {
-                const { regno, name, cname, sex, classcode, classno } = student
+                const {
+                  regno,
+                  ename,
+                  cname,
+                  sex,
+                  classcode,
+                  classno,
+                  isSen,
+                  isNcs,
+                  isNewlyArrived
+                } = student
                 const classcodeAndNo = `${classcode}${String(classno).padStart(2, 0)}`
                 const found = files?.find(
                   (file) => file.name.split('.')[0] == `lp${regno}`
@@ -101,8 +111,12 @@ export default function StudentPhoto() {
                           </figure>
                         )}
                       </div>
-                      {cname && <p>{cname}</p>}
-                      <p>{name}</p>
+                      <p>
+                        {cname || ename}
+                        {isSen && <span> ❤️</span>}
+                        {isNcs && <span> 🌎</span>}
+                        {isNewlyArrived && <span> 🇨🇳</span>}
+                      </p>
                       <div className='tags is-justify-content-center'>
                         <span className='tag is-dark'>{classcodeAndNo}</span>
                         <span className='tag is-success'>{regno}</span>

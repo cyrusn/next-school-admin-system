@@ -361,7 +361,17 @@ export default function StudentProfile() {
           {students
             .filter((s) => s.classcode == filter)
             .map((student) => {
-              const { regno, name, cname, sex, classcode, classno } = student
+              const {
+                regno,
+                ename,
+                cname,
+                sex,
+                classcode,
+                classno,
+                isSen,
+                isNcs,
+                isNewlyArrived
+              } = student
               const classcodeAndNo = `${classcode}${String(classno).padStart(2, 0)}`
               const found = photos?.find(
                 (file) => file.name.split('.')[0] == `lp${regno}`
@@ -370,8 +380,6 @@ export default function StudentProfile() {
                 <div className='box' key={regno}>
                   <div className='columns'>
                     <div className='column is-one-quarter-desktop has-text-centered'>
-                      {cname ? <p>{cname}</p> : <></>}
-                      <p>{name}</p>
                       <div className='is-flex is-justify-content-center'>
                         <figure className='is-3by4'>
                           {found ? (
@@ -388,6 +396,12 @@ export default function StudentProfile() {
                           )}
                         </figure>
                       </div>
+                      <p>
+                        {cname || ename}
+                        {isSen && <span> ❤️</span>}
+                        {isNcs && <span> 🌎</span>}
+                        {isNewlyArrived && <span> 🇨🇳</span>}
+                      </p>
                       <div className='tags is-justify-content-center'>
                         <span className='tag is-dark'>{classcodeAndNo}</span>
                         <span className='tag is-success'>{regno}</span>
