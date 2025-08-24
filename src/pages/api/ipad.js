@@ -5,8 +5,6 @@ import {
   appendRows,
   batchClearData,
   getSheetData,
-  batchGetSheetDataByColumn,
-  batchGetSheetDataByRow,
   batchUpdateSpreadsheet
 } from '@/utils/googleSheet'
 const spreadsheetId = process.env.IPAD_SSID
@@ -34,12 +32,12 @@ export const getHandler = async (req, res) => {
   }
 
   try {
-    const range = 'A1:L'
+    const range = 'A1:M'
 
     const data = await getSheetData(
       spreadsheetId,
       range,
-      (rowNo) => `A${rowNo}:L${rowNo}`
+      (rowNo) => `A${rowNo}:M${rowNo}`
     )
 
     res.status(200).json(data)
@@ -50,8 +48,24 @@ export const getHandler = async (req, res) => {
 }
 
 export const putHandler = async (req, res) => {
+  // timestamp	regno	name	classcode	classno	status	freq	teacher_1	issueDate_1	teacher_2	issueDate_2	teacher_3	issueDate_3
   try {
     const { rangeObjects } = req.body
+    const headerKeys = [
+      'timestamp',
+      'regno',
+      'name',
+      'classcode',
+      'classno',
+      'status',
+      'freq',
+      'teacher_1',
+      'issueDate_1',
+      'teacher_2',
+      'issueDate_2',
+      'teacher_3',
+      'issueDate_3'
+    ]
 
     const totalUpdatedRows = await batchUpdateSpreadsheet(
       spreadsheetId,
@@ -64,49 +78,31 @@ export const putHandler = async (req, res) => {
     res.status(500).json({ error: error.message })
   }
 }
-const uid = function (clubId) {
-  return (
-    Date.now().toString(36) +
-    clubId.toString(36) +
-    Math.random().toString(36).substring(2)
-  )
-}
 
 export const postHandler = async (req, res) => {
   try {
-    const { club, students } = req.body
-    const {
-      id,
-      category,
-      cname: information,
-      pic,
-      associates,
-      admininstrators
-    } = club
+    const { students, initial } = req.body
     const timestamp = getTimestamp()
-
     const rows = students.map(({ regno, classcode, classno, cname, ename }) => {
-      const classcodeAndNo = `${classcode}${String(classno).padStart(2, 0)}`
       const studentName = cname || ename
 
       return [
         timestamp,
-        uid(id),
-        id,
-        category,
-        information,
         regno,
-        classcodeAndNo,
         studentName,
+        classcode,
+        classno,
+        'PENDING',
+        1,
+        initial,
         '',
         '',
         '',
-        pic,
-        associates,
-        admininstrators
+        '',
+        ''
       ]
     })
-    const response = await appendRows(spreadsheetId, 'record!A1:A1', rows)
+    const response = await appendRows(spreadsheetId, 'A1:A1', rows)
     res.status(200).json(response)
   } catch (error) {
     console.error('Error accessing Spreadsheet:', error)

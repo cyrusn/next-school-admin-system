@@ -43,7 +43,7 @@ export const inputMapper = (formInfo, inputInfo) => {
             handleChange,
             name,
             value: formData[name],
-            error: errors[name],
+            error: errors?.[name],
             ...options
           }}
         />
@@ -55,7 +55,7 @@ export const inputMapper = (formInfo, inputInfo) => {
             handleChange,
             name,
             value: formData[name] || '',
-            error: errors[name],
+            error: errors?.[name],
             ...options
           }}
         />
@@ -67,7 +67,7 @@ export const inputMapper = (formInfo, inputInfo) => {
             handleChange,
             name,
             value: formData[name] || '',
-            error: errors[name],
+            error: errors?.[name],
 
             ...options
           }}
@@ -82,7 +82,7 @@ export const inputMapper = (formInfo, inputInfo) => {
             handleChange,
             name,
             value: formData[name] || [],
-            error: errors[name],
+            error: errors?.[name],
             ...options
           }}
         >
@@ -96,7 +96,7 @@ export const inputMapper = (formInfo, inputInfo) => {
             handleChange,
             name,
             checkedValue: formData[name],
-            error: errors[name],
+            error: errors?.[name],
             ...options
           }}
         />
@@ -109,7 +109,7 @@ export const inputMapper = (formInfo, inputInfo) => {
             handleChange,
             name,
             checkedValue: formData[name],
-            error: errors[name],
+            error: errors?.[name],
             ...options
           }}
         />
