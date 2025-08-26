@@ -15,6 +15,7 @@ export default NextAuth({
       try {
         const users = await getUserInfos()
         const found = users.find(({ email }) => email == user.email)
+        console.log(user, found)
 
         if (found) return true // Allow sign in
       } catch (error) {

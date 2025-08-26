@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { SCHOOL_YEAR } from '@/config/constant'
 
@@ -216,6 +216,21 @@ function CreateComment({
     </>
   )
 }
+function OnePageProfileButton({ onePageProfiles, regno }) {
+  const found = onePageProfiles.find((p) => {
+    return p.name == `lp${regno}.pdf`
+  })
+  if (!found) return null
+  return (
+    <a
+      href={found.webViewLink}
+      target='_blank'
+      className='button is-info is-small'
+    >
+      一頁檔案
+    </a>
+  )
+}
 
 export default function StudentProfile() {
   const { data: session } = useSession()
@@ -226,12 +241,14 @@ export default function StudentProfile() {
   const [filter, setFilter] = useState('')
   const [isEdit, setIsEdit] = useState(false)
   const { students } = useStudentsContext()
+  const [privileges, setPrivileges] = useState([])
+  const [onePageProfiles, setOnePageProfiles] = useState([])
 
   const [notification, setNotification] = useState({ ...defaultNotification })
   const {
     setLoadingMessage,
-    setErrorMessage,
-    setSuccessMessage,
+    // setErrorMessage,
+    // setSuccessMessage,
     clearMessage
   } = notificationWrapper(setNotification)
 
@@ -308,6 +325,30 @@ export default function StudentProfile() {
     fetchCommentData()
   }
 
+  const fetchPrivieges = async () => {
+    try {
+      const response = await fetch(`/api/profile/privileges`)
+      const json = await response.json()
+      setPrivileges(json)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  const fetchOnePageProfiles = async () => {
+    try {
+      const response = await fetch(`/api/profile/onepage`)
+      const json = await response.json()
+      setOnePageProfiles(json)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  useEffect(() => {
+    fetchPrivieges()
+    fetchOnePageProfiles()
+  }, [])
+
   if (notification.message) {
     return <Notification {...notification} />
   }
@@ -325,13 +366,32 @@ export default function StudentProfile() {
               <div className='select is-fullwidth'>
                 <select onChange={handleChange}>
                   <option value=''>Select class</option>
-                  {classcodes.map((classcode) => {
-                    return (
-                      <option key={classcode} value={classcode}>
-                        {classcode}
-                      </option>
-                    )
-                  })}
+                  {classcodes
+                    .filter((classcode) => {
+                      const found = privileges.find((p) => p.initial == initial)
+                      if (!found) return false
+
+                      const p = found.privileges
+                      const c = found.classcodes
+                      const i = found.initial
+                      return (
+                        c
+                          .split(',')
+                          .map((a) => a.trim())
+                          .includes(classcode) ||
+                        p
+                          .split(',')
+                          .map((a) => a.trim())
+                          .find((p) => p[1] == classcode[0])
+                      )
+                    })
+                    .map((classcode) => {
+                      return (
+                        <option key={classcode} value={classcode}>
+                          {classcode}
+                        </option>
+                      )
+                    })}
                 </select>
               </div>
             </div>
@@ -431,6 +491,10 @@ export default function StudentProfile() {
                         setComments={setComments}
                         setLoadingMessage={setLoadingMessage}
                         clearMessage={clearMessage}
+                      />
+                      <OnePageProfileButton
+                        onePageProfiles={onePageProfiles}
+                        regno={regno}
                       />
                     </div>
                   </div>

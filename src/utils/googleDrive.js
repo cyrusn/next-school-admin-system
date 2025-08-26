@@ -76,6 +76,28 @@ export async function uploadFiles(driveId, folderId, files) {
   return data
 }
 
+export async function getPdfs(DRIVE_ID, FOLDER_ID, filenames) {
+  // console.log(filenames)
+  const auth = await getAuth()
+
+  let q = `mimeType contains 'pdf' and '${FOLDER_ID}' in parents`
+  console.log(q)
+  try {
+    const response = await drive.files.list({
+      auth,
+      corpora: 'drive',
+      driveId: DRIVE_ID,
+      pageSize: 1000,
+      includeItemsFromAllDrives: 'true',
+      supportsAllDrives: 'true',
+      q,
+      fields: 'files(id,name,webContentLink,webViewLink)'
+    })
+    return response.data
+  } catch (e) {
+    return e.errors
+  }
+}
 export async function getImageUrls(DRIVE_ID, FOLDER_ID, filenames) {
   // console.log(filenames)
   const auth = await getAuth()
@@ -84,7 +106,7 @@ export async function getImageUrls(DRIVE_ID, FOLDER_ID, filenames) {
   if (filenames) {
     q += ` and (${filenames})`
   }
-  // console.log(q)
+  console.log(q)
   const response = await drive.files.list({
     auth,
     corpora: 'drive',
