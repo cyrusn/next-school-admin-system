@@ -29,6 +29,12 @@ const AdvanceList = () => {
       }
     },
     {
+      title: 'Classno',
+      data: 'classno',
+      visible: false,
+      target: 13
+    },
+    {
       title: 'Class',
       data(row) {
         const { classcode, classno } = row
@@ -195,8 +201,20 @@ const AdvanceList = () => {
   const options = {
     fixedHeader: true,
     buttons: [
-      { extend: 'copy', className: 'is-primary' },
-      { extend: 'print', className: 'is-warning' }
+      {
+        extend: 'copy',
+        className: 'is-primary',
+        exportOptions: {
+          columns: [0, 1, 13, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        }
+      },
+      {
+        extend: 'print',
+        className: 'is-warning',
+        exportOptions: {
+          columns: [0, 1, 13, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        }
+      }
     ],
     language: {
       searchBuilder: {
