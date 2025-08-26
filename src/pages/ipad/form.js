@@ -126,7 +126,7 @@ export default function IpadForm() {
 
       setFormData({ ...defaultFormData })
       setSuccessMessage('Data submitted successfully', () => {
-        router.push('/ipad/result')
+        router.push('/ipad/record')
       })
     } catch (e) {
       setErrorMessage(JSON.stringify(e, null, '\t'))
