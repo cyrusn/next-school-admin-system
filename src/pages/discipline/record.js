@@ -193,6 +193,7 @@ export default function DisciplineRecord() {
       newUrl += `&filters[regno][${index}]=${c}`
     })
 
+    console.log(newUrl)
     setUrl(newUrl)
 
     if (tableRef.current) {

@@ -11,17 +11,16 @@ import { DateTime } from 'luxon'
 export const getColumns = (attendanceSummary) => [
   {
     data: null,
+
     title: 'Student',
     width: '15%',
-    render(_, type, row) {
+    render(_, _type, row) {
       const { classcode, classno, name, cname } = row
       const display = `${classcode}${String(classno).padStart(2, '0')} ${cname || name}`
 
-      if (type == 'sort' || type == 'type' || type == 'search') {
-        return [classcode, classno, name, cname]
-      }
       return display
-    }
+    },
+    orderData: [8, 9]
   },
   {
     title: 'Date',
@@ -108,5 +107,6 @@ export const getColumns = (attendanceSummary) => [
   },
   { data: 'classcode', visible: false },
   { data: 'classno', visible: false },
-  { data: 'id', visible: false }
+  { data: 'id', visible: false },
+  { data: 'regno', visible: false }
 ]
