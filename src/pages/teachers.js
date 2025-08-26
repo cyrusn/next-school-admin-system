@@ -19,6 +19,7 @@ function CustomTable({ type }) {
           <th>Name</th>
           <th>姓名</th>
           {type == 'TEACHING_STAFF' && <th>班主任</th>}
+          <th style={{ width: '5%' }} className='print-only'></th>
         </tr>
       </thead>
       <tbody>
@@ -36,6 +37,7 @@ function CustomTable({ type }) {
                   {u.title}
                 </td>
                 {type == 'TEACHING_STAFF' && <td>{u.classMaster}</td>}
+                <td style={{ width: '5%' }} className='print-only'></td>
               </tr>
             </>
           )
