@@ -68,6 +68,7 @@ const Navigator = ({ user }) => {
         <Link href={regularActivity} target='_blank' className='navbar-item'>
           Regular Activity
         </Link>
+        <PageLink title='Duty List' href='/duty' />
       </NavbarDropdown>
 
       <NavbarDropdown
