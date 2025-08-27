@@ -58,7 +58,14 @@ export default function BasicList() {
     const { name, value } = e.target
 
     setFilters((filters) => {
-      const newFilters = { ...filters }
+      let newFilters = null
+
+      if (name == 'classlevels') {
+        newFilters = { ...defaultFilters }
+        newFilters.classlevels = [...filters['classlevels']]
+      } else {
+        newFilters = { ...filters }
+      }
       const found = newFilters[name].includes(value)
 
       if (found) {
