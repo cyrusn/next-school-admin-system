@@ -115,7 +115,7 @@ const Navigator = ({ user }) => {
       <NavbarDropdown title='Careers' includedPaths={['ole']}>
         <PageLink title='OLE Record' href='/ole' />
         <Link
-          href='https://careers.liping.edu.hk'
+          href='https://careers.liping.edu.hk/ss'
           target='_blank'
           className='navbar-item'
         >
