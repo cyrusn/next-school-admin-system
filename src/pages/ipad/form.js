@@ -182,7 +182,7 @@ export default function IpadForm() {
             <div className='field-body'>
               <div className='field tags'>
                 {students
-                  .filter((s) => formData.regnos.includes(s.regno))
+                  .filter((s) => formData.regnos.includes(String(s.regno)))
                   .map((s, key) => {
                     return (
                       <span className='tag is-warning' key={key}>
