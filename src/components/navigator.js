@@ -71,6 +71,9 @@ const Navigator = ({ user }) => {
         <PageLink title='Duty List' href='/duty' />
       </NavbarDropdown>
 
+      <NavbarDropdown title='Academic' includedPaths={['documents']}>
+        <PageLink title='Documents' href='/academic/documents' />
+      </NavbarDropdown>
       <NavbarDropdown
         title='School Admin'
         includedPaths={[

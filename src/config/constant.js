@@ -10,8 +10,8 @@ export const START_TERM_DATE =
 export const TIMEZONE = 'Asia/Hong_Kong'
 
 export const SPECIAL_ACKNOWLEDGE_EMAIL_MAPPER = {
-  'Career and Life Planning Activity Room': 'lpcyn@liping.edu.hk',
-  'Library Activity Room': 'lpkpf@liping.edu.hk,lpypl@liping.edu.hk',
+  'Career and Life Planning Activity Room': 'lpjy@liping.edu.hk',
+  'Library Study Hub': 'lpkpf@liping.edu.hk,lpypl@liping.edu.hk',
   'English Centre': 'lpycl@liping.edu.hk',
   'Band Room': 'lpsfs@liping.edu.hk',
   Notebook: 'itsupport@liping.edu.hk',
