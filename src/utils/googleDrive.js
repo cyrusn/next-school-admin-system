@@ -44,6 +44,7 @@ export async function trashFolder(driveId, folderId) {
 export async function uploadFiles(driveId, folderId, files) {
   const auth = await getAuth()
   const data = []
+  if (!files) return data
 
   for (const file of files) {
     const { originalFilename, filepath, mimetype } = file // Get the uploaded file info

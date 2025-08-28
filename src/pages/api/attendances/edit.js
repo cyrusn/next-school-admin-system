@@ -48,7 +48,7 @@ export const postHandler = async (req, res) => {
       files.files
     )
 
-    const fileData = fields.fileData.map((data) => JSON.parse(data))
+    const fileData = fields.fileData?.map((data) => JSON.parse(data))
 
     const rowData = fields.rows.map((row) => JSON.parse(row))
     const combinedRows = []
