@@ -2,7 +2,7 @@ const DateTimeInput = ({ startTime, endTime, handleChange }) => {
   return (
     <div className='field is-horizontal'>
       <div className='field-label is-normal'>
-        <label className='label'>Title</label>
+        <label className='label'>Event Date</label>
       </div>
       <div className='field-body'>
         <div className='field'>
