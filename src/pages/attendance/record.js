@@ -87,6 +87,11 @@ const AttendanceRecord = ({ attendanceSummary }) => {
       })
     })
 
+    if (CLASS_MASTER) {
+      newUrl += `&filters[classcode]=${CLASS_MASTER}`
+    }
+
+    console.log(newUrl)
     setUrl(newUrl)
 
     if (tableRef.current) {
@@ -169,12 +174,25 @@ const AttendanceRecord = ({ attendanceSummary }) => {
   }
   options.buttons.push('copy', 'print')
 
+  if (ROLE_ENUM[ROLE] < ROLE_ENUM['OFFICE_STAFF'] && !CLASS_MASTER) {
+    return (
+      <>
+        <Nav role={ROLE} />
+        <div className='message is-warning'>
+          <div className='message-body'>Only available for class masters</div>
+        </div>
+      </>
+    )
+  }
   return (
     <>
       <Nav role={ROLE} />
       <div className='field is-horizontal'>
         <div className='field-body'>
-          {recordFilterInputMapper(formData, students).map((inputInfo, key) => {
+          {recordFilterInputMapper(formData, students, {
+            role: ROLE,
+            classMaster: CLASS_MASTER
+          }).map((inputInfo, key) => {
             const { title, name } = inputInfo
             const formInput = { formData, errors, handleChange }
             if (name == 'regnos' && formData.classcodes.length == 0) return null

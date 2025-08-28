@@ -190,6 +190,7 @@ export default function EditModal({
     })
 
     try {
+      console.log(formData)
       const response = await fetch('/api/attendances/edit', {
         method: 'POST',
         body: formData

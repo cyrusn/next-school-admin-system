@@ -1,9 +1,18 @@
 import { groupBy } from 'lodash'
 import { getDisplayName } from '@/lib/helper'
-import { ATTENDANCE_TYPES } from '@/config/constant'
+import {
+  ATTENDANCE_TYPES,
+  ABSENCE_TYPES,
+  EARLY_LEAVE_TYPES,
+  ROLE_ENUM
+} from '@/config/constant'
 import { snakeCase } from 'lodash'
 
-export const recordFilterInputMapper = (formData, students) => {
+export const recordFilterInputMapper = (
+  formData,
+  students,
+  { role, classMaster }
+) => {
   const groupedStudents = groupBy(students, 'classcode')
   const classcodes = Object.keys(groupedStudents).sort()
 
@@ -24,13 +33,20 @@ export const recordFilterInputMapper = (formData, students) => {
       type: 'multi-select',
       title: 'Class',
       name: 'classcodes',
-      children: classcodes.map((classcode) => {
-        return (
-          <option key={classcode} value={classcode}>
-            {classcode}
-          </option>
-        )
-      }),
+      children: classcodes
+        .filter((classcode) => {
+          if (ROLE_ENUM[role] >= ROLE_ENUM['OFFICE_STAFF']) {
+            return true
+          }
+          return classcode == classMaster
+        })
+        .map((classcode) => {
+          return (
+            <option key={classcode} value={classcode}>
+              {classcode}
+            </option>
+          )
+        }),
       rules: { nonEmpty: true }
     },
     {
@@ -53,7 +69,13 @@ export const recordFilterInputMapper = (formData, students) => {
       title: 'Type',
       name: 'types',
       rules: { nonEmpty: true },
-      children: ATTENDANCE_TYPES.map(({ key, title }, index) => {
+      children: ATTENDANCE_TYPES.filter((type) => {
+        if (ROLE_ENUM[role] >= ROLE_ENUM['OFFICE_STAFF']) {
+          return true
+        }
+        const TYPES = [...ABSENCE_TYPES, ...EARLY_LEAVE_TYPES]
+        return TYPES.map(({ key }) => key).includes(type.key)
+      }).map(({ key, title }, index) => {
         return (
           <option key={index} value={snakeCase(key).toUpperCase()}>
             {title}
