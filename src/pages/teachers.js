@@ -31,7 +31,15 @@ function CustomTable({ type }) {
                 <td>
                   <a href={`mailto:${u.email}`}>{u.email}</a>
                 </td>
-                <td>{u.name}</td>
+                <td
+                  className={
+                    u.name?.length > 16
+                      ? 'is-size-7 is-align-content-center'
+                      : ''
+                  }
+                >
+                  {u.name}
+                </td>
                 <td>
                   {u.cname}
                   {u.title}

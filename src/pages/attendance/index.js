@@ -306,103 +306,107 @@ const Attendance = ({ attendanceSummary }) => {
           </div>
         </div>
       </div>
-      <table className='table is-bordered is-striped is-narrow is-hoverable is-fullwidth'>
-        <thead>
-          <tr>
-            <th>Classcode and no</th>
-            <th>Type</th>
-            <th>Student</th>
-            <th>Late</th>
-            <th>Absent</th>
-            <th>Absent (Online)</th>
-            <th>Early Leave</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, index) => {
-            const { student } = row
+      <div className='table-container'>
+        <table className='table is-bordered is-striped is-narrow is-hoverable is-fullwidth'>
+          <thead>
+            <tr>
+              <th>Classcode and no</th>
+              <th>Type</th>
+              <th>Student</th>
+              <th>Late</th>
+              <th>Absent</th>
+              <th>Absent (Online)</th>
+              <th>Early Leave</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => {
+              const { student } = row
 
-            const found = attendanceSummary.find(
-              (a) => a.regno == student?.regno
-            )
-            return (
-              <tr key={index}>
-                <td>
-                  <input
-                    name='classcodeAndNo'
-                    type='text'
-                    value={rows[index]['classcodeAndNo']}
-                    onKeyDown={handleKeyDown}
-                    className={`input ${row.student === undefined ? 'is-danger' : ''}`}
-                    onChange={(e) => handleChange(e, index)}
-                  />
-                  <p className='help is-danger'>
-                    {row.student == undefined ? 'Invalid entry' : ''}
-                  </p>
-                </td>
+              const found = attendanceSummary.find(
+                (a) => a.regno == student?.regno
+              )
+              return (
+                <tr key={index}>
+                  <td>
+                    <input
+                      name='classcodeAndNo'
+                      type='text'
+                      value={rows[index]['classcodeAndNo']}
+                      onKeyDown={handleKeyDown}
+                      className={`input ${row.student === undefined ? 'is-danger' : ''}`}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                    <p className='help is-danger'>
+                      {row.student == undefined ? 'Invalid entry' : ''}
+                    </p>
+                  </td>
 
-                <td>
-                  <SelectInput
-                    name='type'
-                    error={
-                      row['type'] == '' &&
-                      !isEmpty(row['student'], defaultRowData)
-                        ? 'Required'
-                        : ''
-                    }
-                    value={row['type']}
-                    tabIndex={-1}
-                    handleChange={(e) => handleChange(e, index)}
-                  >
-                    <option value=''>Choose one</option>
-                    {ATTENDANCE_TYPES.map(({ key, cTitle, title }, index) => {
-                      return (
-                        <option key={index} value={key}>
-                          {title} - {cTitle}
-                        </option>
-                      )
-                    })}
-                  </SelectInput>
-                </td>
-                <td>{getDisplayName(student)}</td>
-                <td>
-                  {found
-                    ? found.late +
-                      (['lateNormalAm', 'lateNormalPm', 'lateHalfDay'].includes(
-                        row.type
-                      )
-                        ? 1
-                        : 0)
-                    : 0}
-                </td>
-                <td>
-                  {found
-                    ? found.absent +
-                      ([
-                        'absentNormalAm',
-                        'absentNormalPm',
-                        'absentHalfDay'
-                      ].includes(row.type)
-                        ? 1
-                        : 0)
-                    : 0}
-                </td>
-                <td>
-                  {found
-                    ? found.absentOnlineLesson +
-                      (row.type == 'absentOnlineLesson' ? 1 : 0)
-                    : 0}
-                </td>
-                <td>
-                  {found
-                    ? found.earlyLeave + (row.type == 'earlyLeave' ? 1 : 0)
-                    : 0}
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+                  <td>
+                    <SelectInput
+                      name='type'
+                      error={
+                        row['type'] == '' &&
+                        !isEmpty(row['student'], defaultRowData)
+                          ? 'Required'
+                          : ''
+                      }
+                      value={row['type']}
+                      tabIndex={-1}
+                      handleChange={(e) => handleChange(e, index)}
+                    >
+                      <option value=''>Choose one</option>
+                      {ATTENDANCE_TYPES.map(({ key, cTitle, title }, index) => {
+                        return (
+                          <option key={index} value={key}>
+                            {title} - {cTitle}
+                          </option>
+                        )
+                      })}
+                    </SelectInput>
+                  </td>
+                  <td>{getDisplayName(student)}</td>
+                  <td>
+                    {found
+                      ? found.late +
+                        ([
+                          'lateNormalAm',
+                          'lateNormalPm',
+                          'lateHalfDay'
+                        ].includes(row.type)
+                          ? 1
+                          : 0)
+                      : 0}
+                  </td>
+                  <td>
+                    {found
+                      ? found.absent +
+                        ([
+                          'absentNormalAm',
+                          'absentNormalPm',
+                          'absentHalfDay'
+                        ].includes(row.type)
+                          ? 1
+                          : 0)
+                      : 0}
+                  </td>
+                  <td>
+                    {found
+                      ? found.absentOnlineLesson +
+                        (row.type == 'absentOnlineLesson' ? 1 : 0)
+                      : 0}
+                  </td>
+                  <td>
+                    {found
+                      ? found.earlyLeave + (row.type == 'earlyLeave' ? 1 : 0)
+                      : 0}
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
       <div className='buttons is-grouped'>
         <button
           className='button is-info'

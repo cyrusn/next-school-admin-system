@@ -343,11 +343,8 @@ export default function DisciplineRecord() {
 
       {isShowFilters ? (
         <div className='box'>
-          <form
-            id='filterForm'
-            className='field is-grouped is-grouped-centered columns'
-          >
-            <div className='control column'>
+          <form id='filterForm' className='field grid '>
+            <div className='control cell is-min-12'>
               <label className='heading'>Class</label>
               <MultiSelectInput
                 className='is-fullwidth'
@@ -366,7 +363,7 @@ export default function DisciplineRecord() {
               </MultiSelectInput>
             </div>
 
-            <div className='control is-one-third column'>
+            <div className='control cell is-min-12'>
               <label className='heading'>Student</label>
               <MultiSelectInput
                 name='regnos'
@@ -391,7 +388,7 @@ export default function DisciplineRecord() {
               </MultiSelectInput>
             </div>
 
-            <div className='control column'>
+            <div className='control cell is-min-12'>
               {ROLE_ENUM[ROLE] >= ROLE_ENUM['DC_TEAM'] ? (
                 <div className='control mb-2'>
                   <label className='heading'>Term</label>

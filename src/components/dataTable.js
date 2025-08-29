@@ -24,17 +24,19 @@ const DataTableInstance = ({
   DataTable.use(DT)
 
   return (
-    <DataTable
-      id={id}
-      ref={ref}
-      className={`table is-bordered striped is-narrow is-hoverable is-fullwidth ${className ? className : ''}`}
-      columns={columns}
-      ajax={url}
-      options={options}
-      data={data}
-    >
-      <thead></thead>
-    </DataTable>
+    <div className='table-container'>
+      <DataTable
+        id={id}
+        ref={ref}
+        className={`table is-bordered striped is-narrow is-hoverable is-fullwidth ${className ? className : ''}`}
+        columns={columns}
+        ajax={url}
+        options={options}
+        data={data}
+      >
+        <thead></thead>
+      </DataTable>
+    </div>
   )
 }
 
