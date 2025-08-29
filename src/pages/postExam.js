@@ -8,10 +8,9 @@ export default function PostExam() {
           width='640'
           height='360'
           src='https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;ctz=Asia%2FHong_Kong&amp;src=bGlwaW5nLmVkdS5oa192aDZzajZwaHY1ZTgxdmVhaWx1YWxqMG9lY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&amp;src=bGlwaW5nLmVkdS5oa18wamZ1aWUzOTlkMGVsdmFhYzA2azBodXI4b0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&amp;color=%23AB8B00&amp;color=%233366CC&amp;showTz=0&amp;showTitle=0'
-          style={{ borderWidth: 0 }}
-          frameborder='0'
+          style={{ borderWidth: 0, border: 'none' }}
           allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
-          allowfullscreen
+          allowFullScreen
         ></iframe>
       </figure>
 

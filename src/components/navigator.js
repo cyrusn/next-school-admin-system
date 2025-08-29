@@ -40,7 +40,7 @@ const NavbarDropdown = ({ includedPaths, title, children }) => {
 const Navigator = ({ user }) => {
   return (
     <>
-      <NavbarDropdown title='General'>
+      <NavbarDropdown title='General' includedPaths={['duty']}>
         <Link
           href='https://liping.edu.hk/'
           target='_blank'
@@ -71,18 +71,21 @@ const Navigator = ({ user }) => {
         <PageLink title='Duty List' href='/duty' />
       </NavbarDropdown>
 
-      <NavbarDropdown title='Academic' includedPaths={['documents']}>
+      <NavbarDropdown title='Academic' includedPaths={['academic']}>
         <PageLink title='Documents' href='/academic/documents' />
       </NavbarDropdown>
+
       <NavbarDropdown
         title='School Admin'
         includedPaths={[
+          'namelist',
+          'timetable',
+          'teachers',
           'announcement',
           'resource',
-          'timetable',
-          'namelist',
           'profile',
-          'photo'
+          'photo',
+          'specialTimetable'
         ]}
       >
         <PageLink title='Namelist' href='/namelist' />
@@ -92,6 +95,7 @@ const Navigator = ({ user }) => {
         <PageLink title='Resource Booking' href='/resource' />
         <PageLink title='Student Profile' href='/profile' />
         <PageLink title='Student Photos' href='/photo' />
+        <PageLink title='Speical Timetable' href='/specialTimetable' />
       </NavbarDropdown>
 
       <NavbarDropdown title='ITAV'>
