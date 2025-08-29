@@ -1,11 +1,10 @@
-import Nav from './nav'
+export default function SpecialTimetable() {
+  const id = process.env.NEXT_PUBLIC_SPECIAL_TIMETABLE_FOLDER_DRIVE_ID
 
-export default function DutyList() {
-  const id = process.env.NEXT_PUBLIC_ACADEMIC_FOLDER_DRIVE_ID
   const src = `https://drive.google.com/embeddedfolderview?id=${id}#grid`
   return (
     <>
-      <Nav />
+      <h1 className='title'>Special Timetable</h1>
       <iframe
         width='100%'
         height='500'
