@@ -154,6 +154,10 @@ const Attendance = ({ attendanceSummary }) => {
     const attendanceType = selectedType
 
     const TYPE_MAPPER = {
+      absentHalfDay: {
+        type: 'ABSENT',
+        frequency: 'AM'
+      },
       absentNormalAm: {
         type: 'ABSENT',
         frequency: 'AM'
@@ -161,6 +165,10 @@ const Attendance = ({ attendanceSummary }) => {
       absentNormalPm: {
         type: 'ABSENT',
         frequency: 'PM'
+      },
+      lateHalfDay: {
+        type: 'LATE',
+        frequency: 'AM'
       },
       lateNormalAm: {
         type: 'LATE',
@@ -171,8 +179,12 @@ const Attendance = ({ attendanceSummary }) => {
         frequency: 'PM'
       }
     }
-    if (!Object.keys(TYPE_MAPPER).includes(attendanceType)) return []
+    if (!Object.keys(TYPE_MAPPER).includes(attendanceType)) {
+      setErrorMessage('Invalid Type selected')
+      return []
+    }
     const { type, frequency } = TYPE_MAPPER[attendanceType]
+
     const response = await fetch(
       `/api/attendances/grwth?eventDate=${eventDate}&type=${type}&frequency=${frequency}`
     )
