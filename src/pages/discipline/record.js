@@ -254,7 +254,12 @@ export default function DisciplineRecord() {
       },
 
       { extend: 'copy', className: 'is-primary' },
-      { extend: 'print', className: 'is-warning' }
+      {
+        extend: 'print',
+        className: 'is-warning',
+        text: 'Open',
+        autoPrint: false
+      }
     ],
     rowId: 'id',
     pageLength: 25,

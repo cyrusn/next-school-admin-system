@@ -104,7 +104,11 @@ export default function EcaMembershipRecord() {
         className: 'is-info'
       },
       'copy',
-      'print'
+      {
+        extend: 'print',
+        text: 'Open',
+        autoPrint: false
+      }
     ],
     searching: false,
     select: {

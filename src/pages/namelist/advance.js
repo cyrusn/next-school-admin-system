@@ -210,7 +210,9 @@ const AdvanceList = () => {
       },
       {
         extend: 'print',
+        text: 'Open',
         className: 'is-warning',
+        autoPrint: false,
         exportOptions: {
           columns: [0, 1, 13, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
         }

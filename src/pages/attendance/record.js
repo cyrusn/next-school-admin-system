@@ -183,6 +183,8 @@ const AttendanceRecord = ({ attendanceSummary }) => {
     {
       extend: 'print',
       className: 'is-warning',
+      text: 'Open',
+      autoPrint: false,
       exportOptions: {
         columns: [3, 4, 5, 6, 7, 8, 9, 10, 11]
       }

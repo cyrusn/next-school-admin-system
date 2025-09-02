@@ -83,7 +83,12 @@ export default function DisciplineSummary() {
     scrollCollapse: true,
     buttons: [
       { extend: 'copy', className: 'is-primary' },
-      { extend: 'print', className: 'is-warning' }
+      {
+        extend: 'print',
+        className: 'is-warning',
+        autoPrint: false,
+        text: 'Open'
+      }
     ],
     rowId: 'id',
     columnDefs: [
