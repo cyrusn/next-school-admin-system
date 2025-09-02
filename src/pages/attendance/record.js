@@ -147,9 +147,9 @@ const AttendanceRecord = ({ attendanceSummary }) => {
       }
     },
     order: [
-      [7, 'desc'],
-      [8, 'asc'],
-      [9, 'asc']
+      [8, 'desc'],
+      [1, 'asc'],
+      [2, 'asc']
     ]
   }
 
@@ -172,7 +172,22 @@ const AttendanceRecord = ({ attendanceSummary }) => {
       }
     })
   }
-  options.buttons.push('copy', 'print')
+  options.buttons.push(
+    {
+      extend: 'copy',
+      className: 'is-primary',
+      exportOptions: {
+        columns: [3, 4, 5, 6, 7, 8, 9, 10, 11]
+      }
+    },
+    {
+      extend: 'print',
+      className: 'is-warning',
+      exportOptions: {
+        columns: [3, 4, 5, 6, 7, 8, 9, 10, 11]
+      }
+    }
+  )
 
   if (ROLE_ENUM[ROLE] < ROLE_ENUM['OFFICE_STAFF'] && !CLASS_MASTER) {
     return (

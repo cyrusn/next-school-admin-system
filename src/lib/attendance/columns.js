@@ -9,6 +9,10 @@ import { camelCase, map } from 'lodash'
 import { DateTime } from 'luxon'
 
 export const getColumns = (attendanceSummary) => [
+  { data: 'id', visible: false },
+  { data: 'classcode', visible: false },
+  { data: 'classno', visible: false },
+  { data: 'regno', visible: false },
   {
     data: null,
 
@@ -20,7 +24,7 @@ export const getColumns = (attendanceSummary) => [
 
       return display
     },
-    orderData: [8, 9]
+    orderData: [1, 2]
   },
   {
     title: 'Date',
@@ -104,9 +108,5 @@ export const getColumns = (attendanceSummary) => [
     render(createdAt) {
       return DateTime.fromISO(createdAt).setZone().toFormat('yyyy-MM-dd HH:mm')
     }
-  },
-  { data: 'classcode', visible: false },
-  { data: 'classno', visible: false },
-  { data: 'id', visible: false },
-  { data: 'regno', visible: false }
+  }
 ]
