@@ -8,8 +8,10 @@ import NamelistTable from './components/namelistTable.js'
 import { HOMEBASES, TERM } from '@/config/constant'
 
 export default function BasicList() {
+  const CLASSCODES = Object.keys(HOMEBASES[1])
   const defaultFilters = {
     classlevels: [],
+    classcode: [],
     groups: [],
     x1: [],
     x2: [],
@@ -23,6 +25,9 @@ export default function BasicList() {
 
   const filterData = {
     classlevels: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6'],
+    classcode: CLASSCODES.filter((classcode) =>
+      filters.classlevels.some((classlevel) => classcode[0] == classlevel[1])
+    ),
     groups: [],
     x1: [],
     x2: [],
@@ -52,6 +57,7 @@ export default function BasicList() {
 
     return prev
   }, {})
+
   const usersByClassMaster = groupBy(users, 'classMaster')
 
   const handleChange = (e) => {
@@ -66,6 +72,7 @@ export default function BasicList() {
       } else {
         newFilters = { ...filters }
       }
+
       const found = newFilters[name].includes(value)
 
       if (found) {
@@ -92,7 +99,7 @@ export default function BasicList() {
 
   return (
     <>
-      <div className='not-print'>
+      <div className='not-print mb-4'>
         <Nav />
         {Object.keys(filterData).map((key, index) => {
           if (filterData[key]?.length == 0) return null
@@ -123,62 +130,59 @@ export default function BasicList() {
       </div>
 
       <div ref={contentRef}>
-        {filters.classlevels.length !== 0 &&
-          Object.keys(studentsByLevel)
-            .filter((level) => filters.classlevels.includes(level))
-            .map((classlevel, key) => {
-              const groupFn = (s) => {
-                const keys = ['groups', 'x1', 'x2', 'x3']
-                for (const key of keys) {
-                  if (filters[key].length !== 0)
-                    return intersection(
-                      filters[key],
-                      typeof s[key] == 'string' ? [s[key]] : s[key]
-                    )
-                }
-
-                return s.classcode
-              }
-
-              const groupedStudents = groupBy(
-                studentsByLevel[classlevel],
-                groupFn
-              )
-              return (
-                <div key={key} className='hero'>
-                  <div className='hero-body p-0 m-0'>
-                    <h1 className='title not-print'>{`${classlevel}`}</h1>
-                    <div className='fixed-grid has-1-cols-mobile'>
-                      <div className='grid is-gap-6'>
-                        {Object.keys(groupedStudents).map(
-                          (key, index, array) => {
-                            if (!key) return null
-                            return (
-                              <div className='cell' key={key}>
-                                <NamelistTable
-                                  key={key}
-                                  classTitle={`${classlevel}-${key}`}
-                                  students={groupedStudents[key]}
-                                  teacher={
-                                    usersByClassMaster[key]
-                                      ?.map((t) => t.initial)
-                                      ?.join(', ') || ''
-                                  }
-                                  location={HOMEBASES[TERM][key]}
-                                />
-                                {array.length !== index + 1 && (
-                                  <div className='page-break' />
-                                )}
-                              </div>
+        <div className='hero'>
+          <div className='hero-body p-0 m-1'>
+            <div className='fixed-grid has-1-cols-mobile'>
+              <div className='grid is-gap-6'>
+                {filters.classlevels.length !== 0 &&
+                  Object.keys(studentsByLevel)
+                    .filter((level) => filters.classlevels.includes(level))
+                    .map((classlevel) => {
+                      const groupFn = (s) => {
+                        const keys = ['classcode', 'groups', 'x1', 'x2', 'x3']
+                        for (const key of keys) {
+                          if (filters[key].length !== 0)
+                            return intersection(
+                              filters[key],
+                              typeof s[key] == 'string' ? [s[key]] : s[key]
                             )
-                          }
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
+                        }
+
+                        return s.classcode
+                      }
+
+                      const groupedStudents = groupBy(
+                        studentsByLevel[classlevel],
+                        groupFn
+                      )
+                      return Object.keys(groupedStudents).map(
+                        (key, index, array) => {
+                          if (!key) return null
+                          return (
+                            <div className='cell' key={key}>
+                              <NamelistTable
+                                key={key}
+                                classTitle={`${classlevel}-${key}`}
+                                students={groupedStudents[key]}
+                                teacher={
+                                  usersByClassMaster[key]
+                                    ?.map((t) => t.initial)
+                                    ?.join(', ') || ''
+                                }
+                                location={HOMEBASES[TERM][key]}
+                              />
+                              {array.length !== index + 1 && (
+                                <div className='page-break' />
+                              )}
+                            </div>
+                          )
+                        }
+                      )
+                    })}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   )
