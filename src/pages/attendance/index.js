@@ -367,39 +367,30 @@ const Attendance = ({ attendanceSummary }) => {
                   </td>
                   <td>{getDisplayName(student)}</td>
                   <td>
-                    {found
-                      ? found.late +
-                        ([
-                          'lateNormalAm',
-                          'lateNormalPm',
-                          'lateHalfDay'
-                        ].includes(row.type)
-                          ? 1
-                          : 0)
-                      : 0}
+                    {(found?.late || 0) +
+                      (['lateNormalAm', 'lateNormalPm', 'lateHalfDay'].includes(
+                        row.type
+                      )
+                        ? 1
+                        : 0)}
                   </td>
                   <td>
-                    {found
-                      ? found.absent +
-                        ([
-                          'absentNormalAm',
-                          'absentNormalPm',
-                          'absentHalfDay'
-                        ].includes(row.type)
-                          ? 1
-                          : 0)
-                      : 0}
+                    {(found?.absent || 0) +
+                      ([
+                        'absentNormalAm',
+                        'absentNormalPm',
+                        'absentHalfDay'
+                      ].includes(row.type)
+                        ? 1
+                        : 0)}
                   </td>
                   <td>
-                    {found
-                      ? found.absentOnlineLesson +
-                        (row.type == 'absentOnlineLesson' ? 1 : 0)
-                      : 0}
+                    {(found?.absentOnlineLesson || 0) +
+                      (row.type == 'absentOnlineLesson' ? 1 : 0)}
                   </td>
                   <td>
-                    {found
-                      ? found.earlyLeave + (row.type == 'earlyLeave' ? 1 : 0)
-                      : 0}
+                    {(found?.earlyLeave || 0) +
+                      (row.type == 'earlyLeave' ? 1 : 0)}
                   </td>
                 </tr>
               )
