@@ -78,10 +78,16 @@ export const getColumns = (attendanceSummary) => [
     title: 'Has Letter?',
     data: 'isLeaveOfAbsence',
     width: '10%',
-    render(isLeaveOfAbsence, _, row) {
-      if (!map(ABSENCE_TYPES, 'key').includes(camelCase(row.type))) return ''
+    render: {
+      _(isLeaveOfAbsence, _, row) {
+        if (!map(ABSENCE_TYPES, 'key').includes(camelCase(row.type))) return ''
 
-      return isLeaveOfAbsence ? '✅' : '❌'
+        return isLeaveOfAbsence ? '✅' : '❌'
+      },
+      export(isLeaveOfAbsence, _, row) {
+        if (!map(ABSENCE_TYPES, 'key').includes(camelCase(row.type))) return ''
+        return String(isLeaveOfAbsence).toUpperCase()
+      }
     }
   },
   {
