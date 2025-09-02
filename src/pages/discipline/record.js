@@ -160,16 +160,26 @@ export default function DisciplineRecord() {
       width: '5%',
       data: 'isImportFromJournal',
       orderable: false,
-      render(isImportFromJournal) {
-        return isImportFromJournal ? '📘' : '🖊️'
+      render: {
+        _(isImportFromJournal) {
+          return isImportFromJournal ? '📘' : '🖊️'
+        },
+        export(isImportFromJournal) {
+          return isImportFromJournal
+        }
       }
     },
     {
       title: 'Status',
       data: 'informedAt',
       width: '5%',
-      render(informedAt) {
-        return informedAt ? '🔒' : '⏳'
+      render: {
+        _(informedAt) {
+          return informedAt ? '🔒' : '⏳'
+        },
+        export(informedAt) {
+          return informedAt
+        }
       },
       orderable: false
     }
@@ -258,7 +268,10 @@ export default function DisciplineRecord() {
         extend: 'print',
         className: 'is-warning',
         text: 'Open',
-        autoPrint: false
+        autoPrint: false,
+        exportOptions: {
+          orthogonal: 'export'
+        }
       }
     ],
     rowId: 'id',
