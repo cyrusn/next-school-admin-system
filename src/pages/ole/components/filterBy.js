@@ -3,7 +3,7 @@ import RadioInput from '@/components/form/radioInput'
 import { COMPONENTS, COMMITTEES_AND_KLAS, CATEGORIES } from '@/config/constant'
 
 const labelMapper = {
-  pics: `Events you in chrage`,
+  pics: `Events you in charge`,
   components: 'Components',
   category: 'Category',
   committeeAndKla: 'Committee & KLA'
