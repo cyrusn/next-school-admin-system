@@ -42,7 +42,7 @@ export default function DisciplineForm() {
   }
   const [rows, setRows] = useState([Object.assign({}, defaultRow)])
 
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const ROLE = session.user.info.role
   const TEACHER_INITIAL = session.user.info.initial
 
@@ -51,6 +51,7 @@ export default function DisciplineForm() {
   const LAST_MONDAY = now
     .minus({ weeks: 1, days: WEEKDAY - 1 })
     .toFormat('yyyy-MM-dd')
+
   const MIN_DATE =
     ROLE_ENUM[ROLE] == ROLE_ENUM['DC_ADMIN'] ? START_TERM_DATE : LAST_MONDAY
 
@@ -59,7 +60,7 @@ export default function DisciplineForm() {
   const classcodes = Object.keys(groupedStudents)
 
   const [errors, setErrors] = useState([{}])
-  const [isDisable, setIsDisabled] = useState(true)
+  const [isDisabled, setIsDisabled] = useState(true)
 
   const addRows = () => {
     setRows([...rows, Object.assign({}, defaultRow)])
@@ -166,6 +167,7 @@ export default function DisciplineForm() {
 
   const handleSubmit = async () => {
     setLoadingMessage()
+    setIsDisabled(true)
     const data = rows.reduce((prev, row, index) => {
       const { regnos, mark, itemCode, eventDate, description } = row
 
@@ -197,12 +199,16 @@ export default function DisciplineForm() {
     const result = await response.json()
     if (!response.ok) {
       setErrorMessage(`Failed to submit data: ${result.error}`)
-
+      setIsDisabled(false)
       return
     }
-    setSuccessMessage(
+
+   setSuccessMessage(
       `Data submitted successfully: ${JSON.stringify(result)}`,
-      () => router.push('/discipline/record')
+      () => {
+        setIsDisabled(false)
+        router.push('/discipline/record')
+      }
     )
   }
 
@@ -295,7 +301,7 @@ export default function DisciplineForm() {
                     disabled={!rows[index]['itemCode']}
                     name='eventDate'
                     max={TODAY}
-                    min={LAST_MONDAY}
+                    min={MIN_DATE}
                     value={rows[index]['eventDate']}
                     error={errors[index]['eventDate']}
                     handleChange={(e) => handleChange(e, index)}
@@ -413,7 +419,7 @@ export default function DisciplineForm() {
                 type='submit'
                 value='Submit'
                 onClick={handleSubmit}
-                disabled={isDisable}
+                disabled={isDisabled}
               />
             </p>
           </div>

@@ -51,6 +51,7 @@ const Attendance = ({ attendanceSummary }) => {
     { ...defaultRowData }
   ]
   const [rows, setRows] = useState([...defaultRows])
+  const [isClicked, setIsClicked] = useState(false)
   const [notification, setNotification] = useState({ ...defaultNotification })
   const { setLoadingMessage, setErrorMessage, setSuccessMessage } =
     notificationWrapper(setNotification)
@@ -220,6 +221,7 @@ const Attendance = ({ attendanceSummary }) => {
   }
 
   const isDisabled = (rows) => {
+    if (isClicked) return true
     const modifiedRows = rows.filter((row) => !isEqual(row, defaultRowData))
     if (modifiedRows == 0) return true
 
@@ -229,6 +231,8 @@ const Attendance = ({ attendanceSummary }) => {
   }
 
   const handleSubmit = async () => {
+    setIsClicked(true)
+
     setLoadingMessage()
     const data = rows.reduce((prev, row) => {
       const { student, type } = row
@@ -257,15 +261,19 @@ const Attendance = ({ attendanceSummary }) => {
     setRows([...defaultRows])
 
     const result = await response.json()
+    setIsClicked(false)
+
     if (!response.ok) {
       setErrorMessage(`Failed to submit data: ${result.error}`)
-
       return
     }
+
     const { count } = result
     setSuccessMessage(
       `${count} ${count == 1 ? 'record is' : 'records are'} submitted successfully`,
-      () => router.push('/attendance/record')
+      () => {
+        router.push('/attendance/record')
+      }
     )
   }
 

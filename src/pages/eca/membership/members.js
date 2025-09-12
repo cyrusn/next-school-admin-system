@@ -83,6 +83,7 @@ const EcaMembers = () => {
 
   const handleSubmit = async () => {
     setLoadingMessage()
+    setIsDisabled(true)
     try {
       const club = clubs.find(({ id }) => formData.clubId == id)
 
@@ -102,6 +103,7 @@ const EcaMembers = () => {
 
       setFormData({ ...defaultFormData })
       setErrors({})
+      setIsDisabled(false)
 
       const result = await response.json()
       if (!response.ok) {

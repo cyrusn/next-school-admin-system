@@ -13,6 +13,7 @@ export default function EcaRegister({
   ref
 }) {
   const [info, setInfo] = useState(regInfo || {})
+  const [isClicked, setIsClicked] = useState(false)
   const { cname, category, pic, associates, location } = selectedClub
 
   const reset = () => {
@@ -42,6 +43,7 @@ export default function EcaRegister({
   const modeValues = (modeValue || '').split(',').map((v) => v.trim())
 
   const onSubmit = async () => {
+    setIsClicked(true)
     if (mode == 'register') {
       await onRegister()
     } else if (mode == 'edit') {
@@ -50,6 +52,7 @@ export default function EcaRegister({
 
     ref.current = true
     setView('next')
+    setIsClicked(false)
     await fetchClubs()
   }
   const onEdit = async () => {
@@ -458,7 +461,11 @@ export default function EcaRegister({
         </div>
 
         <div className='buttons'>
-          <button className='button is-info' onClick={onSubmit}>
+          <button
+            className='button is-info'
+            onClick={onSubmit}
+            disabled={isClicked}
+          >
             遞交
           </button>
           <a className='button is-success' onClick={reset}>

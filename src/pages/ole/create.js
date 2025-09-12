@@ -84,6 +84,7 @@ const OleCreate = () => {
 
   const handleSubmit = async () => {
     setLoadingMessage()
+    setIsDisabled(true)
 
     const response = await fetch('/api/ole/events', {
       method: 'POST',
@@ -97,9 +98,10 @@ const OleCreate = () => {
     setErrors({})
 
     const result = await response.json()
+    setIsDisabled(false)
+
     if (!response.ok) {
       setErrorMessage(`Failed to submit data: ${result.error}`)
-
       return
     }
 

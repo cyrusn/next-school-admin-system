@@ -13,6 +13,7 @@ import { createRecordsInputInfoMapper } from '@/lib/ipad/createRecordInputMapper
 
 export default function IpadForm() {
   const [records, setRecords] = useState([])
+  const [isClicked, setIsClicked] = useState(false)
 
   const { students } = useStudentsContext()
   const { data: session } = useSession()
@@ -74,6 +75,7 @@ export default function IpadForm() {
   )
 
   const handleSubmit = async () => {
+    setIsDisabled(true)
     setLoadingMessage()
     try {
       const { regnos } = formData
@@ -124,11 +126,13 @@ export default function IpadForm() {
         throw new Error(result)
       }
 
+      setIsClicked(false)
       setFormData({ ...defaultFormData })
       setSuccessMessage('Data submitted successfully', () => {
         router.push('/ipad/record')
       })
     } catch (e) {
+      setIsClicked(false)
       setErrorMessage(JSON.stringify(e, null, '\t'))
     }
   }
@@ -200,7 +204,7 @@ export default function IpadForm() {
                 <button
                   className='button is-info'
                   onClick={handleSubmit}
-                  disabled={formData.regnos?.length == 0}
+                  disabled={formData.regnos?.length == 0 || isClicked}
                 >
                   Submit
                 </button>

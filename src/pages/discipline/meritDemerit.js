@@ -100,6 +100,8 @@ export default function MeritDemeritForm() {
   }
 
   const handleSubmit = async () => {
+    setIsDisabled(true)
+
     setLoadingMessage()
 
     const { regnos, eventDate, code: itemCode, description } = formData
@@ -126,6 +128,8 @@ export default function MeritDemeritForm() {
     setErrors({})
 
     const result = await response.json()
+    setIsDisabled(false)
+
     if (!response.ok) {
       setErrorMessage(`Failed to submit data: ${result.error}`)
 

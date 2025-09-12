@@ -8,6 +8,7 @@ const AddPhotos = ({ notifier, selectedEvent }) => {
   const folderId = last(selectedEvent?.imageFolderUrl?.split('/'))
   const [files, setFiles] = useState([])
   const [links, setLinks] = useState([])
+  const [isClicked, setIsClicked] = useState(false)
   const inputRef = useRef(null)
   const { setLoadingMessage, setErrorMessage, setSuccessMessage } = notifier
 
@@ -30,6 +31,7 @@ const AddPhotos = ({ notifier, selectedEvent }) => {
 
   const handleSubmit = async () => {
     setLoadingMessage()
+    setIsClicked(true)
 
     if (files.length === 0) {
       setErrorMessage('Please select files to upload')
@@ -49,6 +51,7 @@ const AddPhotos = ({ notifier, selectedEvent }) => {
       })
 
       const result = await response.json()
+      setIsClicked(false)
       if (!response.ok) {
         throw new Error(result.message)
       }
@@ -124,7 +127,7 @@ const AddPhotos = ({ notifier, selectedEvent }) => {
           <button
             className='button is-info'
             type='submit'
-            disabled={files.length == 0}
+            disabled={files.length == 0 || isClicked}
             onClick={handleSubmit}
           >
             Upload
