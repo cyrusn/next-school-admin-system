@@ -267,7 +267,7 @@ export default function DisciplineRecord() {
       {
         extend: 'print',
         className: 'is-warning',
-        text: 'Open',
+        text: 'Preview',
         autoPrint: false,
         exportOptions: {
           orthogonal: 'export'

@@ -106,7 +106,7 @@ export default function EcaMembershipRecord() {
       'copy',
       {
         extend: 'print',
-        text: 'Open',
+        text: 'Preview',
         autoPrint: false
       }
     ],

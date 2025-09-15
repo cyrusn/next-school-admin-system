@@ -212,7 +212,7 @@ const AdvanceList = () => {
       },
       {
         extend: 'print',
-        text: 'Open',
+        text: 'Preview',
         className: 'is-warning',
         autoPrint: false,
         exportOptions: {

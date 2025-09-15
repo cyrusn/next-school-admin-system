@@ -87,7 +87,7 @@ export default function DisciplineSummary() {
         extend: 'print',
         className: 'is-warning',
         autoPrint: false,
-        text: 'Open'
+        text: 'Preview'
       }
     ],
     rowId: 'id',
