@@ -1,6 +1,6 @@
 import { WEEKDAYS, MODE_TYPES, ACTIVITY_TYPES } from '@/lib/eca/constant'
 import { useState } from 'react'
-import { compact } from 'lodash'
+import { compact, throttle } from 'lodash'
 import { DateTime } from 'luxon'
 import { TIMEZONE } from '@/config/constant.js'
 
@@ -463,7 +463,7 @@ export default function EcaRegister({
         <div className='buttons'>
           <button
             className='button is-info'
-            onClick={onSubmit}
+            onClick={throttle(onSubmit, 1000)}
             disabled={isClicked}
           >
             遞交

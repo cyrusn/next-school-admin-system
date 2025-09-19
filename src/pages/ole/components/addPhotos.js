@@ -2,7 +2,7 @@
 import { useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUpload } from '@fortawesome/free-solid-svg-icons'
-import { last } from 'lodash'
+import { last, throttle } from 'lodash'
 
 const AddPhotos = ({ notifier, selectedEvent }) => {
   const folderId = last(selectedEvent?.imageFolderUrl?.split('/'))
@@ -128,7 +128,7 @@ const AddPhotos = ({ notifier, selectedEvent }) => {
             className='button is-info'
             type='submit'
             disabled={files.length == 0 || isClicked}
-            onClick={handleSubmit}
+            onClick={throttle(handleSubmit, 1000)}
           >
             Upload
           </button>

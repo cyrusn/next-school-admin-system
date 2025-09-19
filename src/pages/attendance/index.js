@@ -11,10 +11,10 @@ import {
   ROLE_ENUM,
   ATTENDANCE_TYPES
 } from '@/config/constant'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useStudentsContext } from '@/context/studentContext'
 import { getDisplayName, isEmpty } from '@/lib/helper'
-import { isEqual, snakeCase } from 'lodash'
+import { isEqual, snakeCase, throttle } from 'lodash'
 
 import Notification, {
   notificationWrapper,
@@ -410,7 +410,7 @@ const Attendance = ({ attendanceSummary }) => {
         <button
           className='button is-info'
           disabled={isDisabled(rows)}
-          onClick={handleSubmit}
+          onClick={throttle(handleSubmit, 1000)}
         >
           Submit
         </button>

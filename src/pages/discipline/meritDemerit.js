@@ -302,7 +302,7 @@ export default function MeritDemeritForm() {
                 className='button is-info'
                 type='submit'
                 value='Submit'
-                onClick={handleSubmit}
+                onClick={_.throttle(handleSubmit, 1000)}
                 disabled={isDisable}
               />
             </p>

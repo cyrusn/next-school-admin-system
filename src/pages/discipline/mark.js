@@ -203,7 +203,7 @@ export default function DisciplineForm() {
       return
     }
 
-   setSuccessMessage(
+    setSuccessMessage(
       `Data submitted successfully: ${JSON.stringify(result)}`,
       () => {
         setIsDisabled(false)
@@ -418,7 +418,7 @@ export default function DisciplineForm() {
                 className='button is-info'
                 type='submit'
                 value='Submit'
-                onClick={handleSubmit}
+                onClick={_.throttle(handleSubmit, 1000)}
                 disabled={isDisabled}
               />
             </p>

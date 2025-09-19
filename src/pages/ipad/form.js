@@ -10,6 +10,7 @@ import Notification, {
 } from '@/components/notification'
 import { inputMapper } from '@/components/form/inputMapper'
 import { createRecordsInputInfoMapper } from '@/lib/ipad/createRecordInputMapper'
+import { throttle } from 'lodash'
 
 export default function IpadForm() {
   const [records, setRecords] = useState([])
@@ -75,7 +76,7 @@ export default function IpadForm() {
   )
 
   const handleSubmit = async () => {
-    setIsDisabled(true)
+    setIsClicked(true)
     setLoadingMessage()
     try {
       const { regnos } = formData
@@ -203,7 +204,7 @@ export default function IpadForm() {
               <div className='field'>
                 <button
                   className='button is-info'
-                  onClick={handleSubmit}
+                  onClick={throttle(handleSubmit, 1000)}
                   disabled={formData.regnos?.length == 0 || isClicked}
                 >
                   Submit
