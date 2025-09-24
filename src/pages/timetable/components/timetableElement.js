@@ -93,7 +93,7 @@ export default function TimetableElement({ timetable, isLast }) {
                       .split('/')
                       .map((c) => {
                         const regex =
-                          /(?<first>[0-9][A-F]).{4,}(?<last>[0-9][A-F])/
+                          /(?<first>[4-6][A-F]),([4-6][A-F],){3}(?<last>[4-6][A-F])/
                         const result = regex.exec(c)
                         if (result) {
                           return `${result.groups.first}-${result.groups.last}`
@@ -122,7 +122,7 @@ export default function TimetableElement({ timetable, isLast }) {
                       <td key={idx} className='px-0'>
                         {zipContents.map((value, key) => {
                           return (
-                            <div key={key} className=' has-text-centered'>
+                            <div key={key} className='has-text-centered'>
                               {value.map((c, key) => {
                                 if (!c) return null
 
