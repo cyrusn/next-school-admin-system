@@ -93,10 +93,10 @@ export default function TimetableElement({ timetable, isLast }) {
                       .split('/')
                       .map((c) => {
                         const regex =
-                          /(?<first>[4-6][A-F]),([4-6][A-F],){3}(?<last>[4-6][A-F])/
+                          /(?<startClasscode>[4-6][A|B])(,[4-6]B)?(,[4-6]C,[4-6]D,[4-6]E)/
                         const result = regex.exec(c)
                         if (result) {
-                          return `${result.groups.first}-${result.groups.last}`
+                          return `${result.groups.startClasscode}-E`
                         }
                         return c
                       })

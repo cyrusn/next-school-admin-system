@@ -53,7 +53,7 @@ const getHandler = async (req, res) => {
 
     const weekday = now.weekday
     const days = 6 - weekday
-    const beforeNextFriday = now.plus({ weeks: 1, days })
+    const beforeNextFriday = startDate.plus({ weeks: 1, days })
 
     const ranges = announceDates
       .reduce((prev, { date }, index) => {
