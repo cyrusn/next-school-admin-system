@@ -153,25 +153,27 @@ const AttendanceRecord = ({ attendanceSummary }) => {
     ]
   }
 
-  options.buttons = [
-    {
-      text: 'Edit',
-      className: 'is-info',
-      action: function () {
-        setEditModalActive(true)
-      }
-    }
-  ]
+  options.buttons = []
 
   if (ROLE_ENUM[ROLE] >= ROLE_ENUM['OFFICE_STAFF']) {
-    options.buttons.push({
-      text: 'Delete',
-      className: 'is-danger',
-      action: function () {
-        setDeleteModalActive(true)
+    options.buttons.push(
+      {
+        text: 'Edit',
+        className: 'is-info',
+        action: function () {
+          setEditModalActive(true)
+        }
+      },
+      {
+        text: 'Delete',
+        className: 'is-danger',
+        action: function () {
+          setDeleteModalActive(true)
+        }
       }
-    })
+    )
   }
+
   options.buttons.push(
     {
       extend: 'copy',
@@ -192,7 +194,11 @@ const AttendanceRecord = ({ attendanceSummary }) => {
     }
   )
 
-  if (ROLE_ENUM[ROLE] < ROLE_ENUM['OFFICE_STAFF'] && !CLASS_MASTER) {
+  if (
+    ROLE_ENUM[ROLE] < ROLE_ENUM['OFFICE_STAFF'] &&
+    !CLASS_MASTER &&
+    ROLE !== 'SOCIAL_WORKER'
+  ) {
     return (
       <>
         <Nav role={ROLE} />
@@ -202,6 +208,7 @@ const AttendanceRecord = ({ attendanceSummary }) => {
       </>
     )
   }
+
   return (
     <>
       <Nav role={ROLE} />

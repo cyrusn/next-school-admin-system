@@ -28,7 +28,7 @@ export const columns = [
 
       return 'title'
     },
-    width: '30%'
+    width: '30%',
   },
   {
     title: 'Content',
@@ -49,11 +49,11 @@ export const columns = [
 <div class='content'>
   <dl>
     <dt class='has-text-weight-bold'>Description</dt>
-    <dd>${description}</dd>
+    <dd><p>${description}<p></dd>
     <dt class='has-text-weight-bold'>Objective</dt>
-    <dd>${objective}</dd>
+    <dd><p style='overflow-wrap: break-all; inline-size: 400px;'>${objective}</p></dd>
     <dt class='has-text-weight-bold'>Efficacy</dt>
-    <dd>${efficacy}</dd>
+    <dd><p style='overflow-wrap: break-all; inline-size: 400px;'>${efficacy}</p></dd>
     <dt class='has-text-weight-bold'>PIC</dt>
     <dd>
       <div class="tags">

@@ -26,6 +26,7 @@ export const TODAY = DateTime.now()
   .toFormat('yyyy-MM-dd')
 
 export const ROLE_ENUM = {
+  SOCIAL_WORKER: 0,
   GENERAL: 0,
   TEACHER: 1,
   OFFICE_STAFF: 2,
@@ -128,7 +129,7 @@ export const DEDUCTION_ITEM_CODES = [
     title: 'Fighting',
     min: 5,
     max: 15,
-    isDcOnly: null
+    isDcOnly: true
   },
   {
     code: 230,
@@ -136,7 +137,7 @@ export const DEDUCTION_ITEM_CODES = [
     title: 'Truancy',
     min: 5,
     max: 15,
-    isDcOnly: null
+    isDcOnly: true
   },
   {
     code: 240,
@@ -152,15 +153,15 @@ export const DEDUCTION_ITEM_CODES = [
     title: 'Acts of dishonesty',
     min: 5,
     max: 15,
-    isDcOnly: null
+    isDcOnly: true
   },
   {
     code: 270,
     cTitle: '嚴重違規',
     title: 'Serious deviance',
-    min: 1,
+    min: 15,
     max: 99,
-    isDcOnly: null
+    isDcOnly: true
   },
   {
     code: 290,

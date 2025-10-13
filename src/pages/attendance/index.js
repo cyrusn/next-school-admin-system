@@ -202,7 +202,7 @@ const Attendance = ({ attendanceSummary }) => {
       regnos.includes(regno)
     )
 
-    setRows((prevRows) => {
+    setRows(() => {
       const grwthRows = filteredStudents.map((student) => {
         const { classcode, classno } = student
         return {
@@ -213,7 +213,7 @@ const Attendance = ({ attendanceSummary }) => {
       })
 
       const newRows = [
-        ...prevRows.filter(({ classcodeAndNo }) => classcodeAndNo),
+        // ...prevRows.filter(({ classcodeAndNo }) => classcodeAndNo),
         ...grwthRows
       ]
       return newRows

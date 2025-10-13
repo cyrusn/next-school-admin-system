@@ -148,20 +148,20 @@ export default function DisciplineForm() {
 
     if (!rows[index].itemCode) return result
 
-    const { min, max: generalMax } = ITEM_CODES.find(
+    const { min, max } = ITEM_CODES.find(
       ({ code }) => code === parseInt(rows[index].itemCode)
     )
     const isDCTeam = ROLE_ENUM[ROLE] >= ROLE_ENUM['DC_TEAM']
-    const max = isDCTeam ? Math.max(generalMax, 5) : generalMax
+    const adjustedMax = isDCTeam ? max : Math.min(max, 3)
 
-    if (min === max) {
+    if (min === adjustedMax) {
       result.helpText = `Can only enter ${min} mark.`
     } else {
-      result.helpText = `Can choose from ${min} to ${max}.`
+      result.helpText = `Can choose from ${min} to ${adjustedMax}.`
     }
 
     result.min = min
-    result.max = max
+    result.max = adjustedMax
     return result
   }
 
