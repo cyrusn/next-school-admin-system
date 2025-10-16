@@ -153,25 +153,24 @@ const AttendanceRecord = ({ attendanceSummary }) => {
     ]
   }
 
-  options.buttons = []
+  options.buttons = [
+    {
+      text: 'Edit',
+      className: 'is-info',
+      action: function () {
+        setEditModalActive(true)
+      }
+    }
+  ]
 
   if (ROLE_ENUM[ROLE] >= ROLE_ENUM['OFFICE_STAFF']) {
-    options.buttons.push(
-      {
-        text: 'Edit',
-        className: 'is-info',
-        action: function () {
-          setEditModalActive(true)
-        }
-      },
-      {
-        text: 'Delete',
-        className: 'is-danger',
-        action: function () {
-          setDeleteModalActive(true)
-        }
+    options.buttons.push({
+      text: 'Delete',
+      className: 'is-danger',
+      action: function () {
+        setDeleteModalActive(true)
       }
-    )
+    })
   }
 
   options.buttons.push(

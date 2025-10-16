@@ -1,4 +1,12 @@
 #!/bin/bash
 
-./load.sh && ./stop.sh && ./prune.sh && ./start.sh && ./prune.sh
+# ./load.sh && ./stop.sh && ./start.sh && ./prune.sh
+docker load -i ./app.tar
 
+docker stop next
+
+docker rm next
+
+docker run -d --name next -p 3000:3000 cyrusn/next-school-admin-system:latest
+
+docker image prune -a -f
