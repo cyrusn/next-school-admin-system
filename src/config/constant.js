@@ -195,7 +195,7 @@ export const ADDITION_ITEM_CODES = [
     cTitle: '學術表現',
     title: 'Academic',
     min: 1,
-    max: 3,
+    max: 5,
     isDcOnly: null
   },
   {
@@ -203,7 +203,7 @@ export const ADDITION_ITEM_CODES = [
     cTitle: '良好品行',
     title: 'General Behaviour',
     min: 1,
-    max: 3,
+    max: 5,
     isDcOnly: null
   },
   {
@@ -211,7 +211,7 @@ export const ADDITION_ITEM_CODES = [
     cTitle: '服務優異',
     title: 'Service',
     min: 1,
-    max: 3,
+    max: 5,
     isDcOnly: null
   },
   {
@@ -219,7 +219,7 @@ export const ADDITION_ITEM_CODES = [
     cTitle: '課外活動',
     title: 'ECA Participation',
     min: 1,
-    max: 3,
+    max: 5,
     isDcOnly: null
   },
   {
@@ -227,7 +227,7 @@ export const ADDITION_ITEM_CODES = [
     cTitle: '整體表現',
     title: 'Overall Performance',
     min: 1,
-    max: 3,
+    max: 5,
     isDcOnly: true
   }
 ]
