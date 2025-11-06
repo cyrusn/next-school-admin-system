@@ -1,0 +1,51 @@
+{
+  "name": "next-school-admin-system",
+  "version": "1.5.19",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "bulma": "^1.0.4",
+    "datatables.net-bm": "^2.2.2",
+    "datatables.net-buttons-bm": "^3.2.2",
+    "datatables.net-columncontrol-bm": "^1.0.7",
+    "datatables.net-datetime": "^1.5.6",
+    "datatables.net-fixedcolumns-bm": "^5.0.4",
+    "datatables.net-fixedheader-bm": "^4.0.1",
+    "datatables.net-plugins": "^2.2.2",
+    "datatables.net-react": "^1.0.0",
+    "datatables.net-responsive-bm": "^3.0.4",
+    "datatables.net-searchbuilder-bm": "^1.8.3",
+    "datatables.net-searchpanes-bm": "^2.3.4",
+    "datatables.net-select-bm": "^3.0.0",
+    "formidable": "^3.5.4",
+    "googleapis": "^148.0.0",
+    "jquery": "^3.7.1",
+    "jquery-param": "^1.2.4",
+    "lodash": "^4.17.21",
+    "luxon": "^3.6.0",
+    "next": "^15.3.1",
+    "next-auth": "^4.24.11",
+    "next-connect": "^1.0.0",
+    "pdfmake": "^0.2.18",
+    "postcss": "^8.5.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-to-print": "^3.1.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.4"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+}

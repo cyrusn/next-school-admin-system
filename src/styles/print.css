@@ -1,0 +1,54 @@
+@media all {
+  .page-break {
+    display: none; /* Hide the element in screen view */
+  }
+  .print-only {
+    display: none; /* Hide the element in screen view */
+  }
+}
+
+@media print {
+  @page {
+    size: A4; /* Sets the page size to A4 */
+    margin: 5mm; /* Sets a 10mm margin on all sides */
+  }
+
+  .page-break {
+    display: block; /* Make the element visible for printing */
+    break-after: always; /* Force a page break before this element */
+  }
+
+  .not-print {
+    display: none;
+  }
+
+  .print-only th,
+  .print-only td {
+    display: table-cell; /* Hide the element in screen view */
+  }
+
+  .print-table {
+    border-collapse: collapse; /* Collapses borders between cells */
+    margin-top: 0px !important;
+    padding: 0px !important;
+  }
+
+  .print-table th,
+  .print-table td {
+    border: 1px solid black;
+    padding: 2px !important;
+  }
+
+  .print-font-small {
+    font-size: 10px;
+  }
+
+  .container,
+  .section,
+  table,
+  tr,
+  td {
+    margin-top: 0px !important;
+    padding: 0px !important;
+  }
+}
