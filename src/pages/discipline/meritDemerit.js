@@ -52,8 +52,8 @@ export default function MeritDemeritForm() {
   const LAST_MONDAY = now
     .minus({ weeks: 1, days: WEEKDAY - 1 })
     .toFormat('yyyy-MM-dd')
-  // const MIN_DATE =
-  //   ROLE_ENUM[ROLE] == ROLE_ENUM['DC_ADMIN'] ? START_TERM_DATE : LAST_MONDAY
+  const MIN_DATE =
+    ROLE_ENUM[ROLE] == ROLE_ENUM['DC_ADMIN'] ? START_TERM_DATE : LAST_MONDAY
 
   const { students } = useStudentsContext()
   const groupedStudents = _.groupBy(students, 'classcode')
@@ -91,7 +91,7 @@ export default function MeritDemeritForm() {
 
     setFormData(newForm)
 
-    const newErrors = validateForm(formData, validationRules)
+    const newErrors = validateForm(newForm, validationRules)
 
     const isInvalid = Object.keys(newErrors).length > 0
 
@@ -202,7 +202,7 @@ export default function MeritDemeritForm() {
                 disabled={!formData['code']}
                 name='eventDate'
                 max={TODAY}
-                min={LAST_MONDAY}
+                min={MIN_DATE}
                 value={formData['eventDate']}
                 error={errors['eventDate']}
                 handleChange={handleChange}

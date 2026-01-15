@@ -8,6 +8,7 @@ import Loading from '@/components/loading'
 export default function StudentPhoto() {
   const [files, setFiles] = useState([])
   const [filter, setFilter] = useState('')
+  const [isShowDetails, setIsShowDetails] = useState(false)
   const { students } = useStudentsContext()
 
   const classcodes = _(students).map('classcode').uniq().value()
@@ -70,6 +71,16 @@ export default function StudentPhoto() {
                 </div>
               </div>
             </div>
+            <div className='field'>
+              <div className='control'>
+                <button
+                  className={`button ${isShowDetails ? 'is-info' : 'is-warning'}`}
+                  onClick={() => setIsShowDetails(!isShowDetails)}
+                >
+                  {isShowDetails ? 'Hide' : 'Show'} Details
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -90,7 +101,8 @@ export default function StudentPhoto() {
                   classno,
                   isSen,
                   isNcs,
-                  isNewlyArrived
+                  isNewlyArrived,
+                  isAllowAccessories
                 } = student
                 const classcodeAndNo = `${classcode}${String(classno).padStart(2, 0)}`
                 const found = files?.find(
@@ -113,9 +125,14 @@ export default function StudentPhoto() {
                       </div>
                       <p>
                         {cname || ename}
-                        {isSen && <span> ❤️</span>}
-                        {isNcs && <span> 🌎</span>}
-                        {isNewlyArrived && <span> 🇨🇳</span>}
+                        {isShowDetails && (
+                          <span>
+                            {isSen && <span> ❤️</span>}
+                            {isNcs && <span> 🌎</span>}
+                            {isAllowAccessories && <span> ✝️</span>}
+                            {isNewlyArrived && <span> 🇨🇳</span>}
+                          </span>
+                        )}
                       </p>
                       <div className='tags is-justify-content-center'>
                         <span className='tag is-dark'>{classcodeAndNo}</span>

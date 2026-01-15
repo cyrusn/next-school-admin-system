@@ -351,17 +351,17 @@ export default function DisciplineForm() {
                   >
                     {rows[index].classcodes.length
                       ? students
-                        .filter((s) =>
-                          rows[index].classcodes.includes(s.classcode)
-                        )
-                        .map((s) => {
-                          const displayName = getDisplayName(s)
-                          return (
-                            <option value={s.regno} key={s.regno}>
-                              {displayName}
-                            </option>
+                          .filter((s) =>
+                            rows[index].classcodes.includes(s.classcode)
                           )
-                        })
+                          .map((s) => {
+                            const displayName = getDisplayName(s)
+                            return (
+                              <option value={s.regno} key={s.regno}>
+                                {displayName}
+                              </option>
+                            )
+                          })
                       : null}
                   </MultiSelectInput>
                 </div>
