@@ -8,6 +8,7 @@ import { TERM } from '@/config/constant'
 
 export default function Timetable() {
   const [term, setTerm] = useState(TERM || 1)
+  const [isMulti, setIsMulti] = useState(false)
   const [sheetName, setSheetName] = useState('')
   const [selectedTableNames, setSelectedTableNames] = useState([])
   const [timetables, setTimetables] = useState({})
@@ -32,6 +33,7 @@ export default function Timetable() {
     const { value } = e.target
     setSheetName(value)
     setSelectedTableNames([])
+    setIsMulti(false)
   }
   const handleSelect = (e) => {
     setSelectedTableNames((tableNames) => {
@@ -71,19 +73,45 @@ export default function Timetable() {
   return (
     <>
       <div className='not-print'>
-        <div className='tabs is-toggle is-fullwidth mb-3'>
-          <ul>
-            <li className={term === 1 ? 'is-active' : ''}>
-              <a onClick={() => handleTermChange(1)}>
-                <span>Term 1</span>
-              </a>
-            </li>
-            <li className={term === 2 ? 'is-active' : ''}>
-              <a onClick={() => handleTermChange(2)}>
-                <span>Term 2</span>
-              </a>
-            </li>
-          </ul>
+        <div className='is-flex is-align-items-center mb-3' style={{ gap: '0.75rem' }}>
+          <div className='tabs is-toggle is-small mb-0'>
+            <ul>
+              <li className={term === 1 ? 'is-active' : ''}>
+                <a onClick={() => handleTermChange(1)}>
+                  <span>Term 1</span>
+                </a>
+              </li>
+              <li className={term === 2 ? 'is-active' : ''}>
+                <a onClick={() => handleTermChange(2)}>
+                  <span>Term 2</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div className='tabs is-toggle is-small mb-0'>
+            <ul>
+              <li className={!isMulti ? 'is-active' : ''}>
+                <a
+                  onClick={() => {
+                    setIsMulti(false)
+                    setSelectedTableNames([])
+                  }}
+                >
+                  <span>Single</span>
+                </a>
+              </li>
+              <li className={isMulti ? 'is-active' : ''}>
+                <a
+                  onClick={() => {
+                    setIsMulti(true)
+                    setSelectedTableNames([])
+                  }}
+                >
+                  <span>Multiple</span>
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
         <RadioInput
           name='sheetName'
@@ -96,8 +124,7 @@ export default function Timetable() {
         />
         {tableNames?.length > 0 && (
           <>
-            {(sheetName.includes('teacher') ||
-              sheetName.includes('location')) && (
+            {!isMulti ? (
               <RadioInput
                 elements={tableNames
                   .map((tableName) => ({
@@ -108,8 +135,7 @@ export default function Timetable() {
                 checkedValue={selectedTableNames}
                 handleChange={handleSelect}
               />
-            )}
-            {sheetName.includes('class') && (
+            ) : (
               <CheckboxInput
                 elements={tableNames
                   .map((tableName) => ({
