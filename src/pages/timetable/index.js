@@ -4,15 +4,29 @@ import CheckboxInput from '@/components/form/checkboxInput'
 import MultiSelectInput from '@/components/form/multiSelectInput'
 import TimetableElement from './components/timetableElement'
 import { startCase } from 'lodash'
+import { TERM } from '@/config/constant'
 
 export default function Timetable() {
+  const [term, setTerm] = useState(TERM || 1)
   const [sheetName, setSheetName] = useState('')
   const [selectedTableNames, setSelectedTableNames] = useState([])
   const [timetables, setTimetables] = useState({})
 
-  const sheetNames = Object.keys(timetables)
+  const sheetNames = Object.keys(timetables).filter((key) =>
+    key.startsWith(term === 1 ? '1st' : '2nd')
+  )
   const tableNames =
     timetables[sheetName]?.map((t) => String(t.ShortName)) || []
+
+  const handleTermChange = (newTerm) => {
+    setTerm(newTerm)
+    if (sheetName) {
+      const parts = sheetName.split('_')
+      const type = parts.slice(1).join('_')
+      const newSheetName = `${newTerm === 1 ? '1st' : '2nd'}_${type}`
+      setSheetName(newSheetName)
+    }
+  }
 
   const handleChangeType = (e) => {
     const { value } = e.target
@@ -57,6 +71,20 @@ export default function Timetable() {
   return (
     <>
       <div className='not-print'>
+        <div className='tabs is-toggle is-fullwidth mb-3'>
+          <ul>
+            <li className={term === 1 ? 'is-active' : ''}>
+              <a onClick={() => handleTermChange(1)}>
+                <span>Term 1</span>
+              </a>
+            </li>
+            <li className={term === 2 ? 'is-active' : ''}>
+              <a onClick={() => handleTermChange(2)}>
+                <span>Term 2</span>
+              </a>
+            </li>
+          </ul>
+        </div>
         <RadioInput
           name='sheetName'
           elements={sheetNames.map((name) => ({
