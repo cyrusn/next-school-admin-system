@@ -116,7 +116,7 @@ export default function Timetable() {
         <RadioInput
           name='sheetName'
           elements={sheetNames.map((name) => ({
-            title: startCase(name),
+            title: startCase(name.replace(/^(1st|2nd)_/, '')),
             value: name
           }))}
           checkedValue={sheetName}
