@@ -69,6 +69,7 @@ export const getColumns = (attendanceSummary) => [
               return 0
           }
         }
+        return 0
       } catch (e) {
         console.error(e)
       }
