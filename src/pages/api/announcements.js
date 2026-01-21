@@ -85,6 +85,11 @@ const getHandler = async (req, res) => {
 
 export default async function handler(req, res) {
   const { method } = req
+  if (method == 'GET') {
+    await getHandler(req, res)
+    return
+  }
+
   const body = { ...req.body }
   delete req.body
   const session = await getSession({ req, method: 'GET' })
@@ -93,9 +98,6 @@ export default async function handler(req, res) {
   }
 
   switch (method) {
-    case 'GET':
-      await getHandler(req, res)
-      break
     case 'POST':
       req.body = body
       await postHandler(req, res)
