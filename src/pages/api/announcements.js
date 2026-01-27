@@ -86,6 +86,9 @@ const getHandler = async (req, res) => {
 export default async function handler(req, res) {
   const { method } = req
   if (method == 'GET') {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Methods', 'GET')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
     await getHandler(req, res)
     return
   }
