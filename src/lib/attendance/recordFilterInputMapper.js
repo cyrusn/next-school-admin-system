@@ -11,7 +11,7 @@ import { snakeCase } from 'lodash'
 export const recordFilterInputMapper = (
   formData,
   students,
-  { role, classMaster }
+  { role, classMaster, readingTeacher }
 ) => {
   const groupedStudents = groupBy(students, 'classcode')
   const classcodes = Object.keys(groupedStudents).sort()
@@ -38,7 +38,7 @@ export const recordFilterInputMapper = (
           if (ROLE_ENUM[role] >= ROLE_ENUM['OFFICE_STAFF']) {
             return true
           }
-          return classcode == classMaster
+          return classcode == classMaster || classcode == readingTeacher
         })
         .map((classcode) => {
           return (

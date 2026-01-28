@@ -91,6 +91,10 @@ const AttendanceRecord = ({ attendanceSummary }) => {
       newUrl += `&filters[classcode]=${CLASS_MASTER}`
     }
 
+    if (READING_TEACHER) {
+      newUrl += `&filters[classcode]=${READING_TEACHER}`
+    }
+
     console.log(newUrl)
     setUrl(newUrl)
 
@@ -125,6 +129,7 @@ const AttendanceRecord = ({ attendanceSummary }) => {
 
   const ROLE = session.user?.info?.role
   const CLASS_MASTER = session.user?.info?.classMaster
+  const READING_TEACHER = session.user?.info?.readingTeacher
 
   const options = {
     layout: {
@@ -143,7 +148,8 @@ const AttendanceRecord = ({ attendanceSummary }) => {
           return true
         }
 
-        return rowData.classcode == CLASS_MASTER
+        const { classcode } = rowData
+        return classcode == CLASS_MASTER || classcode == READING_TEACHER
       }
     },
     order: [
@@ -195,6 +201,7 @@ const AttendanceRecord = ({ attendanceSummary }) => {
 
   if (
     ROLE_ENUM[ROLE] < ROLE_ENUM['OFFICE_STAFF'] &&
+    !READING_TEACHER &&
     !CLASS_MASTER &&
     ROLE !== 'SOCIAL_WORKER'
   ) {
@@ -202,7 +209,9 @@ const AttendanceRecord = ({ attendanceSummary }) => {
       <>
         <Nav role={ROLE} />
         <div className='message is-warning'>
-          <div className='message-body'>Only available for class masters</div>
+          <div className='message-body'>
+            Only available for class masters / reading teacher
+          </div>
         </div>
       </>
     )
@@ -215,7 +224,8 @@ const AttendanceRecord = ({ attendanceSummary }) => {
         <div className='field-body'>
           {recordFilterInputMapper(formData, students, {
             role: ROLE,
-            classMaster: CLASS_MASTER
+            classMaster: CLASS_MASTER,
+            readingTeacher: READING_TEACHER
           }).map((inputInfo, key) => {
             const { title, name } = inputInfo
             const formInput = { formData, errors, handleChange }

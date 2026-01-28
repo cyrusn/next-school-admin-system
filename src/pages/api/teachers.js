@@ -12,8 +12,8 @@ export default async function handler(req, res) {
     const spreadsheetId = process.env.TEACHER_GOOGLE_SHEET_ID
     const data = await getSheetData(
       spreadsheetId,
-      'A1:H',
-      (rowNo) => `A${rowNo}:H${rowNo}`
+      'A1:I',
+      (rowNo) => `A${rowNo}:I${rowNo}`
     )
     res.status(200).json(data)
   } catch (error) {
