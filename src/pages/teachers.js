@@ -5,9 +5,12 @@ function CustomTable({ type }) {
   const mappers = {
     NON_TEACHING_STAFF: '非教職員',
     TEACHING_STAFF: '教職員',
-    SOCIAL_WORKER: '社工'
+    SOCIAL_WORKER: '社工',
+    SUBSTITUDE_TEACHING_STAFF: '代課老師'
   }
   const filteredUsers = users.filter((u) => u.type == type)
+
+  if (filteredUsers.length == 0) return <></>
 
   return (
     <table className='table is-bordered is-striped is-narrow is-hoverable is-fullwidth print-table print-font-small'>
@@ -69,6 +72,7 @@ export default function Teacher() {
       <div class='column'>
         <CustomTable type='NON_TEACHING_STAFF' />
         <CustomTable type='SOCIAL_WORKER' />
+        <CustomTable type='SUBSTITUDE_TEACHING_STAFF' />
       </div>
     </div>
   )
