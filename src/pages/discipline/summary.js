@@ -210,7 +210,7 @@ export default function DisciplineSummary() {
                   value={filters.startDate}
                   name='startDate'
                   placeholder='Start Date'
-                  min={START_TERM_DATE}
+                  min={filters.startDate}
                   handleChange={handleChange}
                 />
               </div>
