@@ -9,8 +9,8 @@ const SERVICE_ACCOUNT_KEY_PATH = path.join(
   process.env.GOOGLE_API_KEY_FILENAME
 )
 
-export async function getAuth() {
-  if (cachedClient) {
+export async function getAuth(subject) {
+  if (cachedClient && !subject) {
     return cachedClient // Return cached client if it exists
   }
   const client = new google.auth.GoogleAuth({
@@ -21,10 +21,12 @@ export async function getAuth() {
       'https://www.googleapis.com/auth/drive',
       'https://www.googleapis.com/auth/admin.directory.resource.calendar.readonly',
       'https://www.googleapis.com/auth/gmail.send'
-    ]
+    ],
+    clientOptions: {
+      subject: subject || 'schooladmin@liping.edu.hk'
+    }
   })
 
   cachedClient = await client.getClient() // Authenticate and cache the client
-  cachedClient.subject = 'schooladmin@liping.edu.hk'
   return cachedClient
 }

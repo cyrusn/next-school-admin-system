@@ -1,5 +1,4 @@
 import { SCHOOL_YEAR, TERM } from '@/config/constant'
-import { getSession } from 'next-auth/react'
 import _ from 'lodash'
 
 const TOKEN = process.env.STRAPI_API_KEY

@@ -140,11 +140,14 @@ const Resource = () => {
           endTime
         })
       )
-      calendarRef.current.src += ''
       clearMessage()
     } catch (error) {
       setErrorMessage(error.message)
     }
+
+    setTimeout(function () {
+      calendarRef.current.src += ''
+    }, 1000)
   }
 
   useEffect(() => {

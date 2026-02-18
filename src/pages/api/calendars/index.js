@@ -83,6 +83,7 @@ export default async function handler(req, res) {
 
   try {
     const auth = await getAuth()
+    const privateAuth = await getAuth(picEmail)
 
     const freebusyResponse = await calendar.freebusy.query({
       auth,
@@ -107,8 +108,8 @@ export default async function handler(req, res) {
 
     const summary = `${initial}@${resourceName} - ${title}`
     const attendees = [
-      { email: resourceEmail, resource: true },
-      { email: picEmail }
+      { email: resourceEmail, resource: true }
+      // { email: picEmail }
     ]
 
     if (requireJanitor) {
@@ -180,10 +181,11 @@ export default async function handler(req, res) {
       }
     }
 
+    // insert with privateAuth
     const response = await calendar.events.insert({
-      auth,
+      auth: privateAuth,
       requestBody,
-      calendarId
+      calendarId: 'primary'
     })
 
     const { id: eventId } = response.data
