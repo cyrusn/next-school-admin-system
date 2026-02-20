@@ -2,7 +2,6 @@ import {
   createContext,
   useEffect,
   useState,
-  useSession,
   useContext
 } from 'react'
 
@@ -10,10 +9,6 @@ export const StudentsContext = createContext()
 
 export const StudentsContextProvider = ({ children }) => {
   const [students, setStudents] = useState(() => {
-    // if (typeof window !== 'undefined') {
-    //   const storedStudents = localStorage.getItem('students')
-    //   return storedStudents ? JSON.parse(storedStudents) : []
-    // }
     return []
   })
 

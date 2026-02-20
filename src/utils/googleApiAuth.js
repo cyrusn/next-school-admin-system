@@ -23,7 +23,7 @@ export async function getAuth(subject) {
       'https://www.googleapis.com/auth/gmail.send'
     ],
     clientOptions: {
-      subject: subject || 'schooladmin@liping.edu.hk'
+      subject: subject ? subject : 'schooladmin@liping.edu.hk'
     }
   })
 
