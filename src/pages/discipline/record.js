@@ -1,5 +1,5 @@
 // discipline record show all conduct relate to user in the given period of time
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useSession } from 'next-auth/react'
 import _ from 'lodash'
 
@@ -213,7 +213,7 @@ export default function DisciplineRecord() {
     isFirstRun.current = false
   }
 
-  const options = {
+  const options = useMemo(() => ({
     dom: '<"level" <"level-left"l> <"level-right" B> > frtip',
 
     layout: {
@@ -297,7 +297,7 @@ export default function DisciplineRecord() {
       [1, 'asc'],
       [2, 'asc']
     ]
-  }
+  }), [ROLE])
 
   const confirmDelete = async () => {
     if (selectedRows.current.length == 0) return

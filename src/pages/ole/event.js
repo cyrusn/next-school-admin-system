@@ -15,6 +15,23 @@ import ButtonGroup from './components/buttonGroup'
 import Participants from './components/participants'
 import FilterBy from './components/filterBy'
 import { columns } from '@/lib/ole/columns'
+const options = {
+  layout: {
+    topStart: 'pageLength',
+    topEnd: 'search',
+    bottomStart: 'info',
+    bottomEnd: 'paging'
+  },
+  select: {
+    style: 'single',
+    items: 'row'
+    //selectable: function (rowData) {
+    //  return rowData.pics.includes(INITIAL)
+    //}
+  },
+  order: [2, 'desc']
+}
+
 const OleEvent = () => {
   const { data: session } = useSession()
   const [notification, setNotification] = useState({ ...defaultNotification })
@@ -107,22 +124,6 @@ const OleEvent = () => {
     })
   })
 
-  const options = {
-    layout: {
-      topStart: 'pageLength',
-      topEnd: 'search',
-      bottomStart: 'info',
-      bottomEnd: 'paging'
-    },
-    select: {
-      style: 'single',
-      items: 'row'
-      //selectable: function (rowData) {
-      //  return rowData.pics.includes(INITIAL)
-      //}
-    },
-    order: [2, 'desc']
-  }
 
   return (
     <>

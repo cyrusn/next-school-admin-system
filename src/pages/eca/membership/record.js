@@ -1,5 +1,5 @@
 import Nav from './components/nav.js'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import { useStudentsContext } from '@/context/studentContext'
 import { useSession } from 'next-auth/react'
 import { groupBy } from 'lodash'
@@ -83,8 +83,7 @@ export default function EcaMembershipRecord() {
     }
   }
 
-  const options = {
-    data: members,
+  const options = useMemo(() => ({
     rowId: 'id',
     dom: `
                 <"level mb-0" <"level-left" l> <"level-right" B>>
@@ -130,7 +129,7 @@ export default function EcaMembershipRecord() {
       [50, 100, -1],
       [50, 100, 'All']
     ]
-  }
+  }), [initial])
 
   const columns = [
     {

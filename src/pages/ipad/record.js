@@ -1,5 +1,5 @@
 import DataTable from '@/components/dataTable'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import { getDisplayName, getTimestamp } from '@/lib/helper'
 import Loading from '@/components/loading'
 import { useSession } from 'next-auth/react'
@@ -25,58 +25,61 @@ export default function IPadResult() {
     }
   }
 
-  const options = {
-    layout: {
-      top1: 'searchBuilder',
-      topStart: 'pageLength',
-      topEnd: ['buttons'],
-      bottomStart: 'info',
-      bottomEnd: 'paging'
-    },
-    pageLength: 25,
-    lengthMenu: [
-      [10, 25, 50, 100, -1],
-      ['10 rows', '25 rows', '35 rows', '50 rows', '100 rows', 'Show all']
-    ],
-    select: true,
-    buttons: [],
-    columns: [
-      { data: 'classcode', title: 'Class' },
-      { data: 'classno', title: 'No.' },
-      { data: 'regno', title: 'regno' },
-      { data: 'name', title: 'Name' },
-      { data: 'status', title: 'Status' },
-      { data: 'freq', title: 'Freq' },
-      {
-        data(row) {
-          let teachers = []
-          const { freq } = row
-          for (let i = freq; i > 0; i--) {
-            teachers.push(row[`teacher_${i}`])
-          }
-          return teachers.join(', ') || ''
-        },
-        title: 'Teacher'
-      },
-      {
-        data(row) {
-          const { freq } = row
-          return row[`issueDate_${freq}`] || ''
-        },
-        title: 'issueDate'
-      }
-    ]
-  }
+  const options = useMemo(() => {
+    const buttons = []
+    if (ROLE_ENUM[ROLE] >= ROLE_ENUM['DC_TEAM']) {
+      buttons.push({
+        text: 'Delete',
+        className: 'is-danger',
+        action: function () {
+          setIsModalActive(true)
+        }
+      })
+    }
 
-  if (ROLE_ENUM[ROLE] >= ROLE_ENUM['DC_TEAM']) {
-    options.buttons.push({
-      text: 'Delete',
-      className: 'is-danger',
-      action: function () {
-        setIsModalActive(true)
-      }
-    })
-  }
+    return {
+      layout: {
+        top1: 'searchBuilder',
+        topStart: 'pageLength',
+        topEnd: ['buttons'],
+        bottomStart: 'info',
+        bottomEnd: 'paging'
+      },
+      pageLength: 25,
+      lengthMenu: [
+        [10, 25, 50, 100, -1],
+        ['10 rows', '25 rows', '35 rows', '50 rows', '100 rows', 'Show all']
+      ],
+      select: true,
+      buttons,
+      columns: [
+        { data: 'classcode', title: 'Class' },
+        { data: 'classno', title: 'No.' },
+        { data: 'regno', title: 'regno' },
+        { data: 'name', title: 'Name' },
+        { data: 'status', title: 'Status' },
+        { data: 'freq', title: 'Freq' },
+        {
+          data(row) {
+            let teachers = []
+            const { freq } = row
+            for (let i = freq; i > 0; i--) {
+              teachers.push(row[`teacher_${i}`])
+            }
+            return teachers.join(', ') || ''
+          },
+          title: 'Teacher'
+        },
+        {
+          data(row) {
+            const { freq } = row
+            return row[`issueDate_${freq}`] || ''
+          },
+          title: 'issueDate'
+        }
+      ]
+    }
+  }, [ROLE])
 
   const setInactiveStatus = async () => {
     const rangeObjects = selectedRecords.map((r) => {

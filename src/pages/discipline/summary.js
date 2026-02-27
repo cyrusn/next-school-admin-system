@@ -21,6 +21,42 @@ import SelectInput from '@/components/form/selectInput'
 import DateInput from '@/components/form/dateInput'
 import HideformButton from '@/components/hideFormButton'
 
+const options = {
+  dom: '<"level" <"level-left" l> <"level-right" B> > fr <"table-container" t>ip',
+  searching: false,
+  processing: true,
+  serverSide: true,
+  scrollX: true,
+  fixedColumns: true,
+  fixedHeader: true,
+  pageLength: 35,
+  lengthMenu: [
+    [10, 25, 35, 50, -1],
+    ['10 rows', '25 rows', '35 rows', '50 rows', 'Show all']
+  ],
+  scrollCollapse: true,
+  buttons: [
+    { extend: 'copy', className: 'is-primary' },
+    {
+      extend: 'print',
+      className: 'is-warning',
+      autoPrint: false,
+      text: 'Preview'
+    }
+  ],
+  rowId: 'id',
+  columnDefs: [
+    { orderData: [3, 4], targets: 0 },
+    { orderable: false, targets: '_all' },
+    { orderable: true, targets: 0 },
+    { className: 'has-text-centered', targets: '_all' }
+  ],
+  order: [
+    [3, 'asc'],
+    [4, 'asc']
+  ]
+}
+
 export default function DisciplineSummary() {
   const tableRef = useRef()
   const buttonRef = useRef()
@@ -65,42 +101,6 @@ export default function DisciplineSummary() {
     }
 
     setIsShowFilters(false)
-  }
-
-  const options = {
-    dom: '<"level" <"level-left" l> <"level-right" B> > fr <"table-container" t>ip',
-    searching: false,
-    processing: true,
-    serverSide: true,
-    scrollX: true,
-    fixedColumns: true,
-    fixedHeader: true,
-    pageLength: 35,
-    lengthMenu: [
-      [10, 25, 35, 50, -1],
-      ['10 rows', '25 rows', '35 rows', '50 rows', 'Show all']
-    ],
-    scrollCollapse: true,
-    buttons: [
-      { extend: 'copy', className: 'is-primary' },
-      {
-        extend: 'print',
-        className: 'is-warning',
-        autoPrint: false,
-        text: 'Preview'
-      }
-    ],
-    rowId: 'id',
-    columnDefs: [
-      { orderData: [3, 4], targets: 0 },
-      { orderable: false, targets: '_all' },
-      { orderable: true, targets: 0 },
-      { className: 'has-text-centered', targets: '_all' }
-    ],
-    order: [
-      [3, 'asc'],
-      [4, 'asc']
-    ]
   }
 
   const handleChange = (e) => {

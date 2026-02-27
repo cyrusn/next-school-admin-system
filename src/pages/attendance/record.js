@@ -4,7 +4,7 @@ import DeleteModal from './components/deleteModal'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { ROLE_ENUM } from '@/config/constant'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useStudentsContext } from '@/context/studentContext'
 import { recordFilterInputMapper } from '@/lib/attendance/recordFilterInputMapper'
 import { inputMapper } from '@/components/form/inputMapper'
@@ -131,73 +131,76 @@ const AttendanceRecord = ({ attendanceSummary }) => {
   const CLASS_MASTER = session.user?.info?.classMaster
   const READING_TEACHER = session.user?.info?.readingTeacher
 
-  const options = {
-    layout: {
-      topStart: 'pageLength',
-      topEnd: ['buttons'],
-      bottomStart: 'info',
-      bottomEnd: 'paging'
-    },
-    pageLength: 25,
-    searching: false,
-    processing: true,
-    serverSide: true,
-    select: {
-      selectable: (rowData) => {
-        if (ROLE_ENUM[ROLE] >= ROLE_ENUM['OFFICE_STAFF']) {
-          return true
+  const options = useMemo(() => {
+    const buttons = [
+      {
+        text: 'Edit',
+        className: 'is-info',
+        action: function () {
+          setEditModalActive(true)
         }
-
-        const { classcode } = rowData
-        return classcode == CLASS_MASTER || classcode == READING_TEACHER
       }
-    },
-    order: [
-      [8, 'desc'],
-      [1, 'asc'],
-      [2, 'asc']
     ]
-  }
 
-  options.buttons = [
-    {
-      text: 'Edit',
-      className: 'is-info',
-      action: function () {
-        setEditModalActive(true)
-      }
+    if (ROLE_ENUM[ROLE] >= ROLE_ENUM['OFFICE_STAFF']) {
+      buttons.push({
+        text: 'Delete',
+        className: 'is-danger',
+        action: function () {
+          setDeleteModalActive(true)
+        }
+      })
     }
-  ]
 
-  if (ROLE_ENUM[ROLE] >= ROLE_ENUM['OFFICE_STAFF']) {
-    options.buttons.push({
-      text: 'Delete',
-      className: 'is-danger',
-      action: function () {
-        setDeleteModalActive(true)
+    buttons.push(
+      {
+        extend: 'copy',
+        className: 'is-primary',
+        exportOptions: {
+          columns: [3, 4, 5, 6, 7, 8, 9, 10, 11]
+        }
+      },
+      {
+        extend: 'print',
+        className: 'is-warning',
+        text: 'Preview',
+        autoPrint: false,
+        exportOptions: {
+          columns: [3, 4, 5, 6, 7, 8, 9, 10, 11],
+          orthogonal: 'export'
+        }
       }
-    })
-  }
+    )
 
-  options.buttons.push(
-    {
-      extend: 'copy',
-      className: 'is-primary',
-      exportOptions: {
-        columns: [3, 4, 5, 6, 7, 8, 9, 10, 11]
-      }
-    },
-    {
-      extend: 'print',
-      className: 'is-warning',
-      text: 'Preview',
-      autoPrint: false,
-      exportOptions: {
-        columns: [3, 4, 5, 6, 7, 8, 9, 10, 11],
-        orthogonal: 'export'
-      }
+    return {
+      layout: {
+        topStart: 'pageLength',
+        topEnd: ['buttons'],
+        bottomStart: 'info',
+        bottomEnd: 'paging'
+      },
+      pageLength: 25,
+      searching: false,
+      processing: true,
+      serverSide: true,
+      select: {
+        selectable: (rowData) => {
+          if (ROLE_ENUM[ROLE] >= ROLE_ENUM['OFFICE_STAFF']) {
+            return true
+          }
+
+          const { classcode } = rowData
+          return classcode == CLASS_MASTER || classcode == READING_TEACHER
+        }
+      },
+      order: [
+        [8, 'desc'],
+        [1, 'asc'],
+        [2, 'asc']
+      ],
+      buttons
     }
-  )
+  }, [ROLE, CLASS_MASTER, READING_TEACHER])
 
   if (
     ROLE_ENUM[ROLE] < ROLE_ENUM['OFFICE_STAFF'] &&

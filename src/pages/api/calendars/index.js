@@ -219,12 +219,12 @@ export default async function handler(req, res) {
         `To: ${specialAcknowledgeEmail}`,
         `Subject: New Booking of ${resourceName}: [${summary} ${startTime}]`,
         `Content-Type: text/plain; charset="UTF-8"`,
-        '',
-        `Title: ${title} 
-Location: ${resourceName}
-Time: ${startTime} - ${endTime}
-Description: ${description}
-From: ${initial}`
+        ``,
+        `Title: ${title}`,
+        `Location: ${resourceName}`,
+        `Time: ${startTime} - ${endTime}`,
+        `Description: ${description}`,
+        `From: ${initial}`
       ].join('\n')
 
       const base64EncodedEmail = Buffer.from(email)

@@ -4,84 +4,77 @@ import EditParticipants from './editParticipants'
 import AddParticipants from './addParticipants'
 import { getDisplayName } from '@/lib/helper'
 
-export default function Participants({ selectedEvent, notifier }) {
-  const [selectedParticipants, setSelectedParticipants] = useState([])
-  const [isAddParticipants, setIsAddParticipants] = useState(false)
-  const [isEditParticipants, setIsEditParticipants] = useState(false)
-  const eventId = selectedEvent?.eventId
-  const tableRef = useRef(null)
-
-  const columns = [
-    {
-      title: 'Name',
-      name: 'displayName',
-      width: '14%',
-      data(data, type) {
-        const { classcode, classno, name, cname } = data
-        if (type === 'set') {
-          return
-        }
-
-        if (type === 'display' || type === 'filter') {
-          return getDisplayName({ classcode, classno, name, cname })
-        }
-
-        if (type === 'sort') {
-          return ['classcode', 'classno']
-        }
-
-        return 'regno'
+const columns = [
+  {
+    title: 'Name',
+    name: 'displayName',
+    width: '14%',
+    data(data, type) {
+      const { classcode, classno, name, cname } = data
+      if (type === 'set') {
+        return
       }
-    },
-    {
-      title: 'Period',
-      width: '20%',
-      data(data, type) {
-        const { startDate, endDate } = data
-        if (type != 'display') return startDate
 
-        if (startDate == endDate) {
-          return startDate
-        }
-        return `${startDate} to ${endDate}`
+      if (type === 'display' || type === 'filter') {
+        return getDisplayName({ classcode, classno, name, cname })
       }
-    },
-    {
-      title: 'Role and Achievement',
-      width: '25%',
-      data(data, type) {
-        const { role, achievement, hours } = data
-        if (type != 'display') return role
-        if (!achievement) {
-          return `<p>${role} - ${hours}hrs</p>`
-        }
-        return `<p><b>${String(achievement).replace('\n', '<br/>')}</b><br/>${role} - ${hours}hrs</p>`
+
+      if (type === 'sort') {
+        return ['classcode', 'classno']
       }
-    },
-    {
-      title: 'Highlight',
-      data: 'isHighlight',
-      width: '8%',
-      render(isHighlight) {
-        return isHighlight ? '✅' : '❌'
+
+      return 'regno'
+    }
+  },
+  {
+    title: 'Period',
+    width: '20%',
+    data(data, type) {
+      const { startDate, endDate } = data
+      if (type != 'display') return startDate
+
+      if (startDate == endDate) {
+        return startDate
       }
-    },
-    {
-      title: 'Present Award',
-      data: 'isAward',
-      width: '8%',
-      render(isAward) {
-        return isAward ? '✅' : '❌'
+      return `${startDate} to ${endDate}`
+    }
+  },
+  {
+    title: 'Role and Achievement',
+    width: '25%',
+    data(data, type) {
+      const { role, achievement, hours } = data
+      if (type != 'display') return role
+      if (!achievement) {
+        return `<p>${role} - ${hours}hrs</p>`
       }
-    },
-    {
-      title: 'Award',
-      width: '25%',
-      data(data, type) {
-        const { isAward, awardName, awardType, awardStatus } = data
-        if (type != 'display') return isAward
-        if (!isAward) return ''
-        return `
+      return `<p><b>${String(achievement).replace('\n', '<br/>')}</b><br/>${role} - ${hours}hrs</p>`
+    }
+  },
+  {
+    title: 'Highlight',
+    data: 'isHighlight',
+    width: '8%',
+    render(isHighlight) {
+      return isHighlight ? '✅' : '❌'
+    }
+  },
+  {
+    title: 'Present Award',
+    data: 'isAward',
+    width: '8%',
+    render(isAward) {
+      return isAward ? '✅' : '❌'
+    }
+  },
+  {
+    title: 'Award',
+    width: '25%',
+    data(data, type) {
+      const { isAward, awardName, awardType, awardStatus } = data
+      if (type != 'display') return isAward
+      if (!isAward) return ''
+      return `
 <div class='content'>
 <dl>
   <dt class='has-text-weight-bold'>Name of Award</dt>
@@ -93,21 +86,29 @@ export default function Participants({ selectedEvent, notifier }) {
 </dl>
 </div>
 `
-      }
-    },
-    { data: 'range', visible: false },
-    { data: 'eventId', visible: false },
-    { data: 'participantId', visible: false },
-    { data: 'regno', visible: false }
-  ]
+    }
+  },
+  { data: 'range', visible: false },
+  { data: 'eventId', visible: false },
+  { data: 'participantId', visible: false },
+  { data: 'regno', visible: false }
+]
 
-  const options = {
-    serverSide: true,
-    select: true,
-    ordering: false,
-    processing: true,
-    columnDefs: [{ className: 'has-text-centered', targets: [0, 1, 3, 4] }]
-  }
+const options = {
+  serverSide: true,
+  select: true,
+  ordering: false,
+  processing: true,
+  columnDefs: [{ className: 'has-text-centered', targets: [0, 1, 3, 4] }]
+}
+
+export default function Participants({ selectedEvent, notifier }) {
+  const [selectedParticipants, setSelectedParticipants] = useState([])
+  const [isAddParticipants, setIsAddParticipants] = useState(false)
+  const [isEditParticipants, setIsEditParticipants] = useState(false)
+  const eventId = selectedEvent?.eventId
+  const tableRef = useRef(null)
+
 
   useEffect(() => {
     const events = ['select', 'deselect']
