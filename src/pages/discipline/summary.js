@@ -95,6 +95,7 @@ export default function DisciplineSummary() {
     classcodes.forEach((c, index) => {
       newUrl += `&filters[classcode][${index}]=${c}`
     })
+
     setUrl(newUrl)
     if (tableRef.current) {
       tableRef.current.dt().ajax.url(newUrl).load()

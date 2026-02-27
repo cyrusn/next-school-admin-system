@@ -27,6 +27,9 @@ export async function getAuth(subject) {
     }
   })
 
-  cachedClient = await client.getClient() // Authenticate and cache the client
-  return cachedClient
+  const authedClient = await client.getClient() // Authenticate and cache the client
+  if (!subject) {
+    cachedClient = authedClient
+  }
+  return authedClient
 }

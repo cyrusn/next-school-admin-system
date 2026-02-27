@@ -147,7 +147,7 @@ const Resource = () => {
 
     setTimeout(function () {
       calendarRef.current.src += ''
-    }, 1000)
+    }, 2000)
   }
 
   useEffect(() => {
