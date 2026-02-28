@@ -37,7 +37,7 @@ export default function PostExam() {
         <p>
           煩請老師登入 liping.edu.hk 以輸入
           <a
-            href='https://docs.google.com/spreadsheets/d/1XYD8IywaQgsuqIGsCWPh96EI-qDyoUFJ9VGetawA5uM/edit?gid=1815670885#gid=1815670885'
+            href='https://docs.google.com/spreadsheets/d/1GJzQ9uaG876_JEw-d-QsOJMiU71kwMZBdcogRL9jyGM/edit?gid=476231659#gid=476231659'
             target='_blank'
           >
             學生名單
