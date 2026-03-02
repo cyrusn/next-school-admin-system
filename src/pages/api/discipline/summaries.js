@@ -35,8 +35,9 @@ const getHandler = async (req, res) => {
   const { qs: accumulateQs, draw: accumulateDraw } =
     dataTableQueryStrapiConverter(
       Object.assign({}, query, {
-        // [`filters[eventDate][$gte]`]:
-        //   term == 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE,
+        // do not need to set case for term == 2, F6 students will not have correct grade if do so
+        [`filters[eventDate][$gte]`]: FIRST_TERM_START_DATE,
+        // term == 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE,
         [`filters[eventDate][$lte]`]: TODAY
       })
     )
