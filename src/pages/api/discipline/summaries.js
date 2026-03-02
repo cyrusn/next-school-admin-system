@@ -35,8 +35,8 @@ const getHandler = async (req, res) => {
   const { qs: accumulateQs, draw: accumulateDraw } =
     dataTableQueryStrapiConverter(
       Object.assign({}, query, {
-        [`filters[eventDate][$gte]`]:
-          term == 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE,
+        // [`filters[eventDate][$gte]`]:
+        //   term == 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE,
         [`filters[eventDate][$lte]`]: TODAY
       })
     )

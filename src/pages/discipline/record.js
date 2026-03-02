@@ -428,7 +428,7 @@ export default function DisciplineRecord() {
                   value={filters.startDate}
                   name='startDate'
                   placeholder='Start Date'
-                  min={filters.startDate}
+                  // min={filters.startDate}
                   max={TODAY}
                   handleChange={handleChange}
                 />
@@ -440,7 +440,7 @@ export default function DisciplineRecord() {
                   value={filters.endDate}
                   name='endDate'
                   placeholder='End Date'
-                  min={filters.startDate}
+                  // min={filters.startDate}
                   max={TODAY}
                   handleChange={handleChange}
                 />

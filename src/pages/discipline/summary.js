@@ -13,7 +13,8 @@ import {
   ITEM_CODES,
   MERIT_DEMERIT_CODES,
   ATTENDANCE_TYPES,
-  FIRST_TERM_START_DATE
+  FIRST_TERM_START_DATE,
+  SECOND_TERM_START_DATE
 } from '@/config/constant'
 
 import MultiSelectInput from '@/components/form/multiSelectInput'
@@ -211,7 +212,7 @@ export default function DisciplineSummary() {
                   value={filters.startDate}
                   name='startDate'
                   placeholder='Start Date'
-                  min={filters.startDate}
+                  // min={filters.startDate}
                   handleChange={handleChange}
                 />
               </div>
