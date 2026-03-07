@@ -144,10 +144,25 @@ const Resource = () => {
     } catch (error) {
       setErrorMessage(error.message)
     }
+    let refreshCount = 0
+    const maxRefreshes = 2
+    const intervalTime = 3000 // 5 seconds in milliseconds
 
-    setTimeout(function () {
-      calendarRef.current.src += ''
-    }, 2000)
+    const calendarInterval = setInterval(function () {
+      // 1. Reload the iframe
+      // Adding a timestamp prevents the browser from loading a cached version
+      calendarRef.current.src =
+        calendarRef.current.src.split('&t=')[0] + '&t=' + new Date().getTime()
+
+      refreshCount++
+      console.log('Refresh count: ' + refreshCount)
+
+      // 2. Check if we've reached the limit
+      if (refreshCount >= maxRefreshes) {
+        clearInterval(calendarInterval)
+        console.log('Stopped refreshing after 10 times.')
+      }
+    }, intervalTime)
   }
 
   useEffect(() => {

@@ -62,6 +62,8 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
+  const dt = DateTime.now().setZone('Asia/Hong_Kong')
+  const now = dt.toFormat('yyyy-MM-dd HH:mm:ss')
   const {
     resourceType,
     resourceEmail,
@@ -138,7 +140,7 @@ export default async function handler(req, res) {
         timeZone: 'Asia/Hong_Kong'
       },
       summary,
-      description,
+      description: `${now}\n${description}`,
       attendees,
       supportsAttachments: true,
       guestsCanModify: true
@@ -214,6 +216,8 @@ export default async function handler(req, res) {
 
     if (response.status == 200 && specialAcknowledgeEmail) {
       const gmail = google.gmail('v1')
+      const dt = DateTime.now().setZone('Asia/Hong_Kong')
+      const now = dt.toFormat('yyyy-MM-dd HH:mm:ss')
 
       const email = [
         `To: ${specialAcknowledgeEmail}`,
@@ -223,7 +227,7 @@ export default async function handler(req, res) {
         `Title: ${title}`,
         `Location: ${resourceName}`,
         `Time: ${startTime} - ${endTime}`,
-        `Description: ${description}`,
+        `Description: ${now}\n${description}`,
         `From: ${initial}`
       ].join('\n')
 
