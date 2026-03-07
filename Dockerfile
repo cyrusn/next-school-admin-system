@@ -15,6 +15,7 @@ RUN mkdir -p /app/uploads
 
 # Copy the rest of your application code from the src folder
 COPY src ./src
+COPY public ./public
 COPY next.config.mjs ./
 
 # Build the Next.js application
