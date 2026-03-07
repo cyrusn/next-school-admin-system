@@ -140,7 +140,7 @@ export default async function handler(req, res) {
         timeZone: 'Asia/Hong_Kong'
       },
       summary,
-      description: `${now}\n${description}`,
+      description: `Created: ${now}\n${description}`,
       attendees,
       supportsAttachments: true,
       guestsCanModify: true
@@ -227,7 +227,8 @@ export default async function handler(req, res) {
         `Title: ${title}`,
         `Location: ${resourceName}`,
         `Time: ${startTime} - ${endTime}`,
-        `Description: ${now}\n${description}`,
+        `Created: ${now}`,
+        `Description: ${description}`,
         `From: ${initial}`
       ].join('\n')
 
