@@ -11,6 +11,8 @@ import _ from 'lodash'
 import Image from 'next/image'
 
 import { useStudentsContext } from '@/context/studentContext'
+import Loading from '@/components/loading'
+
 const TYPE_MAPPER = {
   LEARNING_TRAIT: '學習',
   FAMILY_BACKGROUND: '家庭',
@@ -239,18 +241,16 @@ export default function StudentProfile() {
   const [photos, setPhotos] = useState([])
   const [comments, setComments] = useState([])
   const [filter, setFilter] = useState('')
+  const [searchFilter, setSearchFilter] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const { students } = useStudentsContext()
   const [privileges, setPrivileges] = useState([])
   const [onePageProfiles, setOnePageProfiles] = useState([])
 
   const [notification, setNotification] = useState({ ...defaultNotification })
-  const {
-    setLoadingMessage,
-    // setErrorMessage,
-    // setSuccessMessage,
-    clearMessage
-  } = notificationWrapper(setNotification)
+  const { setLoadingMessage, clearMessage } =
+    notificationWrapper(setNotification)
 
   const groupedComments = _.groupBy(comments, 'regno')
 
@@ -284,48 +284,148 @@ export default function StudentProfile() {
     '6E'
   ]
 
-  const handleChange = (e) => {
-    const filter = e.target.value || filter
-    setFilter(filter)
-    refresh(filter)
+  const fetchData = async (targetStudents, signal) => {
+    if (!targetStudents || targetStudents.length === 0) {
+      setPhotos([])
+      setComments([])
+      return
+    }
+
+    const fetchStudents = targetStudents.slice(0, 100)
+    const filenames = fetchStudents
+      .map((s) => `lp${s.regno}`)
+      .join("' or name contains '")
+    const regnos = fetchStudents.map((s) => s.regno)
+
+    try {
+      const photoResPromise = fetch(
+        `/api/photos?filenames=name contains '${filenames}'`,
+        { signal }
+      )
+      const commentResPromise = fetch(
+        `/api/profile?regnos=${regnos.join(',')}`,
+        { signal }
+      )
+
+      const [photoRes, commentRes] = await Promise.all([
+        photoResPromise,
+        commentResPromise
+      ])
+      const photoJson = await photoRes.json()
+      const commentJson = await commentRes.json()
+
+      setPhotos(photoJson.files || [])
+      setComments(commentJson || [])
+    } catch (e) {
+      if (e.name !== 'AbortError') console.error(e)
+    }
   }
 
-  const refresh = async (filter) => {
-    const filteredStudents = students.filter((s) => {
-      return s.classcode == filter
-    })
-    const fetchPhotoData = async () => {
-      const filenames = filteredStudents
-        .map((s) => `lp${s.regno}`)
-        .join("' or name contains '")
-      try {
-        const response = await fetch(
-          `/api/photos?filename=name contains '${filenames}'`
+  const refresh = async () => {
+    let targetStudents = []
+    if (filter) {
+      targetStudents = students.filter((s) => s.classcode == filter)
+    } else if (searchFilter) {
+      const search = searchFilter.toLowerCase().trim()
+      const exactMatch = search.match(/^([1-6][a-z])\s*0?(\d{1,2})$/)
+      targetStudents = students.filter((s) => {
+        if (exactMatch) {
+          return (
+            s.classcode?.toLowerCase() === exactMatch[1] &&
+            String(s.classno) === exactMatch[2]
+          )
+        }
+        const classcodeAndNo = `${s.classcode?.toLowerCase()}${String(s.classno).padStart(2, '0')}`
+        const classcodeAndNoShort = `${s.classcode?.toLowerCase()}${String(s.classno)}`
+        return (
+          s.ename?.toLowerCase().includes(search) ||
+          s.cname?.includes(search) ||
+          String(s.regno).includes(search) ||
+          s.classcode?.toLowerCase().includes(search) ||
+          String(s.classno).includes(search) ||
+          classcodeAndNo.includes(search) ||
+          classcodeAndNoShort.includes(search)
         )
-        const json = await response.json()
-        setPhotos(json.files)
-      } catch (e) {
-        console.error(e)
-      }
+      })
     }
-
-    const fetchCommentData = async () => {
-      const regnos = filteredStudents.map((s) => s.regno)
-
-      try {
-        const response = await fetch(`/api/profile?regnos=${regnos.join(',')}`)
-        const json = await response.json()
-        setComments(json)
-      } catch (e) {
-        console.error(e)
-      }
-    }
-
-    fetchPhotoData()
-    fetchCommentData()
+    await fetchData(targetStudents)
   }
 
-  const fetchPrivieges = async () => {
+  useEffect(() => {
+    const abortController = new AbortController()
+
+    const search = searchFilter.toLowerCase().trim()
+
+    if (!searchFilter || search.length < 1) {
+      if (!filter) {
+        setPhotos([])
+        setComments([])
+      }
+      setIsLoading(false)
+      return
+    }
+
+    setIsLoading(true)
+
+    const delayDebounceFn = setTimeout(async () => {
+      const exactMatch = search.match(/^([1-6][a-z])\s*0?(\d{1,2})$/)
+
+      const matchedStudents = students.filter((s) => {
+        if (exactMatch) {
+          return (
+            s.classcode?.toLowerCase() === exactMatch[1] &&
+            String(s.classno) === exactMatch[2]
+          )
+        }
+        const classcodeAndNo = `${s.classcode?.toLowerCase()}${String(s.classno).padStart(2, '0')}`
+        const classcodeAndNoShort = `${s.classcode?.toLowerCase()}${String(s.classno)}`
+        return (
+          s.ename?.toLowerCase().includes(search) ||
+          s.cname?.includes(search) ||
+          String(s.regno).includes(search) ||
+          s.classcode?.toLowerCase().includes(search) ||
+          String(s.classno).includes(search) ||
+          classcodeAndNo.includes(search) ||
+          classcodeAndNoShort.includes(search)
+        )
+      })
+
+      if (matchedStudents.length === 0) {
+        setPhotos([])
+        setComments([])
+        setIsLoading(false)
+        return
+      }
+
+      await fetchData(matchedStudents, abortController.signal)
+      setIsLoading(false)
+    }, 500)
+
+    return () => {
+      clearTimeout(delayDebounceFn)
+      abortController.abort()
+    }
+  }, [searchFilter, students, filter])
+
+  const handleSelectChange = (e) => {
+    const val = e.target.value
+    setSearchFilter('')
+    setFilter(val)
+    if (val) {
+      const targetStudents = students.filter((s) => s.classcode == val)
+      fetchData(targetStudents)
+    } else {
+      setPhotos([])
+      setComments([])
+    }
+  }
+
+  const handleSearchChange = (e) => {
+    setFilter('')
+    setSearchFilter(e.target.value)
+  }
+
+  const fetchPrivileges = async () => {
     try {
       const response = await fetch(`/api/profile/privileges`)
       const json = await response.json()
@@ -345,7 +445,7 @@ export default function StudentProfile() {
   }
 
   useEffect(() => {
-    fetchPrivieges()
+    fetchPrivileges()
     fetchOnePageProfiles()
   }, [])
 
@@ -353,18 +453,66 @@ export default function StudentProfile() {
     return <Notification {...notification} />
   }
 
+  let resultsToRender = []
+  if (filter) {
+    resultsToRender = students.filter((s) => s.classcode == filter)
+  } else if (searchFilter) {
+    const search = searchFilter.toLowerCase().trim()
+    if (search.length >= 1) {
+      const exactMatch = search.match(/^([1-6][a-z])\s*0?(\d{1,2})$/)
+
+      resultsToRender = students.filter((s) => {
+        if (exactMatch) {
+          return (
+            s.classcode?.toLowerCase() === exactMatch[1] &&
+            String(s.classno) === exactMatch[2]
+          )
+        }
+
+        const classcodeAndNo = `${s.classcode?.toLowerCase()}${String(s.classno).padStart(2, '0')}`
+        const classcodeAndNoShort = `${s.classcode?.toLowerCase()}${String(s.classno)}`
+
+        return (
+          s.ename?.toLowerCase().includes(search) ||
+          s.cname?.includes(search) ||
+          String(s.regno).includes(search) ||
+          s.classcode?.toLowerCase().includes(search) ||
+          String(s.classno).includes(search) ||
+          classcodeAndNo.includes(search) ||
+          classcodeAndNoShort.includes(search)
+        )
+      })
+    }
+  }
+
   return (
     <>
       <h1 className='title has-text-centered'>Student Profile</h1>
       <div className='field is-horizontal'>
-        <div className='field-label'>
-          <label className='label'>class</label>
+        <div className='field-label is-normal'>
+          <label className='label'>Filter</label>
         </div>
         <div className='field-body'>
           <div className='field'>
             <div className='control'>
+              <input
+                className='input'
+                type='text'
+                placeholder='Fuzzy Search: name, cname, regno, classcode, classno'
+                onChange={handleSearchChange}
+                value={searchFilter}
+              />
+            </div>
+          </div>
+          <div className='field is-narrow'>
+            <div className='control'>
+              <p className='has-text-weight-bold my-2 px-2'>OR</p>
+            </div>
+          </div>
+          <div className='field'>
+            <div className='control'>
               <div className='select is-fullwidth'>
-                <select onChange={handleChange}>
+                <select onChange={handleSelectChange} value={filter}>
                   <option value=''>Select class</option>
                   {classcodes
                     .filter((classcode) => {
@@ -416,94 +564,102 @@ export default function StudentProfile() {
         </div>
       </div>
 
-      {filter ? (
-        <div>
-          {students
-            .filter((s) => s.classcode == filter)
-            .map((student) => {
-              const {
-                regno,
-                ename,
-                cname,
-                sex,
-                classcode,
-                classno,
-                isSen,
-                isNcs,
-                isNewlyArrived
-              } = student
-              const classcodeAndNo = `${classcode}${String(classno).padStart(2, 0)}`
-              const found = photos?.find(
-                (file) => file.name.split('.')[0] == `lp${regno}`
-              )
-              return (
-                <div className='box' key={regno}>
-                  <div className='columns'>
-                    <div className='column is-one-quarter-desktop has-text-centered'>
-                      <div className='is-flex is-justify-content-center'>
-                        <figure className='is-3by4'>
-                          {found ? (
-                            <Image
-                              alt={regno}
-                              src={found.thumbnailLink}
-                              width='0'
-                              height='0'
-                              sizes='250vw'
-                              style={{ width: '100%', height: 'auto' }}
-                            />
-                          ) : (
-                            <></>
-                          )}
-                        </figure>
-                      </div>
-                      <p>
-                        {cname || ename}
-                        {isSen && <span> ❤️</span>}
-                        {isNcs && <span> 🌎</span>}
-                        {isNewlyArrived && <span> 🇨🇳</span>}
-                      </p>
-                      <div className='tags is-justify-content-center'>
-                        <span className='tag is-dark'>{classcodeAndNo}</span>
-                        <span className='tag is-success'>{regno}</span>
-                        <span
-                          className={`tag ${sex == 'M' ? 'is-info' : 'is-danger'}`}
-                        >
-                          {sex}
-                        </span>
-                      </div>
-                    </div>
-                    <div className='column'>
-                      {isEdit ? (
-                        <CreateComment
-                          regno={regno}
-                          initial={initial}
-                          refresh={() => refresh(filter)}
-                          setLoadingMessage={setLoadingMessage}
-                          clearMessage={clearMessage}
-                        />
-                      ) : (
-                        <></>
-                      )}
+      {searchFilter && isLoading && <Loading />}
 
-                      <DisplayComment
-                        comments={groupedComments[regno]}
+      {(filter || (searchFilter && !isLoading)) && (
+        <div>
+          {resultsToRender.map((student) => {
+            const {
+              regno,
+              ename,
+              cname,
+              sex,
+              classcode,
+              classno,
+              isSen,
+              isNcs,
+              isNewlyArrived,
+              x1,
+              x2,
+              x3
+            } = student
+            const classcodeAndNo = `${classcode}${String(classno).padStart(2, '0')}`
+            const found = photos?.find(
+              (file) => file.name.split('.')[0] == `lp${regno}`
+            )
+            return (
+              <div className='box' key={regno}>
+                <div className='columns'>
+                  <div className='column is-one-quarter-desktop has-text-centered'>
+                    <div className='is-flex is-justify-content-center'>
+                      <figure className='is-3by4'>
+                        {found ? (
+                          <Image
+                            alt={regno}
+                            src={found.thumbnailLink}
+                            width='0'
+                            height='0'
+                            sizes='250vw'
+                            style={{ width: '100%', height: 'auto' }}
+                          />
+                        ) : (
+                          <></>
+                        )}
+                      </figure>
+                    </div>
+                    <p>
+                      {cname || ename}
+                      {isSen && <span> ❤️</span>}
+                      {isNcs && <span> 🌎</span>}
+                      {isNewlyArrived && <span> 🇨🇳</span>}
+                    </p>
+                    <div className='tags is-justify-content-center'>
+                      <span className='tag is-dark'>{classcodeAndNo}</span>
+                      <span className='tag is-success'>{regno}</span>
+                      <span
+                        className={`tag ${sex == 'M' ? 'is-info' : 'is-danger'}`}
+                      >
+                        {sex}
+                      </span>
+                      {(x1 || x2 || x3) && (
+                        <div className='tags is-justify-content-center mt-1'>
+                          {x1 && <span className='tag is-warning'>{x1}</span>}
+                          {x2 && <span className='tag is-warning'>{x2}</span>}
+                          {x3 && <span className='tag is-warning'>{x3}</span>}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className='column'>
+                    {isEdit ? (
+                      <CreateComment
+                        regno={regno}
                         initial={initial}
-                        setComments={setComments}
+                        refresh={() => refresh()}
                         setLoadingMessage={setLoadingMessage}
                         clearMessage={clearMessage}
                       />
-                      <OnePageProfileButton
-                        onePageProfiles={onePageProfiles}
-                        regno={regno}
-                      />
-                    </div>
+                    ) : (
+                      <></>
+                    )}
+
+                    <DisplayComment
+                      comments={groupedComments[regno]}
+                      initial={initial}
+                      setComments={setComments}
+                      setLoadingMessage={setLoadingMessage}
+                      clearMessage={clearMessage}
+                    />
+                    <OnePageProfileButton
+                      onePageProfiles={onePageProfiles}
+                      regno={regno}
+                    />
                   </div>
                 </div>
-              )
-            })}
+              </div>
+            )
+          })}
         </div>
-      ) : (
-        <></>
       )}
     </>
   )
