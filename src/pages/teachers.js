@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import { useUsersContext } from '@/context/usersContext'
 
-function CustomTable({ type }) {
+function CustomTable({ type, searchTerm }) {
   const { users } = useUsersContext()
   const mappers = {
     NON_TEACHING_STAFF: '非教職員',
@@ -8,7 +9,19 @@ function CustomTable({ type }) {
     SOCIAL_WORKER: '社工',
     SUBSTITUDE_TEACHING_STAFF: '代課老師'
   }
-  const filteredUsers = users.filter((u) => u.type == type)
+  
+  let filteredUsers = users.filter((u) => u.type == type)
+
+  if (searchTerm) {
+    const term = searchTerm.toLowerCase()
+    filteredUsers = filteredUsers.filter((u) => 
+      (u.initial && u.initial.toLowerCase().includes(term)) ||
+      (u.email && u.email.toLowerCase().includes(term)) ||
+      (u.name && u.name.toLowerCase().includes(term)) ||
+      (u.cname && u.cname.toLowerCase().includes(term)) ||
+      (u.classMaster && u.classMaster.toLowerCase().includes(term))
+    )
+  }
 
   if (filteredUsers.length == 0) return <></>
 
@@ -28,33 +41,31 @@ function CustomTable({ type }) {
       <tbody>
         {filteredUsers.map((u, key) => {
           return (
-            <>
-              <tr key={key}>
-                <td>{u.initial}</td>
-                <td>
-                  <a href={`mailto:${u.email}`}>{u.email}</a>
-                </td>
-                <td
-                  className={
-                    u.name?.length > 16
-                      ? 'is-size-7 is-align-content-center'
-                      : ''
-                  }
-                >
-                  {u.name}
-                </td>
-                <td>
-                  {u.cname}
-                  {u.title}
-                </td>
-                {type == 'TEACHING_STAFF' && <td>{u.classMaster}</td>}
-                <td style={{ width: '5%' }} className='print-only'></td>
-              </tr>
-            </>
+            <tr key={key}>
+              <td>{u.initial}</td>
+              <td>
+                <a href={`mailto:${u.email}`}>{u.email}</a>
+              </td>
+              <td
+                className={
+                  u.name?.length > 16
+                    ? 'is-size-7 is-align-content-center'
+                    : ''
+                }
+              >
+                {u.name}
+              </td>
+              <td>
+                {u.cname}
+                {u.title}
+              </td>
+              {type == 'TEACHING_STAFF' && <td>{u.classMaster}</td>}
+              <td style={{ width: '5%' }} className='print-only'></td>
+            </tr>
           )
         })}
         <tr>
-          <td colSpan='5' className='has-text-right'>
+          <td colSpan={type == 'TEACHING_STAFF' ? 6 : 5} className='has-text-right'>
             Total: {filteredUsers.length}
           </td>
         </tr>
@@ -64,16 +75,31 @@ function CustomTable({ type }) {
 }
 
 export default function Teacher() {
+  const [searchTerm, setSearchTerm] = useState('')
+
   return (
-    <div className='columns print-50'>
-      <div class='column'>
-        <CustomTable type='TEACHING_STAFF' />
+    <>
+      <div className='field mb-4 print-hidden'>
+        <div className='control'>
+          <input
+            className='input'
+            type='text'
+            placeholder='Search by name, initial, email...'
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
-      <div class='column'>
-        <CustomTable type='NON_TEACHING_STAFF' />
-        <CustomTable type='SOCIAL_WORKER' />
-        <CustomTable type='SUBSTITUDE_TEACHING_STAFF' />
+      <div className='columns print-50'>
+        <div className='column'>
+          <CustomTable type='TEACHING_STAFF' searchTerm={searchTerm} />
+        </div>
+        <div className='column'>
+          <CustomTable type='NON_TEACHING_STAFF' searchTerm={searchTerm} />
+          <CustomTable type='SOCIAL_WORKER' searchTerm={searchTerm} />
+          <CustomTable type='SUBSTITUDE_TEACHING_STAFF' searchTerm={searchTerm} />
+        </div>
       </div>
-    </div>
+    </>
   )
 }
