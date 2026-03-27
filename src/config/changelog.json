@@ -1,0 +1,40 @@
+[
+  {
+    "version": "v1.9.1",
+    "commits": [
+      "feat: add search bar to filter teacher list"
+    ]
+  },
+  {
+    "version": "v1.9.0",
+    "commits": [
+      "Implemented fuzzy search with pattern matching for class/no (e.g., 2A03, 2A3).",
+      "Added AbortController and optimized debouncing for snappier, efficient searching.",
+      "Updated UI layout to prioritize fuzzy search and improve result clarity.",
+      "Displayed student electives (x1, x2, x3) directly using warning tags.",
+      "Fixed minor photo API parameter bug in profile module."
+    ]
+  },
+  {
+    "version": "v1.8.9",
+    "commits": [
+      "Added NEXT_PUBLIC_IS_FILTER_F6 environment variable support.",
+      "Restricted F6 student selection in attendance and conduct entry.",
+      "Blocked F6 record modification and deletion for restricted users in record lists.",
+      "Added visual 'unselectable' indicators for restricted records."
+    ]
+  },
+  {
+    "version": "v1.8.8",
+    "commits": [
+      "copy ./public to docker image",
+      "better outlook"
+    ]
+  },
+  {
+    "version": "v1.8.7",
+    "commits": [
+      "add submission time and refresh twice"
+    ]
+  }
+]

@@ -1,5 +1,6 @@
 import { useSession } from 'next-auth/react'
 import packageInfo from '../../package.json'
+import changelog from '@/config/changelog.json'
 
 export const metadata = {
   title: {
@@ -26,35 +27,16 @@ export default function Home() {
         </div>
         <div className='message-body'>
           <ul>
-            <li className='mb-2'>
-              <b>v1.9.1</b>
-              <ul style={{ marginLeft: '1.5rem', listStyleType: 'disc' }}>
-                <li>Added search bar to filter teacher list</li>
-              </ul>
-            </li>
-            <li className='mb-2'>
-              <b>v1.9.0</b>
-              <ul style={{ marginLeft: '1.5rem', listStyleType: 'disc' }}>
-                <li>Enhanced fuzzy search</li>
-                <li>Display electives in photo and profile modules</li>
-              </ul>
-            </li>
-            <li className='mb-2'>
-              <b>v1.8.9</b>
-              <ul style={{ marginLeft: '1.5rem', listStyleType: 'disc' }}>
-                <li>Implemented F6 record filtering</li>
-                <li>Access restrictions for non-DC_ADMIN users</li>
-                <li>Improved UI layout and system outlook</li>
-              </ul>
-            </li>
-            <li className='mb-2'>
-              <b>v1.8.5</b>
-              <ul style={{ marginLeft: '1.5rem', listStyleType: 'disc' }}>
-                <li>Enhanced attendance reporting with Grwth API</li>
-                <li>Fixed grading calculation for F6 summary reports</li>
-                <li>Removed date restrictions for disciplinary records</li>
-              </ul>
-            </li>
+            {changelog.map((release, index) => (
+              <li key={index} className='mb-2'>
+                <b>{release.version}</b>
+                <ul style={{ marginLeft: '1.5rem', listStyleType: 'disc' }}>
+                  {release.commits.map((commit, cIndex) => (
+                    <li key={cIndex}>{commit}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
