@@ -27,6 +27,12 @@ export default function Home() {
         <div className='message-body'>
           <ul>
             <li className='mb-2'>
+              <b>v1.9.1</b>
+              <ul style={{ marginLeft: '1.5rem', listStyleType: 'disc' }}>
+                <li>Added search bar to filter teacher list</li>
+              </ul>
+            </li>
+            <li className='mb-2'>
               <b>v1.9.0</b>
               <ul style={{ marginLeft: '1.5rem', listStyleType: 'disc' }}>
                 <li>Enhanced fuzzy search</li>
