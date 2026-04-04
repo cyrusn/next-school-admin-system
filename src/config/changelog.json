@@ -1,13 +1,16 @@
 [
   {
-    "version": "v1.9.1",
+    "version": "v1.9.2",
     "commits": [
-      "feat: add search bar to filter teacher list"
+      "feat: auto-focus teacher search input and update postExam template",
+      "feat: automate dynamic changelog generation from git history"
     ]
   },
   {
-    "version": "v1.9.0",
+    "version": "v1.9.1",
     "commits": [
+      "feat: add search bar to filter teacher list",
+      "feat: add recent updates changelog to index page",
       "Implemented fuzzy search with pattern matching for class/no (e.g., 2A03, 2A3).",
       "Added AbortController and optimized debouncing for snappier, efficient searching.",
       "Updated UI layout to prioritize fuzzy search and improve result clarity.",
