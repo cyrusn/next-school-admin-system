@@ -20,7 +20,8 @@ export default function PostExam() {
           href='https://calendar.google.com/calendar/ical/liping.edu.hk_vh6sj6phv5e81veailualj0oec%40group.calendar.google.com/public/basic.ics'
           target='_blank'
         >
-          Calendar address
+          {' '}
+          Calendar address{' '}
         </a>
       </div>
 
@@ -29,8 +30,8 @@ export default function PostExam() {
         <p>
           同事可到此
           <a href='https://forms.gle/FvMYVyzyLWYNmsmN9' target='_blank'>
-            連結
-          </a>
+            連結{' '}
+          </a>{' '}
           申報試後活動
         </p>
         <h1 className='title is-5'>輸入學生名單</h1>
@@ -40,7 +41,8 @@ export default function PostExam() {
             href='https://docs.google.com/spreadsheets/d/1GJzQ9uaG876_JEw-d-QsOJMiU71kwMZBdcogRL9jyGM/edit?gid=476231659#gid=476231659'
             target='_blank'
           >
-            學生名單
+            {' '}
+            學生名單{' '}
           </a>{' '}
           (全級性活動除外)。如有學生重疊參與活動，請較後輸入的同工主動與相關同事協商，完成後在Remark一欄中輸入
           <code>compromised</code>。

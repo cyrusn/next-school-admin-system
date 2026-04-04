@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useUsersContext } from '@/context/usersContext'
 
 function CustomTable({ type, searchTerm }) {
@@ -76,6 +76,13 @@ function CustomTable({ type, searchTerm }) {
 
 export default function Teacher() {
   const [searchTerm, setSearchTerm] = useState('')
+  const searchInputRef = useRef(null)
+
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus()
+    }
+  }, [])
 
   return (
     <>
@@ -86,6 +93,7 @@ export default function Teacher() {
             type='text'
             placeholder='Search by name, initial, email...'
             value={searchTerm}
+            ref={searchInputRef}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
