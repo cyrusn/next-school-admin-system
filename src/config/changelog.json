@@ -1,5 +1,11 @@
 [
   {
+    "version": "v1.9.3",
+    "commits": [
+      "feat: add auto-focus to search inputs and frontpage changelog pagination"
+    ]
+  },
+  {
     "version": "v1.9.2",
     "commits": [
       "feat: auto-focus teacher search input and update postExam template",
@@ -38,6 +44,74 @@
     "version": "v1.8.7",
     "commits": [
       "add submission time and refresh twice"
+    ]
+  },
+  {
+    "version": "v1.8.6",
+    "commits": [
+      "bug fix for grading in summary for F6"
+    ]
+  },
+  {
+    "version": "v1.8.5",
+    "commits": [
+      "remove minDate for DC record and summary"
+    ]
+  },
+  {
+    "version": "v1.8.4",
+    "commits": [
+      "update postExam student list"
+    ]
+  },
+  {
+    "version": "v1.8.3",
+    "commits": [
+      "use useMemo"
+    ]
+  },
+  {
+    "version": "v1.8.1",
+    "commits": [
+      "bug fix for getting initial in googleAuth"
+    ]
+  },
+  {
+    "version": "v1.8.0",
+    "commits": [
+      "create calendar to user calendar",
+      "update min date"
+    ]
+  },
+  {
+    "version": "v1.7.2",
+    "commits": [
+      "reading period can submit attendance proof",
+      "add substitude teachers",
+      "add flipped_classroom api",
+      "make announcement public"
+    ]
+  },
+  {
+    "version": "v1.6.3",
+    "commits": [
+      "Improve print functionality for announcement box",
+      "v1.6.2 fix: if no attendances summary found.",
+      "bug fix"
+    ]
+  },
+  {
+    "version": "v1.6.1",
+    "commits": [
+      "fix: simplified timetable category labels (removed term prefix). Bump version to 1.6.1"
+    ]
+  },
+  {
+    "version": "v1.6.0",
+    "commits": [
+      "feat: Add single/multi selection mode to Timetable and Namelist, add Term toggle to Timetable. Bump version to 1.6.0",
+      "Add term toggle to timetable",
+      "re-initiation"
     ]
   }
 ]
