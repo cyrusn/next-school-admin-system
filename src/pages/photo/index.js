@@ -186,6 +186,7 @@ export default function StudentPhoto() {
                   placeholder='Fuzzy Search: name, cname, regno, classcode, classno'
                   onChange={handleSearchChange}
                   value={searchFilter}
+                  autoFocus
                 />
               </div>
             </div>

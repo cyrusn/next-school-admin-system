@@ -50,8 +50,8 @@ function generateChangelog() {
     const outPath = path.join(__dirname, '../src/config/changelog.json');
     fs.mkdirSync(path.dirname(outPath), { recursive: true });
     
-    // Filter empty versions and save the top 5
-    const finalVersions = versions.filter(v => v.commits.length > 0).slice(0, 5);
+    // Filter empty versions and save the top 50
+    const finalVersions = versions.filter(v => v.commits.length > 0).slice(0, 50);
     
     fs.writeFileSync(outPath, JSON.stringify(finalVersions, null, 2));
     console.log(`Changelog generated successfully at ${outPath}`);
