@@ -1,5 +1,11 @@
 [
   {
+    "version": "v1.9.4",
+    "commits": [
+      "fix: resolve DataTables dark mode styling and update setup guide"
+    ]
+  },
+  {
     "version": "v1.9.3",
     "commits": [
       "feat: add auto-focus to search inputs and frontpage changelog pagination"
