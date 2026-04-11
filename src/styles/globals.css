@@ -4,7 +4,39 @@
 @import url('datatables.net-select-bm');
 @import url('datatables.net-fixedcolumns-bm');
 @import url('datatables.net-fixedheader-bm');
-@import url('datatables.net-fixedheader-bm');
 @import url('datatables.net-columncontrol-bm');
 @import url('datatables.net-searchbuilder-bm');
 @import url('datatables.net-searchpanes-bm');
+
+
+/* Fix DataTables styling for Bulma 1.0 */
+:root {
+  --dtfc_background: var(--bulma-table-background-color) !important;
+  --dt-html-background: var(--bulma-table-background-color) !important;
+  --dtfc-thead-cell_background: var(--bulma-table-background-color) !important;
+  --dtfc-tbody-cell_background: var(--bulma-table-background-color) !important;
+}
+
+table.dataTable.fixedHeader-floating,
+table.dataTable.fixedHeader-locked {
+  background-color: var(--bulma-table-background-color) !important;
+}
+
+.dtfh-floatingparent {
+  background-color: var(--bulma-table-background-color) !important;
+}
+
+div.dt-scroll div.dtfc-top-blocker,
+div.dt-scroll div.dtfc-bottom-blocker,
+div.dtfh-floatingparent div.dtfc-top-blocker,
+div.dtfh-floatingparent div.dtfc-bottom-blocker {
+  background-color: var(--bulma-table-background-color) !important;
+}
+
+/* Ensure sticky headers and footers are opaque in Bulma */
+table.dataTable thead th,
+table.dataTable thead td,
+table.dataTable tfoot th,
+table.dataTable tfoot td {
+  background-color: var(--bulma-table-background-color) !important;
+}

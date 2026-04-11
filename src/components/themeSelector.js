@@ -16,26 +16,30 @@ const ThemeSelector = () => {
   const [theme, setTheme] = useState({ ...themes[0] })
 
   const updateTheme = (newTheme) => {
-    const classList = document.querySelector('html').classList
+    const html = document.querySelector('html');
+    const classList = html.classList;
 
     if (newTheme == 'System') {
       setTheme(themes[0])
       classList.remove('theme-dark')
-      classList.remove('theme-light')
+      classList.remove('theme-light');
+      html.removeAttribute('data-theme');
       return
     }
 
     if (newTheme == 'Light') {
       setTheme(themes[1])
       classList.add('theme-light')
-      classList.remove('theme-dark')
+      classList.remove('theme-dark');
+      html.setAttribute('data-theme', 'light');
       return
     }
 
     if (newTheme == 'Dark') {
       setTheme(themes[2])
       classList.add('theme-dark')
-      classList.remove('theme-light')
+      classList.remove('theme-light');
+      html.setAttribute('data-theme', 'dark');
     }
   }
 
