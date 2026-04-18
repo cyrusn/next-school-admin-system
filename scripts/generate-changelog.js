@@ -28,7 +28,7 @@ function generateChangelog() {
       }
       
       // Filter out chore commits, version bumps, and merges
-      if (!subject || subject.startsWith('chore:') || subject.match(/^[0-9\.]+$/) || subject.match(/^v[0-9\.]+$/) || subject.startsWith('Squash merge') || subject.startsWith('docs: update changelog') || subject.startsWith('docs: changelog') || subject.startsWith('bump version') || subject.includes('update version number')) {
+      if (!subject || subject.match(/^[0-9\.]+$/) || subject.match(/^v[0-9\.]+$/) || subject.startsWith('Squash merge') || subject.startsWith('docs: update changelog') || subject.startsWith('docs: changelog') || subject.startsWith('bump version') || subject.includes('update version number')) {
         continue;
       }
       

@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.10.2",
+    "commits": [
+      "fix: include scripts directory in Dockerfile for startup settings fetch",
+      "fix: resolve stale .next cache and missing component errors during dev build",
+      "chore: bump version to 1.10.0 and migrate settings to Google Sheets"
+    ]
+  },
+  {
     "version": "v1.9.4",
     "commits": [
       "fix: resolve DataTables dark mode styling and update setup guide"
@@ -33,6 +41,7 @@
   {
     "version": "v1.8.9",
     "commits": [
+      "chore: bump version to 1.8.9",
       "Added NEXT_PUBLIC_IS_FILTER_F6 environment variable support.",
       "Restricted F6 student selection in attendance and conduct entry.",
       "Blocked F6 record modification and deletion for restricted users in record lists.",
