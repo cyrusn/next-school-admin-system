@@ -1,9 +1,10 @@
 import { getArrayData } from '@/utils/googleSheet'
-
-const spreadsheetId = process.env.FLIPPED_CLASSROOM_SSID
+import { getSettings } from '@/utils/settings'
 
 const getHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.FLIPPED_CLASSROOM_SSID
     const data = await getArrayData(
       spreadsheetId,
       'SubjectOrDepartments!A2:A',

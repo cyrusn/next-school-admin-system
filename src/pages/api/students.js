@@ -4,8 +4,8 @@ import { groupBy } from 'lodash'
 
 import { google } from 'googleapis'
 import { getAuth } from '@/utils/googleApiAuth'
+import { getSettings } from '@/utils/settings'
 const sheets = google.sheets('v4')
-const spreadsheetId = process.env.STUDENT_GOOGLE_SHEET_ID
 
 export default async function handler(req, res) {
   const session = await getSession({ req, method: 'GET' })
@@ -13,6 +13,8 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.STUDENT_GOOGLE_SHEET_ID
     const auth = await getAuth()
     const ranges = ['students!A1:U', 'groups!A1:G']
     const response = await sheets.spreadsheets.values.batchGet({

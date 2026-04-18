@@ -1,5 +1,6 @@
 import { getSheetData } from '../../utils/googleSheet'
 import { getSession } from 'next-auth/react'
+import { getSettings } from '@/utils/settings'
 
 export default async function handler(req, res) {
   const session = await getSession({ req })
@@ -9,7 +10,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const spreadsheetId = process.env.TEACHER_GOOGLE_SHEET_ID
+    const settings = await getSettings()
+    const spreadsheetId = settings.TEACHER_GOOGLE_SHEET_ID
     const data = await getSheetData(
       spreadsheetId,
       'A1:I',

@@ -7,9 +7,11 @@ import {
 import { getSession } from 'next-auth/react'
 import { DateTime } from 'luxon'
 
-const spreadsheetId = process.env.ANNOUNCEMENT_GOOGLE_SHEET_ID
+import { getSettings } from '@/utils/settings'
 
 const postHandler = async (req, res) => {
+  const settings = await getSettings()
+  const spreadsheetId = settings.ANNOUNCEMENT_GOOGLE_SHEET_ID
   const { range, values } = req.body // Extract data from the request body
   if (!range) {
     return res.status(404).json({ error: 'Required: range value' })
@@ -24,6 +26,8 @@ const postHandler = async (req, res) => {
 }
 
 const deleteHandler = async (req, res) => {
+  const settings = await getSettings()
+  const spreadsheetId = settings.ANNOUNCEMENT_GOOGLE_SHEET_ID
   const range = req.query.range
   if (!range) return res.status(404).json({ message: 'Required: range value' })
 
@@ -38,6 +42,8 @@ const deleteHandler = async (req, res) => {
 
 const getHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.ANNOUNCEMENT_GOOGLE_SHEET_ID
     const announceDates = await getSheetData(spreadsheetId, 'B1:B')
     const { start_date } = req.query // in yyyy-MM-dd format
 

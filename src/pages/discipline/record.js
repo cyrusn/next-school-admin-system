@@ -14,6 +14,7 @@ import Modal from "./components/modal";
 
 import { useStudentsContext } from "@/context/studentContext";
 import { useUsersContext } from "@/context/usersContext";
+import { useSettings } from "@/context/settingsContext";
 import { getDisplayName } from "@/lib/helper";
 import {
   TODAY,
@@ -29,7 +30,8 @@ import {
 
 export default function DisciplineRecord() {
   const { data: session } = useSession();
-  const { role: ROLE, initial: INITIAL } = session.user.info;
+  const { settings } = useSettings();
+  const { role: ROLE, initial: INITIAL } = session?.user?.info || {};
   const { students } = useStudentsContext();
   const { users } = useUsersContext();
 
@@ -39,15 +41,30 @@ export default function DisciplineRecord() {
   const selectedRows = useRef([]);
   const isFirstRun = useRef(true);
 
+  const term = parseInt(settings.TERM || TERM);
+  const firstTermStart = settings.FIRST_TERM_START_DATE || FIRST_TERM_START_DATE;
+  const secondTermStart = settings.SECOND_TERM_START_DATE || SECOND_TERM_START_DATE;
+  const startTermDate = term === 2 ? secondTermStart : firstTermStart;
+
   const defaultFilters = {
     classcodes: [],
     regnos: [],
-    startDate: START_TERM_DATE,
+    startDate: startTermDate,
     endDate: TODAY,
     teacher: INITIAL,
-    term: TERM,
+    term: term,
   };
   const [filters, setFilters] = useState({ ...defaultFilters });
+
+  useEffect(() => {
+    if (settings.TERM) {
+      setFilters((prev) => ({
+        ...prev,
+        term,
+        startDate: startTermDate,
+      }));
+    }
+  }, [settings.TERM, startTermDate, term]);
 
   const groupedStudents = _.groupBy(students, "classcode");
   const classcodes = Object.keys(groupedStudents);
@@ -70,10 +87,10 @@ export default function DisciplineRecord() {
       newFilters[name] = value;
 
       if (name == "term" && value == 1) {
-        newFilters["startDate"] = FIRST_TERM_START_DATE;
+        newFilters["startDate"] = settings.FIRST_TERM_START_DATE || FIRST_TERM_START_DATE;
       }
       if (name == "term" && value == 2) {
-        newFilters["startDate"] = SECOND_TERM_START_DATE;
+        newFilters["startDate"] = settings.SECOND_TERM_START_DATE || SECOND_TERM_START_DATE;
       }
       return newFilters;
     });
@@ -187,8 +204,9 @@ export default function DisciplineRecord() {
 
   const handleSubmitFilter = async () => {
     const { startDate, endDate, classcodes, regnos, teacher } = filters;
+    const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR;
     let newUrl = "";
-    newUrl += `/api/strapi/conducts?filters[schoolYear]=${SCHOOL_YEAR}`;
+    newUrl += `/api/strapi/conducts?filters[schoolYear]=${schoolYear}`;
     newUrl += `&filters[eventDate][$gte]=${startDate}&filters[eventDate][$lte]=${endDate}`;
 
     if (teacher) {
@@ -224,7 +242,7 @@ export default function DisciplineRecord() {
         bottomEnd: "paging",
       },
       rowCallback: function (tr, rowData) {
-        const isFilterF6 = process.env.NEXT_PUBLIC_IS_FILTER_F6 === "true";
+        const isFilterF6 = settings.IS_FILTER_F6 === "true" || settings.IS_FILTER_F6 === true;
         const isDCAdmin =
           ROLE_ENUM[ROLE] === ROLE_ENUM["DC_ADMIN"] ||
           ROLE === ROLE_ENUM["DC_ADMIN"];
@@ -259,7 +277,7 @@ export default function DisciplineRecord() {
         items: "row",
         style: "multi",
         selectable: function (rowData) {
-          const isFilterF6 = process.env.NEXT_PUBLIC_IS_FILTER_F6 === "true";
+          const isFilterF6 = settings.IS_FILTER_F6 === "true" || settings.IS_FILTER_F6 === true;
           const isDCAdmin =
             ROLE_ENUM[ROLE] === ROLE_ENUM["DC_ADMIN"] ||
             ROLE === ROLE_ENUM["DC_ADMIN"];
@@ -319,7 +337,7 @@ export default function DisciplineRecord() {
         [2, "asc"],
       ],
     }),
-    [ROLE],
+    [ROLE, settings],
   );
 
   const confirmDelete = async () => {
@@ -351,7 +369,7 @@ export default function DisciplineRecord() {
 
   useEffect(() => {
     // update DataTable on start
-    if (isFirstRun.current) {
+    if (isFirstRun.current && settings.TERM && filters.term === parseInt(settings.TERM)) {
       handleSubmitFilter();
     }
 
@@ -368,7 +386,7 @@ export default function DisciplineRecord() {
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFirstRun.current]);
+  }, [isFirstRun.current, settings.TERM]);
 
   return (
     <div>

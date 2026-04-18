@@ -2,9 +2,7 @@
 import { IncomingForm } from 'formidable'
 
 import { uploadFiles } from '@/utils/googleDrive'
-
-// Set up multer for file uploads
-const { DRIVE_ID } = process.env
+import { getSettings } from '@/utils/settings'
 
 // API route handler
 export const config = {
@@ -29,6 +27,8 @@ const parseForm = async (req) => {
 
 export const postHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const { DRIVE_ID } = settings
     const parsedResult = await parseForm(req) // Use async/await to parse form data
     const { fields, files } = parsedResult
     const data = await uploadFiles(DRIVE_ID, fields.folderId[0], files.files)

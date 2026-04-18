@@ -4,8 +4,8 @@ import { DateTime } from 'luxon'
 
 import { google } from 'googleapis'
 const calendar = google.calendar('v3')
-const JANITOR_GROUP_CALENDAR_EMAIL = process.env.JANITOR_GROUP_CALENDAR_EMAIL
-import { SPECIAL_ACKNOWLEDGE_EMAIL_MAPPER } from '@/config/constant'
+import { getSettings } from '@/utils/settings'
+import { getSheetKeyValueData } from '@/utils/googleSheet'
 
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -84,6 +84,15 @@ export default async function handler(req, res) {
   const calendarId = resourceEmail
 
   try {
+    const settings = await getSettings()
+    const { JANITOR_GROUP_CALENDAR_EMAIL } = settings
+    
+    // Fetch the email mapper dynamically from the dedicated tab
+    const SPECIAL_ACKNOWLEDGE_EMAIL_MAPPER = await getSheetKeyValueData(
+      process.env.SETTINGS_GOOGLE_SHEET_ID, 
+      'email_mapper!A:B'
+    )
+    
     const auth = await getAuth()
     const privateAuth = await getAuth(picEmail)
 
@@ -105,7 +114,7 @@ export default async function handler(req, res) {
     // Event title (summary)
     const initial =
       picEmail == session.user.email
-        ? session.user.info.initial
+        ? session?.user?.info?.initial
         : picEmail.split('@')[0].slice(2).toUpperCase()
 
     const summary = `${initial}@${resourceName} - ${title}`

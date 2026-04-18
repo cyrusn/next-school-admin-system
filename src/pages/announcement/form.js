@@ -4,13 +4,7 @@ import { useState } from 'react'
 import { DateTime } from 'luxon'
 import { validateForm } from '@/utils/formValidation' // Import the validation function
 import { TIMEZONE } from '@/config/constant'
-
-const EXCLUDED_DATES = process.env['NEXT_PUBLIC_ANNOUNCEMENT_EXCLUDED_DATES']
-  .split(',')
-  .map((s) => {
-    const [date, reason] = s.split(':')
-    return { date, reason }
-  })
+import { useSettings } from '@/context/settingsContext'
 
 import Notification, {
   notificationWrapper,
@@ -27,7 +21,17 @@ import ConfirmButton from '@/components/form/confirmButton'
 
 export default function FormPage() {
   const { data: session } = useSession()
+  const { settings } = useSettings()
   const router = useRouter()
+
+  const EXCLUDED_DATES = (settings.ANNOUNCEMENT_EXCLUDED_DATES || '')
+    .split(',')
+    .filter(Boolean)
+    .map((s) => {
+      const [date, reason] = s.split(':')
+      return { date, reason }
+    })
+
   const TIMEZONE = 'Asia/Hong_Kong'
   const now = DateTime.now().setZone(TIMEZONE)
 
@@ -140,7 +144,7 @@ export default function FormPage() {
     try {
       const timestamp = now.toFormat("yyyy-MM-dd'T'HH:mm:ss")
       const { date, from, targetType, target, announcedBy, content } = formData
-      const pic = session.user.info.initial // Assuming this is part of your session
+      const pic = session?.user?.info?.initial // Assuming this is part of your session
       const values = [
         [
           timestamp,

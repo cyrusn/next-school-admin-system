@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { ROLE_ENUM } from "@/config/constant";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useStudentsContext } from "@/context/studentContext";
+import { useSettings } from "@/context/settingsContext";
 import { recordFilterInputMapper } from "@/lib/attendance/recordFilterInputMapper";
 import { inputMapper } from "@/components/form/inputMapper";
 import { TODAY, SCHOOL_YEAR } from "@/config/constant";
@@ -29,6 +30,7 @@ export async function getServerSideProps() {
 const AttendanceRecord = ({ attendanceSummary }) => {
   const { data: session } = useSession();
   const { students } = useStudentsContext();
+  const { settings } = useSettings();
   const defaultForm = {
     startDate: TODAY,
     endDate: TODAY,
@@ -71,8 +73,9 @@ const AttendanceRecord = ({ attendanceSummary }) => {
 
   const handleSubmit = () => {
     const { startDate, endDate, isLeaveOfAbsence } = formData;
+    const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR;
     let newUrl = "";
-    newUrl += `/api/strapi/attendances?filters[schoolYear]=${SCHOOL_YEAR}`;
+    newUrl += `/api/strapi/attendances?filters[schoolYear]=${schoolYear}`;
     newUrl += `&filters[eventDate][$gte]=${startDate}&filters[eventDate][$lte]=${endDate}`;
 
     if (isLeaveOfAbsence) {
@@ -186,7 +189,7 @@ const AttendanceRecord = ({ attendanceSummary }) => {
       select: {
         selectable: (rowData) => {
           const { classcode } = rowData;
-          const isFilterF6 = process.env.NEXT_PUBLIC_IS_FILTER_F6 === "true";
+          const isFilterF6 = settings.IS_FILTER_F6 === "true" || settings.IS_FILTER_F6 === true;
           const isDCAdmin =
             ROLE_ENUM[ROLE] === ROLE_ENUM["DC_ADMIN"] ||
             ROLE === ROLE_ENUM["DC_ADMIN"];
@@ -209,7 +212,7 @@ const AttendanceRecord = ({ attendanceSummary }) => {
       ],
       buttons,
     };
-  }, [ROLE, CLASS_MASTER, READING_TEACHER]);
+  }, [ROLE, CLASS_MASTER, READING_TEACHER, settings]);
 
   if (
     ROLE_ENUM[ROLE] < ROLE_ENUM["OFFICE_STAFF"] &&

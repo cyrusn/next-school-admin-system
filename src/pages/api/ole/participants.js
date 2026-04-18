@@ -9,11 +9,12 @@ import {
 } from '@/utils/googleSheet'
 
 import _ from 'lodash'
-
-const { OLE_GOOGLE_SHEET_ID } = process.env
+import { getSettings } from '@/utils/settings'
 
 export const putHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const { OLE_GOOGLE_SHEET_ID } = settings
     const { rangeObjects } = req.body
     const headerKeys = [
       'participantId',
@@ -53,6 +54,8 @@ export const putHandler = async (req, res) => {
 
 export const getHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const { OLE_GOOGLE_SHEET_ID } = settings
     const { eventId, draw, start, length } = req.query
 
     const filterData = await batchGetSheetDataByColumn(OLE_GOOGLE_SHEET_ID, [
@@ -88,6 +91,8 @@ export const getHandler = async (req, res) => {
 }
 export const postHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const { OLE_GOOGLE_SHEET_ID } = settings
     const { rows } = req.body
 
     const participantsIds = await batchGetSheetDataByColumn(
@@ -116,6 +121,8 @@ export const postHandler = async (req, res) => {
 
 export const deleteHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const { OLE_GOOGLE_SHEET_ID } = settings
     const { ranges } = req.body
 
     const participantsDataResponse = await batchClearData(

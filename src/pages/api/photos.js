@@ -1,7 +1,6 @@
 import { getImageUrls } from '@/utils/googleDrive'
 import { getSession } from 'next-auth/react'
-
-const { DRIVE_ID, STUDENT_PHOTOS_FOLDER_ID } = process.env
+import { getSettings } from '@/utils/settings'
 
 export default async function handler(req, res) {
   const session = await getSession({ req, method: 'GET' })
@@ -11,6 +10,8 @@ export default async function handler(req, res) {
   const { filenames } = req.query
 
   try {
+    const settings = await getSettings()
+    const { DRIVE_ID, STUDENT_PHOTOS_FOLDER_ID } = settings
     const result = await getImageUrls(
       DRIVE_ID,
       STUDENT_PHOTOS_FOLDER_ID,

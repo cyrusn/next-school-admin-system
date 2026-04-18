@@ -7,10 +7,11 @@ import {
 import { getSession } from 'next-auth/react'
 import { DateTime } from 'luxon'
 import { TIMEZONE } from '@/config/constant'
-
-const spreadsheetId = process.env.STUDENT_PROFILE_SSID
+import { getSettings } from '@/utils/settings'
 
 const postHandler = async (req, res) => {
+  const settings = await getSettings()
+  const spreadsheetId = settings.STUDENT_PROFILE_SSID
   const { row } = req.body // Extract data from the request body
   console.log(row)
 
@@ -31,6 +32,8 @@ const postHandler = async (req, res) => {
 }
 
 const deleteHandler = async (req, res) => {
+  const settings = await getSettings()
+  const spreadsheetId = settings.STUDENT_PROFILE_SSID
   const { id } = req.query
 
   if (!id) return res.status(404).json({ message: 'Required: invalid id' })
@@ -54,6 +57,8 @@ const deleteHandler = async (req, res) => {
 
 const getHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.STUDENT_PROFILE_SSID
     const regnos = req.query.regnos?.split(',')
     if (!regnos.length) {
       throw new Error('invalid regnos')

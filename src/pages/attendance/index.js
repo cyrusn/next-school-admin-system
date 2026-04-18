@@ -13,8 +13,10 @@ import {
 } from "@/config/constant";
 import { useState, useCallback } from "react";
 import { useStudentsContext } from "@/context/studentContext";
+import { useSettings } from "@/context/settingsContext";
 import { getDisplayName, isEmpty } from "@/lib/helper";
 import { isEqual, snakeCase, throttle } from "lodash";
+import Loading from "@/components/loading";
 
 import Notification, {
   notificationWrapper,
@@ -35,7 +37,8 @@ export async function getServerSideProps() {
 
 const Attendance = ({ attendanceSummary }) => {
   const { students } = useStudentsContext();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const { settings } = useSettings();
   const router = useRouter();
   const [selectedType, setSelectedType] = useState("");
   const [eventDate, setEventDate] = useState(TODAY);
@@ -85,7 +88,7 @@ const Attendance = ({ attendanceSummary }) => {
       return undefined;
     }
 
-    const isFilterF6 = process.env.NEXT_PUBLIC_IS_FILTER_F6 === "true";
+    const isFilterF6 = settings.IS_FILTER_F6 === "true" || settings.IS_FILTER_F6 === true;
     const role = session?.user?.info?.role;
     const isDCAdmin =
       ROLE_ENUM[role] === ROLE_ENUM["DC_ADMIN"] ||
@@ -209,7 +212,7 @@ const Attendance = ({ attendanceSummary }) => {
 
     const regnos = data.map(({ regno }) => parseInt(regno));
 
-    const isFilterF6 = process.env.NEXT_PUBLIC_IS_FILTER_F6 === "true";
+    const isFilterF6 = settings.IS_FILTER_F6 === "true" || settings.IS_FILTER_F6 === true;
     const role = session?.user?.info?.role;
     const isDCAdmin =
       ROLE_ENUM[role] === ROLE_ENUM["DC_ADMIN"] ||
@@ -245,7 +248,7 @@ const Attendance = ({ attendanceSummary }) => {
     const modifiedRows = rows.filter((row) => !isEqual(row, defaultRowData));
     if (modifiedRows == 0) return true;
 
-    const isFilterF6 = process.env.NEXT_PUBLIC_IS_FILTER_F6 === "true";
+    const isFilterF6 = settings.IS_FILTER_F6 === "true" || settings.IS_FILTER_F6 === true;
     const role = session?.user?.info?.role;
     const isDCAdmin =
       ROLE_ENUM[role] === ROLE_ENUM["DC_ADMIN"] ||
@@ -277,7 +280,7 @@ const Attendance = ({ attendanceSummary }) => {
         type: snakeCase(type).toUpperCase(),
         schoolYear: SCHOOL_YEAR,
         term: TERM,
-        recordedBy: session.user.info.initial,
+        recordedBy: session?.user?.info?.initial,
         eventDate,
       });
       return prev;
@@ -310,9 +313,15 @@ const Attendance = ({ attendanceSummary }) => {
     );
   };
 
-  if (session.user?.info?.role < ROLE_ENUM["OFFICE_STAFF"]) {
+  if (status === "loading") return <Loading />;
+  if (!session) {
+    router.push("/");
+    return null;
+  }
+
+  if (session?.user?.info?.role < ROLE_ENUM["OFFICE_STAFF"]) {
     router.push("/"); // Redirect to home page
-    return;
+    return null;
   }
 
   return (

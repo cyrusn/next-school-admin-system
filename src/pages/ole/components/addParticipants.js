@@ -1,7 +1,8 @@
 import { createParticipantsInputInfoMapper } from '@/lib/ole/createParticipantsInputMapper'
 import { inputMapper } from '@/components/form/inputMapper'
 import { useStudentsContext } from '@/context/studentContext'
-import { useState } from 'react'
+import { useSettings } from '@/context/settingsContext'
+import { useState, useEffect } from 'react'
 import { TODAY, TERM } from '@/config/constant'
 import { validateForm } from '@/utils/formValidation' // Import the validation function
 import { getTimestamp } from '@/lib/helper'
@@ -9,6 +10,7 @@ import { getTimestamp } from '@/lib/helper'
 export default function AddParticipants({ notifier, tableRef, selectedEvent }) {
   // const { data: session, status } = useSession()
   const { students } = useStudentsContext()
+  const { settings } = useSettings()
   const [errors, setErrors] = useState({})
   const [isDisabled, setIsDisabled] = useState(true)
   const { setLoadingMessage, setErrorMessage, setSuccessMessage } = notifier
@@ -29,6 +31,12 @@ export default function AddParticipants({ notifier, tableRef, selectedEvent }) {
     classcodes: []
   }
   const [formData, setFormData] = useState({ ...defaultFormData })
+
+  useEffect(() => {
+    if (settings.TERM) {
+      setFormData((prev) => ({ ...prev, term: settings.TERM }))
+    }
+  }, [settings.TERM])
 
   const handleChange = (e) => {
     const { name, value, options, type } = e.target

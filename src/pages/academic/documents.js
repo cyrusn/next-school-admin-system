@@ -1,17 +1,21 @@
 import Nav from './nav'
+import { useSettings } from '@/context/settingsContext'
 
 export default function DutyList() {
-  const id = process.env.NEXT_PUBLIC_ACADEMIC_FOLDER_DRIVE_ID
-  const src = `https://drive.google.com/embeddedfolderview?id=${id}#grid`
+  const { settings } = useSettings()
+  const id = settings.ACADEMIC_FOLDER_DRIVE_ID || process.env.ACADEMIC_FOLDER_DRIVE_ID
+  const src = id ? `https://drive.google.com/embeddedfolderview?id=${id}#grid` : ''
   return (
     <>
       <Nav />
-      <iframe
-        width='100%'
-        height='500'
-        src={src}
-        style={{ border: 'none' }}
-      ></iframe>
+      {id && (
+        <iframe
+          width='100%'
+          height='500'
+          src={src}
+          style={{ border: 'none' }}
+        ></iframe>
+      )}
     </>
   )
 }

@@ -1,12 +1,17 @@
 import { SCHOOL_YEAR, TERM } from '@/config/constant'
 import _ from 'lodash'
+import { getSettings } from '@/utils/settings'
 
 const TOKEN = process.env.STRAPI_API_KEY
 const Authorization = `Bearer ${TOKEN}`
 const BASE_URL = 'https://careers.liping.edu.hk/strapi/api'
 
 export async function getAttendanceSummary() {
-  const qs = `filters[schoolYear]=${SCHOOL_YEAR}&filters[term]=${TERM}&pagination[pageSize]=800`
+  const settings = await getSettings()
+  const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR
+  const term = settings.TERM || TERM
+
+  const qs = `filters[schoolYear]=${schoolYear}&filters[term]=${term}&pagination[pageSize]=800`
   const url =
     'https://careers.liping.edu.hk/strapi/api/attendances/summary?' + qs
 

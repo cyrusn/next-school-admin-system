@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
+import { useSettings } from '@/context/settingsContext'
 
 import NextPage from './components/nextPage.js'
 import Register from './components/register.js'
@@ -16,7 +17,8 @@ export default function EcaRegistration() {
   const selectedRegInfo = regInfos.find((info) => info.clubId == selectedClubId)
 
   const { data: session } = useSession()
-  const { initial } = session.user.info
+  const { settings } = useSettings()
+  const { initial } = session?.user?.info || {}
 
   async function fetchClubs() {
     try {
@@ -104,13 +106,15 @@ export default function EcaRegistration() {
     )
   }
 
+  const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR;
+
   return (
     <div>
       <h1 className='title has-text-centered'>聯課活動學會註冊</h1>
       <div>
         <h2 className='subtitle'>
-          以下為{SCHOOL_YEAR}-
-          {String(parseInt(SCHOOL_YEAR) + 1 - 2000).padStart(2, 0)}
+          以下為{schoolYear}-
+          {String(parseInt(schoolYear) + 1 - 2000).padStart(2, 0)}
           年度閣下負責的聯課活動學會，請選擇：
         </h2>
         <div className='field has-addons'>

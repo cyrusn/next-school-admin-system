@@ -7,7 +7,7 @@ import {
   getSheetData,
   batchUpdateSpreadsheet
 } from '@/utils/googleSheet'
-const spreadsheetId = process.env.IPAD_SSID
+import { getSettings } from '@/utils/settings'
 import { getTimestamp } from '@/lib/helper'
 
 const headerKeys = [
@@ -32,6 +32,8 @@ export const getHandler = async (req, res) => {
   }
 
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.IPAD_SSID
     const range = 'A1:M'
 
     const data = await getSheetData(
@@ -50,6 +52,8 @@ export const getHandler = async (req, res) => {
 export const putHandler = async (req, res) => {
   // timestamp	regno	name	classcode	classno	status	freq	teacher_1	issueDate_1	teacher_2	issueDate_2	teacher_3	issueDate_3
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.IPAD_SSID
     const { rangeObjects } = req.body
     const headerKeys = [
       'timestamp',
@@ -81,6 +85,8 @@ export const putHandler = async (req, res) => {
 
 export const postHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.IPAD_SSID
     const { students, initial } = req.body
     const timestamp = getTimestamp()
     const rows = students.map(({ regno, classcode, classno, cname, ename }) => {
@@ -112,6 +118,8 @@ export const postHandler = async (req, res) => {
 
 export const deleteHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.IPAD_SSID
     const { ranges } = req.body
 
     const participantsDataResponse = await batchClearData(spreadsheetId, ranges)

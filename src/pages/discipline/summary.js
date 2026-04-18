@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { columns as defaultColumns } from '@/lib/discipline/summary/columns'
 import DataTable from '@/components/dataTable'
 import { useStudentsContext } from '@/context/studentContext'
+import { useSettings } from '@/context/settingsContext'
 import _ from 'lodash'
 
 import {
@@ -59,6 +60,7 @@ const options = {
 }
 
 export default function DisciplineSummary() {
+  const { settings } = useSettings()
   const tableRef = useRef()
   const buttonRef = useRef()
   const attendanceRef = useRef()
@@ -67,13 +69,19 @@ export default function DisciplineSummary() {
 
   const [columns, setColumns] = useState(defaultColumns)
 
+  const firstTermStart = settings.FIRST_TERM_START_DATE || FIRST_TERM_START_DATE
+  const secondTermStart = settings.SECOND_TERM_START_DATE || SECOND_TERM_START_DATE
+  const term = settings.TERM || TERM
+  const startTermDate = parseInt(term) === 2 ? secondTermStart : firstTermStart
+  const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR
+
   const defaultFilters = {
-    startDate: START_TERM_DATE,
+    startDate: startTermDate,
     endDate: TODAY,
     classcodes: [],
     attendances: [],
     items: [],
-    term: TERM
+    term: term
   }
   const { students } = useStudentsContext()
   const [isShowFilters, setIsShowFilters] = useState(true)
@@ -82,10 +90,26 @@ export default function DisciplineSummary() {
   const groupedStudents = _.groupBy(students, 'classcode')
   const classcodes = Object.keys(groupedStudents)
 
+  useEffect(() => {
+    if (settings.TERM) {
+      setFilters(prev => ({
+        ...prev,
+        term: parseInt(settings.TERM),
+        startDate: parseInt(settings.TERM) === 2 ? secondTermStart : firstTermStart
+      }))
+    }
+  }, [settings.TERM, firstTermStart, secondTermStart])
+
+  useEffect(() => {
+    if (settings.TERM && filters.term === parseInt(settings.TERM) && !url) {
+      handleSubmitFilter()
+    }
+  }, [settings.TERM, filters.term])
+
   const handleSubmitFilter = async () => {
     const { classcodes, term, startDate, endDate } = filters
     let newUrl = ''
-    newUrl += `/api/discipline/summaries?filters[schoolYear]=${SCHOOL_YEAR}&filters[term]=${term}&filters[status]=ACTIVE`
+    newUrl += `/api/discipline/summaries?filters[schoolYear]=${schoolYear}&filters[term]=${term}&filters[status]=ACTIVE`
     if (startDate) {
       newUrl += `&filters[eventDate][$gte]=${startDate}`
     }
@@ -139,10 +163,10 @@ export default function DisciplineSummary() {
       newFilters[name] = value
 
       if (name == 'term' && value == 1) {
-        newFilters['startDate'] = FIRST_TERM_START_DATE
+        newFilters['startDate'] = firstTermStart
       }
       if (name == 'term' && value == 2) {
-        newFilters['startDate'] = SECOND_TERM_START_DATE
+        newFilters['startDate'] = secondTermStart
       }
       return newFilters
     })

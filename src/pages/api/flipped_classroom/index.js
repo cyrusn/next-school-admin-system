@@ -1,10 +1,11 @@
 import { getSheetData } from '@/utils/googleSheet'
 import { getSession } from 'next-auth/react'
-
-const spreadsheetId = process.env.FLIPPED_CLASSROOM_SSID
+import { getSettings } from '@/utils/settings'
 
 const getHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.FLIPPED_CLASSROOM_SSID
     const { sd } = req.query
     const data = await getSheetData(
       spreadsheetId,

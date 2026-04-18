@@ -5,10 +5,12 @@ import {
   getSheetData,
   batchUpdateSpreadsheet
 } from '@/utils/googleSheet'
-const spreadsheetId = process.env.CLUB_REGISTRATION_SSID
+import { getSettings } from '@/utils/settings'
 
 export const putHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.CLUB_REGISTRATION_SSID
     const { rangeObjects } = req.body
     const headerKeys = [
       'clubId',
@@ -43,6 +45,8 @@ export const putHandler = async (req, res) => {
 
 export const postHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.CLUB_REGISTRATION_SSID
     const { rows } = req.body
     const response = await appendRows(spreadsheetId, 'information!A1:A1', rows)
     res.status(200).json({ response })
@@ -58,6 +62,8 @@ export const getHandler = async (req, res) => {
     return res.status(401).json({ error: 'Unauthorized' })
   }
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.CLUB_REGISTRATION_SSID
     const data = await getSheetData(
       spreadsheetId,
       'information!A:P',

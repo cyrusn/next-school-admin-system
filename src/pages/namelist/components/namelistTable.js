@@ -1,4 +1,5 @@
 import { HOMEBASES, TERM, SCHOOL_YEAR } from '@/config/constant'
+import { useSettings } from '@/context/settingsContext'
 import _ from 'lodash'
 
 export default function NamelistTable({
@@ -7,6 +8,9 @@ export default function NamelistTable({
   location,
   classTitle
 }) {
+  const { settings } = useSettings()
+  const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR
+
   return (
     <div className='table-container'>
       <table className='table is-bordered is-narrow is-hoverable is-fullwidth print-table'>
@@ -40,7 +44,7 @@ export default function NamelistTable({
           <tr>
             <td style={{ border: 'none' }} colSpan='2'>
               {'Year: '}
-              {`${SCHOOL_YEAR}-${parseInt(SCHOOL_YEAR) + 1}`}
+              {`${schoolYear}-${parseInt(schoolYear) + 1}`}
             </td>
             <td colSpan='6' style={{ border: 'none' }}>
               {location && `Homebase: ${location}`}

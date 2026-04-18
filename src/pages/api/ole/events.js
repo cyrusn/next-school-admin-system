@@ -14,11 +14,12 @@ import { createFolder, trashFolder } from '@/utils/googleDrive'
 import { DateTime } from 'luxon'
 import _ from 'lodash'
 import { TIMEZONE } from '@/config/constant'
-
-const { DRIVE_ID, OLE_GOOGLE_SHEET_ID, OLE_DATA_FOLDER_ID } = process.env
+import { getSettings } from '@/utils/settings'
 
 export const getHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const { OLE_GOOGLE_SHEET_ID } = settings
     const { filter } = req.query
     const [type, value] = filter?.split(':')
 
@@ -63,6 +64,9 @@ export const postHandler = async (req, res) => {
   if (!formData) {
     return res.status(404).json({ error: 'Required: FormData' })
   }
+  const settings = await getSettings()
+  const { OLE_GOOGLE_SHEET_ID, DRIVE_ID, OLE_DATA_FOLDER_ID } = settings
+
   const oldEventIds = await batchGetSheetDataByColumn(
     OLE_GOOGLE_SHEET_ID,
     'events!A:A'
@@ -128,6 +132,8 @@ export const postHandler = async (req, res) => {
 
 export const putHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const { OLE_GOOGLE_SHEET_ID } = settings
     const { rangeObjects } = req.body
     // console.log(rangeObjects)
     const headerKeys = [
@@ -164,6 +170,8 @@ export const putHandler = async (req, res) => {
 
 export const deleteHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const { OLE_GOOGLE_SHEET_ID, OLE_DATA_FOLDER_ID } = settings
     const { ranges, eventId, imageFolderUrl } = req.body
     const folderId = imageFolderUrl.split('/').pop()
 

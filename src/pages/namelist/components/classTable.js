@@ -1,5 +1,9 @@
 import { TERM, HOMEBASES } from '@/config/constant/'
+import { useSettings } from '@/context/settingsContext'
+
 export default function ClassReport({ report, classlevel, classMasters }) {
+  const { settings } = useSettings()
+  const term = settings.TERM || TERM
   const sexes = ['F', 'M']
   return (
     <table
@@ -89,7 +93,7 @@ export default function ClassReport({ report, classlevel, classMasters }) {
             .map((classcode) => {
               return (
                 <th className='has-text-centered' key={classcode}>
-                  {HOMEBASES[TERM][classcode]}
+                  {HOMEBASES[term]?.[classcode] || ''}
                 </th>
               )
             })}

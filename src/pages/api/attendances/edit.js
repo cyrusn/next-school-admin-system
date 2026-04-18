@@ -10,6 +10,7 @@ const BASE_URL = 'https://careers.liping.edu.hk/strapi/api'
 import { TIMEZONE } from '@/config/constant'
 
 import { appendRows } from '@/utils/googleSheet'
+import { getSettings } from '@/utils/settings'
 
 const parseForm = async (req) => {
   const { multiples = true } = req.query
@@ -33,11 +34,10 @@ export const config = {
   }
 }
 
-const { REASON_OF_LEAVE_SSID, REASON_OF_LEAVE_FOLDER_ID, DRIVE_ID } =
-  process.env
-
 export const postHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const { REASON_OF_LEAVE_SSID, REASON_OF_LEAVE_FOLDER_ID, DRIVE_ID } = settings
     const parsedResult = await parseForm(req) // Use async/await to parse form data
 
     const { fields, files } = parsedResult

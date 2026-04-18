@@ -1,25 +1,15 @@
 import { DateTime } from 'luxon'
 export const FIRST_TERM_START_DATE =
-  process.env.NEXT_PUBLIC_FIRST_TERM_START_DATE
+  process.env.FIRST_TERM_START_DATE || '2024-09-01'
 export const SECOND_TERM_START_DATE =
-  process.env.NEXT_PUBLIC_SECOND_TERM_START_DATE
-export const SCHOOL_YEAR = process.env.NEXT_PUBLIC_SCHOOL_YEAR
-export const TERM = parseInt(process.env.NEXT_PUBLIC_TERM)
+  process.env.SECOND_TERM_START_DATE || '2025-01-20'
+export const SCHOOL_YEAR = process.env.SCHOOL_YEAR || 2024
+export const TERM = parseInt(process.env.TERM || '1')
 export const START_TERM_DATE =
   TERM == 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE
 export const TIMEZONE = 'Asia/Hong_Kong'
 
-export const SPECIAL_ACKNOWLEDGE_EMAIL_MAPPER = {
-  'Career and Life Planning Activity Room': 'lpjy@liping.edu.hk',
-  'Library Study Hub': 'lpkpf@liping.edu.hk,lpypl@liping.edu.hk',
-  'English Centre': 'lpycl@liping.edu.hk',
-  'Band Room': 'lpsfs@liping.edu.hk',
-  Notebook: 'itsupport@liping.edu.hk',
-  'iPad (Delivery)': 'itsupport@liping.edu.hk',
-  'iPad (Self-Service)': 'itsupport@liping.edu.hk',
-  "60' Television (Fixed on G03)": 'itsupport@liping.edu.hk',
-  "75' Television (Movable)": 'itsupport@liping.edu.hk'
-}
+
 
 export const TODAY = DateTime.now()
   .setZone('Asia/Hong_Kong')

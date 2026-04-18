@@ -4,16 +4,18 @@ import { groupBy } from 'lodash'
 
 import { google } from 'googleapis'
 import { getAuth } from '@/utils/googleApiAuth'
+import { getSettings } from '@/utils/settings'
 const sheets = google.sheets('v4')
 
 export default async function handler(req, res) {
-  const spreadsheetId = process.env.TIMETABLE_SSID
   const session = await getSession({ req, method: 'GET' })
   if (!session) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.TIMETABLE_SSID
     const auth = await getAuth()
     const ranges = [
       '1st_teacher!A1:FS',

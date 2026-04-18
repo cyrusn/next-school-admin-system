@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { SCHOOL_YEAR } from '@/config/constant'
+import { useSettings } from '@/context/settingsContext'
 
 import Notification, {
   notificationWrapper,
@@ -129,7 +130,8 @@ function CreateComment({
   const handleSubmit = async () => {
     setLoadingMessage()
     const { type, content } = comment
-    const row = [regno, type, content, initial, SCHOOL_YEAR]
+    const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR;
+    const row = [regno, type, content, initial, schoolYear]
 
     const response = await fetch('/api/profile', {
       method: 'POST',
@@ -236,7 +238,8 @@ function OnePageProfileButton({ onePageProfiles, regno }) {
 
 export default function StudentProfile() {
   const { data: session } = useSession()
-  const initial = session.user.info.initial
+  const { settings } = useSettings()
+  const initial = session?.user?.info?.initial
 
   const [photos, setPhotos] = useState([])
   const [comments, setComments] = useState([])

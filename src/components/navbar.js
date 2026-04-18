@@ -6,12 +6,16 @@ import Navigator from '../components/navigator'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import ThemeSelector from '@/components/themeSelector'
-const NEXT_PUBLIC_SCHOOL_NAME = process.env.NEXT_PUBLIC_SCHOOL_NAME
+import { useSettings } from '@/context/settingsContext'
 
 const Navbar = () => {
   const { data: session, status } = useSession()
   const [isActive, setIsActive] = useState(false)
   const pathname = usePathname()
+  const { settings } = useSettings()
+
+  const SCHOOL_NAME = settings?.SCHOOL_NAME || process.env.SCHOOL_NAME
+
   const handleLogin = () => {
     signIn('google')
   }
@@ -28,7 +32,7 @@ const Navbar = () => {
             <span className='icon'>
               <FontAwesomeIcon icon={faHome} />
             </span>
-            {NEXT_PUBLIC_SCHOOL_NAME}
+            {SCHOOL_NAME}
           </span>
           <span id='user' className='is-hidden-desktop icon-text'>
             <span className='icon'>

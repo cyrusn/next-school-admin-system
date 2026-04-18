@@ -5,9 +5,17 @@ import MultiSelectInput from '@/components/form/multiSelectInput'
 import TimetableElement from './components/timetableElement'
 import { startCase } from 'lodash'
 import { TERM } from '@/config/constant'
+import { useSettings } from '@/context/settingsContext'
 
 export default function Timetable() {
+  const { settings } = useSettings()
   const [term, setTerm] = useState(TERM || 1)
+
+  useEffect(() => {
+    if (settings.TERM) {
+      setTerm(parseInt(settings.TERM))
+    }
+  }, [settings.TERM])
   const [isMulti, setIsMulti] = useState(false)
   const [sheetName, setSheetName] = useState('')
   const [selectedTableNames, setSelectedTableNames] = useState([])

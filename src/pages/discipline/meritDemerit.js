@@ -15,6 +15,7 @@ import {
 } from "@/config/constant";
 import { validateForm } from "@/utils/formValidation"; // Import the validation function
 import { useStudentsContext } from "@/context/studentContext";
+import { useSettings } from "@/context/settingsContext";
 import { getDisplayName } from "@/lib/helper";
 
 import Notification, {
@@ -29,7 +30,8 @@ import TextAreaInput from "@/components/form/textAreaInput";
 import DisciplineNav from "./components/nav";
 
 export default function MeritDemeritForm() {
-  const NEXT_PUBLIC_IS_DC_DOWN = process.env["NEXT_PUBLIC_IS_DC_DOWN"];
+  const { settings } = useSettings();
+  const IS_DC_DOWN = settings.IS_DC_DOWN === "true" || settings.IS_DC_DOWN === true;
   const router = useRouter();
   const defaultForm = {
     code: "",
@@ -42,9 +44,9 @@ export default function MeritDemeritForm() {
 
   const {
     data: session,
-    // status
+    status
   } = useSession();
-  const ROLE = session.user.info.role;
+  const ROLE = session?.user?.info?.role;
   // const TEACHER_INITIAL = session.user.info.initial
 
   const now = DateTime.now().setZone(TIMEZONE);
@@ -52,12 +54,16 @@ export default function MeritDemeritForm() {
   const LAST_MONDAY = now
     .minus({ weeks: 1, days: WEEKDAY - 1 })
     .toFormat("yyyy-MM-dd");
+
+  const term = parseInt(settings.TERM || TERM);
+  const startTermDate = term === 2 ? (settings.SECOND_TERM_START_DATE || SECOND_TERM_START_DATE) : (settings.FIRST_TERM_START_DATE || FIRST_TERM_START_DATE);
+
   const MIN_DATE =
-    ROLE_ENUM[ROLE] == ROLE_ENUM["DC_ADMIN"] ? START_TERM_DATE : LAST_MONDAY;
+    ROLE_ENUM[ROLE] == ROLE_ENUM["DC_ADMIN"] ? startTermDate : LAST_MONDAY;
 
   const { students } = useStudentsContext();
   const groupedStudents = _.groupBy(students, "classcode");
-  const isFilterF6 = process.env.NEXT_PUBLIC_IS_FILTER_F6 === "true";
+  const isFilterF6 = settings.IS_FILTER_F6 === "true" || settings.IS_FILTER_F6 === true;
   const isDCAdmin =
     ROLE_ENUM[ROLE] === ROLE_ENUM["DC_ADMIN"] || ROLE === ROLE_ENUM["DC_ADMIN"];
 
@@ -112,15 +118,17 @@ export default function MeritDemeritForm() {
     setLoadingMessage();
 
     const { regnos, eventDate, code: itemCode, description } = formData;
+    const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR;
+    const term = settings.TERM || TERM;
     const data = regnos.map((regno) => ({
       regno,
-      schoolYear: SCHOOL_YEAR,
-      term: TERM,
+      schoolYear,
+      term,
       eventDate,
       itemCode,
       mark: 0,
       description,
-      teacher: session.user?.info.initial,
+      teacher: session.user?.info?.initial,
     }));
 
     const response = await fetch("/api/strapi/conducts", {
@@ -155,7 +163,7 @@ export default function MeritDemeritForm() {
   };
 
   if (
-    NEXT_PUBLIC_IS_DC_DOWN == "true" &&
+    IS_DC_DOWN == "true" &&
     ROLE_ENUM[ROLE] < ROLE_ENUM["DC_ADMIN"]
   ) {
     return (

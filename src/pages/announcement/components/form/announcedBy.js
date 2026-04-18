@@ -6,9 +6,9 @@ const AnnouncedBy = ({ handleChange, formData }) => {
   const { data: session, status } = useSession()
   const elements = [
     { value: 0, title: 'Student announcer' },
-    { value: 1, title: `Teacher in charge (${session.user.info.initial})` }
+    { value: 1, title: `Teacher in charge (${session?.user?.info?.initial})` }
   ]
-  return session ? (
+  return session && status !== 'loading' ? (
     <div className='field is-horizontal'>
       <div className='field-label'>
         <label className='label'>Announced by</label>

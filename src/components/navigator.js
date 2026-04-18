@@ -1,12 +1,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ROLE_ENUM } from '@/config/constant'
-
-const calenderEventUrl = process.env.NEXT_PUBLIC_CALENDAR_EVENT_SPREADSHEET_URL
-const regularActivity = process.env.NEXT_PUBLIC_REGULAR_ACTIVITY_DOCUMENT_URL
-const itavBooking = process.env.NEXT_PUBLIC_ITAV_BOOKING
-const itavRepair = process.env.NEXT_PUBLIC_ITAV_REPAIR
-const gotYourBackUrl = process.env.NEXT_PUBLIC_GOT_YOUR_BACK
+import { useSettings } from '@/context/settingsContext'
 
 const PageLink = ({ href, title }) => {
   return (
@@ -38,6 +33,14 @@ const NavbarDropdown = ({ includedPaths, title, children }) => {
 }
 
 const Navigator = ({ user }) => {
+  const { settings } = useSettings()
+
+  const calenderEventUrl = settings?.CALENDAR_EVENT_SPREADSHEET_URL || process.env.CALENDAR_EVENT_SPREADSHEET_URL || '#'
+  const regularActivity = settings?.REGULAR_ACTIVITY_DOCUMENT_URL || process.env.REGULAR_ACTIVITY_DOCUMENT_URL || '#'
+  const itavBooking = settings?.ITAV_BOOKING || process.env.ITAV_BOOKING || '#'
+  const itavRepair = settings?.ITAV_REPAIR || process.env.ITAV_REPAIR || '#'
+  const gotYourBackUrl = settings?.GOT_YOUR_BACK || process.env.GOT_YOUR_BACK || '#'
+
   return (
     <>
       <NavbarDropdown title='General' includedPaths={['duty']}>

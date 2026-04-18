@@ -8,11 +8,13 @@ import {
   batchGetSheetDataByRow,
   batchUpdateSpreadsheet
 } from '@/utils/googleSheet'
-const spreadsheetId = process.env.ECA_EVALUATION_SSID
+import { getSettings } from '@/utils/settings'
 import { getTimestamp } from '@/lib/helper'
 
 export const putHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.ECA_EVALUATION_SSID
     const { rangeObjects } = req.body
     const headerKeys = [
       'timestamp',
@@ -52,6 +54,8 @@ const uid = function (clubId) {
 
 export const postHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.ECA_EVALUATION_SSID
     const { club, students } = req.body
     const {
       id,
@@ -99,6 +103,8 @@ export const getHandler = async (req, res) => {
   }
 
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.ECA_EVALUATION_SSID
     const { filter } = req.query
     const [type, value] = filter?.split(':')
     const filterRanges = ['record!B:B']
@@ -144,6 +150,8 @@ export const getHandler = async (req, res) => {
 
 export const deleteHandler = async (req, res) => {
   try {
+    const settings = await getSettings()
+    const spreadsheetId = settings.ECA_EVALUATION_SSID
     const { ranges } = req.body
 
     const participantsDataResponse = await batchClearData(spreadsheetId, ranges)

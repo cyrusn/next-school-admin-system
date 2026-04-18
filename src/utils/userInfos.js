@@ -1,13 +1,9 @@
 import { getSheetData } from './googleSheet'
+import { getSettings } from '@/utils/settings'
 
-// Create a Context
-
-// let userInfos = []
-// Create a Provider component
 export async function getUserInfos() {
-  // if (userInfos.length !== 0) return userInfos
-
-  const spreadsheetId = process.env.TEACHER_GOOGLE_SHEET_ID
+  const settings = await getSettings()
+  const spreadsheetId = settings.TEACHER_GOOGLE_SHEET_ID
   const userInfos = await getSheetData(spreadsheetId, 'A1:H')
   return userInfos
 }

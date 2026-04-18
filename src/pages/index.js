@@ -39,7 +39,7 @@ export default function Home() {
     <>
       <div className='message is-success'>
         <div className='message-body'>
-          Welcome Back, {session?.user?.info.initial}. Please select service
+          Welcome Back, {session?.user?.info?.initial}. Please select service
           from the menu to start.
         </div>
       </div>

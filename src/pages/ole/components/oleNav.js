@@ -1,16 +1,19 @@
 import Nav from '@/components/nav'
 import { useSession } from 'next-auth/react'
-
-const NEXT_PUBLIC_OLE_SPREADSHEET_URL =
-  process.env.NEXT_PUBLIC_OLE_SPREADSHEET_URL
+import { useSettings } from '@/context/settingsContext'
 
 export default function OleNav() {
   const { data: session, status } = useSession()
+  const { settings } = useSettings()
+
+  const OLE_SPREADSHEET_URL =
+    settings?.OLE_SPREADSHEET_URL || process.env.OLE_SPREADSHEET_URL || '#'
+
   const paths = [
     { href: '/ole/create', label: 'Create' },
     { href: '/ole/event', label: 'Event' },
     {
-      href: NEXT_PUBLIC_OLE_SPREADSHEET_URL,
+      href: OLE_SPREADSHEET_URL,
       label: 'Spreadsheet',
       isExternalLink: true
     },
