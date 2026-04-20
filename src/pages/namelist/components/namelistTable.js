@@ -9,7 +9,12 @@ export default function NamelistTable({
   classTitle
 }) {
   const { settings } = useSettings()
-  const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR
+  const schoolYear = settings.SCHOOL_YEAR
+  if (!schoolYear) {
+    throw new Error(
+      'School Year is missing in settings. Please check the spreadsheet.'
+    )
+  }
 
   return (
     <div className='table-container'>

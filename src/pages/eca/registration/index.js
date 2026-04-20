@@ -106,7 +106,12 @@ export default function EcaRegistration() {
     )
   }
 
-  const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR;
+  const schoolYear = settings.SCHOOL_YEAR;
+  if (!schoolYear) {
+    throw new Error(
+      "School Year is missing in settings. Please check the spreadsheet.",
+    );
+  }
 
   return (
     <div>

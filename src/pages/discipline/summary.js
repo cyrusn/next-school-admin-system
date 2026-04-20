@@ -71,9 +71,18 @@ export default function DisciplineSummary() {
 
   const firstTermStart = settings.FIRST_TERM_START_DATE || FIRST_TERM_START_DATE
   const secondTermStart = settings.SECOND_TERM_START_DATE || SECOND_TERM_START_DATE
-  const term = settings.TERM || TERM
+  
+  const term = settings.TERM
+  if (!term) {
+    throw new Error("Term is missing in settings. Please check the spreadsheet.")
+  }
+  
   const startTermDate = parseInt(term) === 2 ? secondTermStart : firstTermStart
-  const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR
+  
+  const schoolYear = settings.SCHOOL_YEAR
+  if (!schoolYear) {
+    throw new Error("School Year is missing in settings. Please check the spreadsheet.")
+  }
 
   const defaultFilters = {
     startDate: startTermDate,

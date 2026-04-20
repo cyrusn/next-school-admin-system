@@ -1,24 +1,22 @@
-import { getSheetKeyValueData } from '@/utils/googleSheet'
+import fs from 'fs'
+import path from 'path'
 
-let cachedSettings = null
-let lastFetched = 0
-const CACHE_DURATION = 1000 * 60 * 5 // 5 minutes
+let cachedSettings = null;
 
+// Function to fetch settings from the local JSON file.
+// This file is generated at startup by scripts/fetch-settings.js
 export async function getSettings() {
-  const now = Date.now()
-  if (cachedSettings && now - lastFetched < CACHE_DURATION) {
-    return cachedSettings
+  if (cachedSettings) {
+    return cachedSettings;
   }
 
   try {
-    const spreadsheetId = process.env.SETTINGS_GOOGLE_SHEET_ID
-    const data = await getSheetKeyValueData(spreadsheetId, 'setting!A:B')
-    cachedSettings = data
-    lastFetched = now
-    return data
+    const settingsPath = path.join(process.cwd(), 'src', 'config', 'settings.json')
+    const fileContents = fs.readFileSync(settingsPath, 'utf8')
+    cachedSettings = JSON.parse(fileContents)
+    return cachedSettings
   } catch (error) {
-    console.error('Error fetching settings:', error)
-    // Return cached settings even if expired if fetch fails, or empty object
-    return cachedSettings || {}
+    console.error('Error reading settings.json:', error)
+    return {}
   }
 }

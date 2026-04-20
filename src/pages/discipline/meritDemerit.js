@@ -55,7 +55,11 @@ export default function MeritDemeritForm() {
     .minus({ weeks: 1, days: WEEKDAY - 1 })
     .toFormat("yyyy-MM-dd");
 
-  const term = parseInt(settings.TERM || TERM);
+  const termSetting = settings.TERM;
+  if (!termSetting) {
+    throw new Error("Term is missing in settings. Please check the spreadsheet.");
+  }
+  const term = parseInt(termSetting);
   const startTermDate = term === 2 ? (settings.SECOND_TERM_START_DATE || SECOND_TERM_START_DATE) : (settings.FIRST_TERM_START_DATE || FIRST_TERM_START_DATE);
 
   const MIN_DATE =
@@ -118,12 +122,21 @@ export default function MeritDemeritForm() {
     setLoadingMessage();
 
     const { regnos, eventDate, code: itemCode, description } = formData;
-    const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR;
-    const term = settings.TERM || TERM;
+    
+    const schoolYear = settings.SCHOOL_YEAR;
+    if (!schoolYear) {
+      throw new Error("School Year is missing in settings. Please check the spreadsheet.");
+    }
+    
+    const innerTerm = settings.TERM;
+    if (!innerTerm) {
+      throw new Error("Term is missing in settings. Please check the spreadsheet.");
+    }
+
     const data = regnos.map((regno) => ({
       regno,
       schoolYear,
-      term,
+      term: innerTerm,
       eventDate,
       itemCode,
       mark: 0,

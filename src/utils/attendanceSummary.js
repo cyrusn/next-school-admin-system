@@ -8,15 +8,21 @@ const BASE_URL = 'https://careers.liping.edu.hk/strapi/api'
 
 export async function getAttendanceSummary() {
   const settings = await getSettings()
-  const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR
-  const term = settings.TERM || TERM
+  const schoolYear = settings.SCHOOL_YEAR
+  const term = settings.TERM
+
+  if (!schoolYear || !term) {
+    throw new Error('School Year or Term is missing in settings. Please check the spreadsheet.')
+  }
 
   const qs = `filters[schoolYear]=${schoolYear}&filters[term]=${term}&pagination[pageSize]=800`
   const url =
     'https://careers.liping.edu.hk/strapi/api/attendances/summary?' + qs
 
   const response = await fetch(url, {
-    Authorization
+    headers: {
+      Authorization
+    }
   })
 
   if (!response.ok) {

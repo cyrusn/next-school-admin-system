@@ -73,7 +73,12 @@ const AttendanceRecord = ({ attendanceSummary }) => {
 
   const handleSubmit = () => {
     const { startDate, endDate, isLeaveOfAbsence } = formData;
-    const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR;
+    const schoolYear = settings.SCHOOL_YEAR;
+    if (!schoolYear) {
+      throw new Error(
+        "School Year is missing in settings. Please check the spreadsheet.",
+      );
+    }
     let newUrl = "";
     newUrl += `/api/strapi/attendances?filters[schoolYear]=${schoolYear}`;
     newUrl += `&filters[eventDate][$gte]=${startDate}&filters[eventDate][$lte]=${endDate}`;

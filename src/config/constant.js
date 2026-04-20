@@ -3,8 +3,8 @@ export const FIRST_TERM_START_DATE =
   process.env.FIRST_TERM_START_DATE || '2024-09-01'
 export const SECOND_TERM_START_DATE =
   process.env.SECOND_TERM_START_DATE || '2025-01-20'
-export const SCHOOL_YEAR = process.env.SCHOOL_YEAR || 2024
-export const TERM = parseInt(process.env.TERM || '1')
+export const SCHOOL_YEAR = process.env.SCHOOL_YEAR || null
+export const TERM = parseInt(process.env.TERM) || null
 export const START_TERM_DATE =
   TERM == 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE
 export const TIMEZONE = 'Asia/Hong_Kong'

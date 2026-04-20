@@ -1,7 +1,8 @@
 [
   {
-    "version": "v1.10.2",
+    "version": "v1.10.3",
     "commits": [
+      "fix: update changelog generation to include chore commits",
       "fix: include scripts directory in Dockerfile for startup settings fetch",
       "fix: resolve stale .next cache and missing component errors during dev build",
       "chore: bump version to 1.10.0 and migrate settings to Google Sheets"

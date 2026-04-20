@@ -130,7 +130,12 @@ function CreateComment({
   const handleSubmit = async () => {
     setLoadingMessage()
     const { type, content } = comment
-    const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR;
+    const schoolYear = settings.SCHOOL_YEAR;
+    if (!schoolYear) {
+      throw new Error(
+        "School Year is missing in settings. Please check the spreadsheet."
+      );
+    }
     const row = [regno, type, content, initial, schoolYear]
 
     const response = await fetch('/api/profile', {

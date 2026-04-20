@@ -40,6 +40,8 @@ const Attendance = ({ attendanceSummary }) => {
   const { data: session, status } = useSession();
   const { settings } = useSettings();
   const router = useRouter();
+
+  console.log("Current School Year from settings:", settings.SCHOOL_YEAR);
   const [selectedType, setSelectedType] = useState("");
   const [eventDate, setEventDate] = useState(TODAY);
 
@@ -267,6 +269,10 @@ const Attendance = ({ attendanceSummary }) => {
   };
 
   const handleSubmit = async () => {
+    if (!settings.SCHOOL_YEAR || !settings.TERM) {
+      setErrorMessage("School Year or Term is missing in settings. Please check the spreadsheet.");
+      return;
+    }
     setIsClicked(true);
 
     setLoadingMessage();
@@ -278,8 +284,8 @@ const Attendance = ({ attendanceSummary }) => {
       prev.push({
         regno,
         type: snakeCase(type).toUpperCase(),
-        schoolYear: SCHOOL_YEAR,
-        term: TERM,
+        schoolYear: settings.SCHOOL_YEAR,
+        term: settings.TERM,
         recordedBy: session?.user?.info?.initial,
         eventDate,
       });

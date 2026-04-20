@@ -53,10 +53,13 @@ export default function DisciplineForm() {
   const LAST_MONDAY = now
     .minus({ weeks: 1, days: WEEKDAY - 1 })
     .toFormat("yyyy-MM-dd");
-  
-  const term = parseInt(settings.TERM || TERM);
-  const startTermDate = term === 2 ? (settings.SECOND_TERM_START_DATE || SECOND_TERM_START_DATE) : (settings.FIRST_TERM_START_DATE || FIRST_TERM_START_DATE);
 
+  const termSetting = settings.TERM;
+  if (!termSetting) {
+    throw new Error("Term is missing in settings. Please check the spreadsheet.");
+  }
+  const term = parseInt(termSetting);
+  const startTermDate = term === 2 ? (settings.SECOND_TERM_START_DATE || SECOND_TERM_START_DATE) : (settings.FIRST_TERM_START_DATE || FIRST_TERM_START_DATE);
   const MIN_DATE =
     ROLE_ENUM[ROLE] == ROLE_ENUM["DC_ADMIN"] ? startTermDate : LAST_MONDAY;
 
@@ -183,12 +186,20 @@ export default function DisciplineForm() {
     const data = rows.reduce((prev, row, index) => {
       const { regnos, mark, itemCode, eventDate, description } = row;
 
-      const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR;
-      const term = settings.TERM || TERM;
+      const schoolYear = settings.SCHOOL_YEAR;
+      if (!schoolYear) {
+        throw new Error("School Year is missing in settings. Please check the spreadsheet.");
+      }
+      
+      const innerTerm = settings.TERM;
+      if (!innerTerm) {
+        throw new Error("Term is missing in settings. Please check the spreadsheet.");
+      }
+
       const records = regnos.map((regno) => ({
         regno,
         schoolYear,
-        term,
+        term: innerTerm,
         eventDate,
         itemCode,
         description,

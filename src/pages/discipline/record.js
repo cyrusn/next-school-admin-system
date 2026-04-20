@@ -41,7 +41,11 @@ export default function DisciplineRecord() {
   const selectedRows = useRef([]);
   const isFirstRun = useRef(true);
 
-  const term = parseInt(settings.TERM || TERM);
+  const termSetting = settings.TERM;
+  if (!termSetting) {
+    throw new Error("Term is missing in settings. Please check the spreadsheet.");
+  }
+  const term = parseInt(termSetting);
   const firstTermStart = settings.FIRST_TERM_START_DATE || FIRST_TERM_START_DATE;
   const secondTermStart = settings.SECOND_TERM_START_DATE || SECOND_TERM_START_DATE;
   const startTermDate = term === 2 ? secondTermStart : firstTermStart;
@@ -204,7 +208,12 @@ export default function DisciplineRecord() {
 
   const handleSubmitFilter = async () => {
     const { startDate, endDate, classcodes, regnos, teacher } = filters;
-    const schoolYear = settings.SCHOOL_YEAR || SCHOOL_YEAR;
+    
+    const schoolYear = settings.SCHOOL_YEAR;
+    if (!schoolYear) {
+      throw new Error("School Year is missing in settings. Please check the spreadsheet.");
+    }
+    
     let newUrl = "";
     newUrl += `/api/strapi/conducts?filters[schoolYear]=${schoolYear}`;
     newUrl += `&filters[eventDate][$gte]=${startDate}&filters[eventDate][$lte]=${endDate}`;
