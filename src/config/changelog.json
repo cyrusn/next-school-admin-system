@@ -1,7 +1,9 @@
 [
   {
-    "version": "v1.10.3",
+    "version": "v1.10.4",
     "commits": [
+      "feat: add column visibility selection in advance namelist",
+      "fix: strictly use school year and term from spreadsheet settings",
       "fix: update changelog generation to include chore commits",
       "fix: include scripts directory in Dockerfile for startup settings fetch",
       "fix: resolve stale .next cache and missing component errors during dev build",
