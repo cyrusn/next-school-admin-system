@@ -15,11 +15,19 @@ const columnDefs = [
     }
   },
   {
+    title: 'Class',
+    data(row) {
+      const { classcode, classno } = row
+      return `${classcode}${String(classno).padStart(2, 0)}`
+    },
+    width: '8%',
+    target: 1
+  },
+  {
     title: 'Classcode',
     data: 'classcode',
     visible: false,
-    className: 'noVis',
-    target: 1,
+    target: 2,
     searchBuilder: {
       defaultCondition: '='
     }
@@ -28,22 +36,12 @@ const columnDefs = [
     title: 'Classno',
     data: 'classno',
     visible: false,
-    className: 'noVis',
-    target: 13
-  },
-  {
-    title: 'Class',
-    data(row) {
-      const { classcode, classno } = row
-      return `${classcode}${String(classno).padStart(2, 0)}`
-    },
-    width: '8%',
-    target: 2
+    target: 3
   },
   {
     title: 'Name',
     data: 'ename',
-    target: 3,
+    target: 4,
     width: '15%',
     searchBuilder: {
       defaultCondition: 'contains'
@@ -52,7 +50,7 @@ const columnDefs = [
   {
     title: '姓名',
     data: 'cname',
-    target: 4,
+    target: 5,
     width: '10%',
     searchBuilder: {
       defaultCondition: 'contains'
@@ -61,7 +59,7 @@ const columnDefs = [
   {
     title: 'Sex',
     data: 'sex',
-    target: 5,
+    target: 6,
     width: '5%',
     searchBuilder: {
       defaultCondition: '='
@@ -70,7 +68,7 @@ const columnDefs = [
   {
     title: 'House',
     data: 'house',
-    target: 6,
+    target: 7,
     width: '5%',
     searchBuilder: {
       defaultCondition: '='
@@ -79,7 +77,7 @@ const columnDefs = [
   {
     title: 'DOB',
     data: 'dob',
-    target: 7,
+    target: 8,
     width: '10%',
     visible: true,
     searchPanes: { show: false },
@@ -89,7 +87,7 @@ const columnDefs = [
   },
   {
     title: 'X1',
-    target: 8,
+    target: 9,
     data: 'x1',
     width: '5%',
     visible: false,
@@ -100,7 +98,7 @@ const columnDefs = [
   {
     title: 'X2',
     data: 'x2',
-    target: 9,
+    target: 10,
     width: '5%',
     visible: false,
     searchBuilder: {
@@ -110,7 +108,7 @@ const columnDefs = [
   {
     title: 'X3',
     data: 'x3',
-    target: 10,
+    target: 11,
     width: '5%',
     visible: false,
     searchBuilder: {
@@ -138,7 +136,7 @@ const columnDefs = [
       show: true,
       orthogonal: 'sp'
     },
-    target: 11
+    target: 12
   },
   {
     title: 'Info',
@@ -192,7 +190,7 @@ const columnDefs = [
         }
       ]
     },
-    target: 12
+    target: 13
   }
 ]
 
@@ -210,14 +208,13 @@ const options = {
     top3: {
       buttons: [
         {
-          extend: 'columnsToggle',
-          columns: ':not(.noVis)'
+          extend: 'columnsToggle'
         }
       ]
     },
     top2: {
       searchPanes: {
-        columns: [1, 5, 6, 8, 9, 10, 11, 12],
+        columns: [1, 6, 7, 9, 10, 11, 12, 13],
         viewTotal: true,
         initCollapsed: true,
         cascadePanes: true,
@@ -226,7 +223,7 @@ const options = {
     },
     top1: {
       searchBuilder: {
-        columns: [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        columns: [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
         cascadePanes: true,
         viewTotal: true
       }
