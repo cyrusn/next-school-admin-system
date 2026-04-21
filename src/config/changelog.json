@@ -1,5 +1,14 @@
 [
   {
+    "version": "v1.10.5",
+    "commits": [
+      "style: move column toggles below search filters",
+      "feat: restore Classcode and Classno to column visibility toggles",
+      "feat: show column visibility toggles as inline checkboxes above the table",
+      "fix: correctly separate v1.10.3 and v1.10.4 in changelog and style colvis as checkboxes"
+    ]
+  },
+  {
     "version": "v1.10.4",
     "commits": [
       "feat: add column visibility selection in advance namelist",

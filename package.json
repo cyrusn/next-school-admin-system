@@ -1,6 +1,6 @@
 {
   "name": "next-school-admin-system",
-  "version": "1.10.4",
+  "version": "1.10.5",
   "private": true,
   "scripts": {
     "dev": "node scripts/fetch-settings.js && next dev",

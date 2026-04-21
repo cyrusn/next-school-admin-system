@@ -207,7 +207,7 @@ const options = {
   layout: {
     top3: {
       searchPanes: {
-        columns: [1, 6, 7, 9, 10, 11, 12, 13],
+        columns: [1, 2, 6, 7, 9, 10, 11, 12, 13],
         viewTotal: true,
         initCollapsed: true,
         cascadePanes: true,
