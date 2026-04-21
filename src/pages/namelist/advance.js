@@ -206,13 +206,6 @@ const options = {
   },
   layout: {
     top3: {
-      buttons: [
-        {
-          extend: 'columnsToggle'
-        }
-      ]
-    },
-    top2: {
       searchPanes: {
         columns: [1, 6, 7, 9, 10, 11, 12, 13],
         viewTotal: true,
@@ -221,12 +214,19 @@ const options = {
         liveSearch: false
       }
     },
-    top1: {
+    top2: {
       searchBuilder: {
         columns: [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
         cascadePanes: true,
         viewTotal: true
       }
+    },
+    top1: {
+      buttons: [
+        {
+          extend: 'columnsToggle'
+        }
+      ]
     },
     topStart: ['pageLength'],
     topEnd: {
