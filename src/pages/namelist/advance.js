@@ -198,39 +198,6 @@ const columnDefs = [
 
 const options = {
   fixedHeader: true,
-  buttons: {
-    dom: {
-      button: {
-        dropHtml: ''
-      }
-    },
-    buttons: [
-      {
-        extend: 'colvis',
-        className: 'is-info',
-        text: 'Columns',
-        columns: ':not(.noVis)'
-      },
-      {
-        extend: 'copy',
-        className: 'is-primary',
-        exportOptions: {
-          columns: ':visible',
-          orthogonal: 'export'
-        }
-      },
-      {
-        extend: 'print',
-        text: 'Preview',
-        className: 'is-warning',
-        autoPrint: false,
-        exportOptions: {
-          columns: ':visible',
-          orthogonal: 'export'
-        }
-      }
-    ]
-  },
   language: {
     searchBuilder: {
       title: {
@@ -240,6 +207,14 @@ const options = {
     }
   },
   layout: {
+    top3: {
+      buttons: [
+        {
+          extend: 'columnsToggle',
+          columns: ':not(.noVis)'
+        }
+      ]
+    },
     top2: {
       searchPanes: {
         columns: [1, 5, 6, 8, 9, 10, 11, 12],
@@ -257,7 +232,28 @@ const options = {
       }
     },
     topStart: ['pageLength'],
-    topEnd: ['pageLength', 'buttons'],
+    topEnd: {
+      buttons: [
+        {
+          extend: 'copy',
+          className: 'is-primary',
+          exportOptions: {
+            columns: ':visible',
+            orthogonal: 'export'
+          }
+        },
+        {
+          extend: 'print',
+          text: 'Preview',
+          className: 'is-warning',
+          autoPrint: false,
+          exportOptions: {
+            columns: ':visible',
+            orthogonal: 'export'
+          }
+        }
+      ]
+    },
     bottomStart: 'info',
     bottomEnd: 'paging'
   },
