@@ -18,6 +18,7 @@ const columnDefs = [
     title: 'Classcode',
     data: 'classcode',
     visible: false,
+    className: 'noVis',
     target: 1,
     searchBuilder: {
       defaultCondition: '='
@@ -27,6 +28,7 @@ const columnDefs = [
     title: 'Classno',
     data: 'classno',
     visible: false,
+    className: 'noVis',
     target: 13
   },
   {
@@ -79,12 +81,11 @@ const columnDefs = [
     data: 'dob',
     target: 7,
     width: '10%',
-    visible: false,
+    visible: true,
     searchPanes: { show: false },
     searchBuilder: {
       defaultCondition: '<'
-    },
-    visible: true
+    }
   },
   {
     title: 'X1',
@@ -148,6 +149,7 @@ const columnDefs = [
       if (row.isSen) result.push('SEN')
       return result
     },
+    visible: false,
     width: '8%',
     render: {
       sb: '[]',
@@ -196,26 +198,39 @@ const columnDefs = [
 
 const options = {
   fixedHeader: true,
-  buttons: [
-    {
-      extend: 'copy',
-      className: 'is-primary',
-      exportOptions: {
-        columns: [0, 1, 13, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        orthogonal: 'export'
+  buttons: {
+    dom: {
+      button: {
+        dropHtml: ''
       }
     },
-    {
-      extend: 'print',
-      text: 'Preview',
-      className: 'is-warning',
-      autoPrint: false,
-      exportOptions: {
-        columns: [0, 1, 13, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        orthogonal: 'export'
+    buttons: [
+      {
+        extend: 'colvis',
+        className: 'is-info',
+        text: 'Columns',
+        columns: ':not(.noVis)'
+      },
+      {
+        extend: 'copy',
+        className: 'is-primary',
+        exportOptions: {
+          columns: ':visible',
+          orthogonal: 'export'
+        }
+      },
+      {
+        extend: 'print',
+        text: 'Preview',
+        className: 'is-warning',
+        autoPrint: false,
+        exportOptions: {
+          columns: ':visible',
+          orthogonal: 'export'
+        }
       }
-    }
-  ],
+    ]
+  },
   language: {
     searchBuilder: {
       title: {
