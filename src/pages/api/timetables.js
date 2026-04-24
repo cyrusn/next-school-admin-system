@@ -7,10 +7,19 @@ import { getAuth } from '@/utils/googleApiAuth'
 import { getSettings } from '@/utils/settings'
 const sheets = google.sheets('v4')
 
+let cachedTimetables = null
+let lastFetch = 0
+const CACHE_DURATION = 1000 * 60 * 10 // 10 minutes
+
 export default async function handler(req, res) {
   const session = await getSession({ req, method: 'GET' })
   if (!session) {
     return res.status(401).json({ error: 'Unauthorized' })
+  }
+
+  const now = Date.now()
+  if (cachedTimetables && now - lastFetch < CACHE_DURATION) {
+    return res.status(200).json(cachedTimetables)
   }
 
   try {
@@ -44,6 +53,10 @@ export default async function handler(req, res) {
       prev[key] = convertRowsToCollection(values)
       return prev
     }, {})
+
+    cachedTimetables = timetables
+    lastFetch = now
+
     res.status(200).json(timetables)
   } catch (error) {
     console.error('Error accessing Google Sheets:', error)

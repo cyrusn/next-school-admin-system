@@ -1,12 +1,19 @@
 [
   {
+    "version": "v1.10.7",
+    "commits": [
+      "fix: changed namelist query parameters x1, x2, x3 to non-plural for consistency",
+      "perf: added universal in-memory caching across core APIs (Timetables, Students, Teachers, Photos) for instant load times"
+    ]
+  },
+  {
     "version": "v1.10.6",
     "commits": [
       "feat: standardized shareable URLs with query parameters. You can now copy and share your exact view with colleagues:",
       "- Timetable: /timetable?term=2&type=teacher&codes=myt,cyn,pyl",
       "- Student Profile: /profile?search=chan",
       "- Student Photo: /photo?classcode=1a",
-      "- Namelist: /namelist/basic?classlevels=s4,s5&classcodes=5a,5b&x1s=phy",
+      "- Namelist: /namelist/basic?classlevels=s4,s5&classcodes=5a,5b&x1=phy",
       "- Teacher List: /teachers?search=cyn",
       "perf: instant UI hydration and zero-lag URL syncing for a smoother experience",
       "fix: resolved a navigation crash and fixed Namelist filter dependency logic"

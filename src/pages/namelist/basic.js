@@ -102,9 +102,9 @@ export default function Namelist() {
         classlevels: 'classlevels',
         classcode: 'classcodes',
         groups: 'groups',
-        x1: 'x1s',
-        x2: 'x2s',
-        x3: 'x3s'
+        x1: 'x1',
+        x2: 'x2',
+        x3: 'x3'
       }
 
       Object.keys(defaultFilters).forEach((key) => {
@@ -148,9 +148,9 @@ export default function Namelist() {
         classlevels: 'classlevels',
         classcode: 'classcodes',
         groups: 'groups',
-        x1: 'x1s',
-        x2: 'x2s',
-        x3: 'x3s'
+        x1: 'x1',
+        x2: 'x2',
+        x3: 'x3'
       }
 
       Object.keys(filters).forEach((key) => {

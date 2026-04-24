@@ -7,11 +7,21 @@ import { getAuth } from '@/utils/googleApiAuth'
 import { getSettings } from '@/utils/settings'
 const sheets = google.sheets('v4')
 
+let cachedStudents = null
+let lastFetch = 0
+const CACHE_DURATION = 1000 * 60 * 10 // 10 minutes
+
 export default async function handler(req, res) {
   const session = await getSession({ req, method: 'GET' })
   if (!session) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
+
+  const now = Date.now()
+  if (cachedStudents && now - lastFetch < CACHE_DURATION) {
+    return res.status(200).json(cachedStudents)
+  }
+
   try {
     const settings = await getSettings()
     const spreadsheetId = settings.STUDENT_GOOGLE_SHEET_ID
@@ -49,7 +59,11 @@ export default async function handler(req, res) {
     //   (rowNo) => `A${rowNo}:R${rowNo}`
     // )
 
-    res.status(200).json(studentData.filter(({ isSkip }) => !isSkip))
+    const filteredStudentData = studentData.filter(({ isSkip }) => !isSkip)
+    cachedStudents = filteredStudentData
+    lastFetch = now
+
+    res.status(200).json(filteredStudentData)
   } catch (error) {
     console.error('Error accessing Google Sheets:', error)
     res.status(500).json({ error: 'Error accessing Google Sheets' })
