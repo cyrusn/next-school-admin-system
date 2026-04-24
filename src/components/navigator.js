@@ -19,7 +19,7 @@ const PageLink = ({ href, title }) => {
 
 const NavbarDropdown = ({ includedPaths, title, children }) => {
   const pathname = usePathname()
-  const rootPath = pathname.split('/')[1]
+  const rootPath = pathname?.split('/')[1] || ''
   return (
     <div className='navbar-item has-dropdown is-hoverable'>
       <a

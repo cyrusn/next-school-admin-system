@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/router'
 import { useUsersContext } from '@/context/usersContext'
 
 function CustomTable({ type, searchTerm }) {
@@ -75,8 +76,39 @@ function CustomTable({ type, searchTerm }) {
 }
 
 export default function Teacher() {
+  const router = useRouter()
+  const { query, isReady } = router
+
   const [searchTerm, setSearchTerm] = useState('')
   const searchInputRef = useRef(null)
+  const initialized = useRef(false)
+
+  // Hydrate search from URL query
+  useEffect(() => {
+    if (isReady && !initialized.current) {
+      if (query.search) {
+        setSearchTerm(query.search)
+      }
+      initialized.current = true
+    }
+  }, [isReady, query])
+
+  // Sync URL with search input
+  useEffect(() => {
+    if (initialized.current) {
+      const params = new URLSearchParams()
+      if (searchTerm) {
+        params.set('search', searchTerm)
+      }
+      
+      const newQuery = params.toString()
+      const newPath = `/teachers${newQuery ? `?${newQuery}` : ''}`
+      
+      if (window.location.search !== `?${newQuery}` && (window.location.search || newQuery)) {
+        window.history.replaceState({ ...window.history.state, as: newPath, url: newPath }, '', newPath)
+      }
+    }
+  }, [searchTerm])
 
   useEffect(() => {
     if (searchInputRef.current) {

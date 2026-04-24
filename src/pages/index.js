@@ -49,16 +49,36 @@ export default function Home() {
         </div>
         <div className='message-body'>
           <ul>
-            {currentChangelog.map((release, index) => (
-              <li key={index} className='mb-2'>
-                <b>{release.version}</b>
-                <ul style={{ marginLeft: '1.5rem', listStyleType: 'disc' }}>
-                  {release.commits.map((commit, cIndex) => (
-                    <li key={cIndex}>{commit}</li>
-                  ))}
-                </ul>
-              </li>
-            ))}
+            {currentChangelog.map((release, index) => {
+              const groupedCommits = release.commits.reduce((acc, commit) => {
+                if (commit.startsWith('- ') && acc.length > 0) {
+                  acc[acc.length - 1].subItems.push(commit.replace(/^- /, ''))
+                } else {
+                  acc.push({ text: commit, subItems: [] })
+                }
+                return acc
+              }, [])
+
+              return (
+                <li key={index} className='mb-3'>
+                  <b>{release.version}</b>
+                  <ul style={{ marginLeft: '1.5rem', listStyleType: 'disc' }}>
+                    {groupedCommits.map((item, i) => (
+                      <li key={i} className='mb-1'>
+                        {item.text}
+                        {item.subItems.length > 0 && (
+                          <ul style={{ marginLeft: '1.5rem', listStyleType: 'circle' }}>
+                            {item.subItems.map((sub, j) => (
+                              <li key={j}>{sub}</li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              )
+            })}
           </ul>
         </div>
       </div>

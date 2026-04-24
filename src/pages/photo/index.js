@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/router'
 import _ from 'lodash'
 import Image from 'next/image'
 
@@ -6,12 +7,17 @@ import { useStudentsContext } from '@/context/studentContext'
 import Loading from '@/components/loading'
 
 export default function StudentPhoto() {
+  const router = useRouter()
+  const { query, isReady } = router
+
   const [files, setFiles] = useState([])
   const [filter, setFilter] = useState('')
   const [searchFilter, setSearchFilter] = useState('')
   const [isShowDetails, setIsShowDetails] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const { students } = useStudentsContext()
+
+  const initialized = useRef(false)
 
   const classcodes = _(students).map('classcode').uniq().value()
 
@@ -40,12 +46,49 @@ export default function StudentPhoto() {
     }
   }
 
+  // Hydrate state from query params
+  useEffect(() => {
+    if (isReady && !initialized.current) {
+      const { classcode, search } = query
+      if (classcode) {
+        setFilter(String(classcode).toUpperCase())
+      } else if (search) {
+        setSearchFilter(search)
+      }
+      initialized.current = true
+    }
+  }, [isReady, query])
+
+  // Sync URL with state
+  useEffect(() => {
+    if (initialized.current) {
+      const params = new URLSearchParams()
+      if (filter) {
+        params.set('classcode', filter)
+      } else if (searchFilter) {
+        params.set('search', searchFilter)
+      }
+
+      const newQuery = params.toString()
+      const newPath = `/photo${newQuery ? `?${newQuery}` : ''}`
+
+      if (window.location.search !== `?${newQuery}` && (window.location.search || newQuery)) {
+        window.history.replaceState({ ...window.history.state, as: newPath, url: newPath }, '', newPath)
+      }
+    }
+  }, [filter, searchFilter])
+
   useEffect(() => {
     const abortController = new AbortController()
     const search = searchFilter.toLowerCase().trim()
 
     if (!searchFilter || search.length < 1) {
-      if (!filter) setFiles([])
+      if (!filter) {
+        setFiles([])
+      } else {
+        // If there is a filter (classcode), fetch its data
+        fetchData(filter)
+      }
       setIsLoading(false)
       return
     }
@@ -113,11 +156,6 @@ export default function StudentPhoto() {
   const handleSelectChange = (e) => {
     setSearchFilter('')
     setFilter(e.target.value)
-    if (e.target.value) {
-      fetchData(e.target.value)
-    } else {
-      setFiles([])
-    }
   }
 
   const handleSearchChange = (e) => {

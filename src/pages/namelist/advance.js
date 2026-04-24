@@ -28,6 +28,7 @@ const columnDefs = [
     data: 'classcode',
     visible: false,
     target: 2,
+    width: '5%',
     searchBuilder: {
       defaultCondition: '='
     }
@@ -36,6 +37,7 @@ const columnDefs = [
     title: 'Classno',
     data: 'classno',
     visible: false,
+    width: '5%',
     target: 3
   },
   {

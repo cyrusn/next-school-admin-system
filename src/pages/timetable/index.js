@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/router'
 import RadioInput from '@/components/form/radioInput'
 import CheckboxInput from '@/components/form/checkboxInput'
 import MultiSelectInput from '@/components/form/multiSelectInput'
@@ -8,18 +9,68 @@ import { TERM } from '@/config/constant'
 import { useSettings } from '@/context/settingsContext'
 
 export default function Timetable() {
+  const router = useRouter()
+  const { query, isReady } = router
+
   const { settings } = useSettings()
   const [term, setTerm] = useState(TERM || 1)
 
   useEffect(() => {
-    if (settings.TERM) {
+    if (settings.TERM && !query.term) {
       setTerm(parseInt(settings.TERM))
     }
-  }, [settings.TERM])
+  }, [settings.TERM, query.term])
+
   const [isMulti, setIsMulti] = useState(false)
   const [sheetName, setSheetName] = useState('')
   const [selectedTableNames, setSelectedTableNames] = useState([])
   const [timetables, setTimetables] = useState({})
+
+  const initialized = useRef(false)
+
+  useEffect(() => {
+    if (isReady && Object.keys(timetables).length > 0 && !initialized.current) {
+      const { term: qTerm, type, codes } = query
+
+      if (qTerm) {
+        setTerm(parseInt(qTerm))
+      }
+
+      if (type) {
+        const currentTerm = qTerm ? parseInt(qTerm) : term
+        // Find the matching sheet name case-insensitively
+        const targetType = type.toLowerCase()
+        const foundSheetName = Object.keys(timetables).find(key => {
+          const isTermMatch = key.startsWith(currentTerm === 1 ? '1st' : '2nd')
+          const isTypeMatch = key.split('_').slice(1).join('_').toLowerCase() === targetType
+          return isTermMatch && isTypeMatch
+        })
+        
+        if (foundSheetName) {
+          setSheetName(foundSheetName)
+          if (codes) {
+            const codeList = String(codes).split(',')
+            if (codeList.length > 1) {
+              setIsMulti(true)
+            }
+            const foundNames = codeList.reduce((acc, c) => {
+              const searchCode = c.trim().toLowerCase()
+              const found = timetables[foundSheetName].find(
+                (t) => String(t.ShortName).toLowerCase() === searchCode
+              )
+              if (found) acc.push(String(found.ShortName))
+              return acc
+            }, [])
+
+            if (foundNames.length > 0) {
+              setSelectedTableNames(foundNames)
+            }
+          }
+        }
+      }
+      initialized.current = true
+    }
+  }, [isReady, timetables, query])
 
   const sheetNames = Object.keys(timetables).filter((key) =>
     key.startsWith(term === 1 ? '1st' : '2nd')
@@ -69,7 +120,7 @@ export default function Timetable() {
       try {
         const response = await fetch(`/api/timetables`)
         const result = await response.json()
-        if (!response.ok) throw new Error(result.meesage)
+        if (!response.ok) throw new Error(result.message)
         setTimetables(result)
       } catch (e) {
         console.error(e)
@@ -77,6 +128,28 @@ export default function Timetable() {
     }
     fetchData()
   }, [])
+
+  useEffect(() => {
+    if (initialized.current) {
+      const params = new URLSearchParams()
+      params.set('term', term)
+      
+      if (sheetName) {
+        const type = sheetName.split('_').slice(1).join('_')
+        params.set('type', type)
+        if (selectedTableNames.length > 0) {
+          params.set('codes', selectedTableNames.join(','))
+        }
+      }
+      
+      const newQuery = params.toString()
+      const newPath = `/timetable${newQuery ? `?${newQuery}` : ''}`
+      
+      if (window.location.search !== `?${newQuery}` && (window.location.search || newQuery)) {
+        window.history.replaceState({ ...window.history.state, as: newPath, url: newPath }, '', newPath)
+      }
+    }
+  }, [term, sheetName, selectedTableNames])
 
   return (
     <>

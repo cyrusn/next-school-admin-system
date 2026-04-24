@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { SCHOOL_YEAR } from '@/config/constant'
 import { useSettings } from '@/context/settingsContext'
@@ -119,7 +120,8 @@ function CreateComment({
   initial,
   refresh,
   clearMessage,
-  setLoadingMessage
+  setLoadingMessage,
+  settings
 }) {
   const defaultComment = {
     type: '',
@@ -242,6 +244,9 @@ function OnePageProfileButton({ onePageProfiles, regno }) {
 }
 
 export default function StudentProfile() {
+  const router = useRouter()
+  const { query, isReady } = router
+
   const { data: session } = useSession()
   const { settings } = useSettings()
   const initial = session?.user?.info?.initial
@@ -259,6 +264,8 @@ export default function StudentProfile() {
   const [notification, setNotification] = useState({ ...defaultNotification })
   const { setLoadingMessage, clearMessage } =
     notificationWrapper(setNotification)
+
+  const initialized = useRef(false)
 
   const groupedComments = _.groupBy(comments, 'regno')
 
@@ -359,6 +366,38 @@ export default function StudentProfile() {
     await fetchData(targetStudents)
   }
 
+  // Hydrate state from query params
+  useEffect(() => {
+    if (isReady && !initialized.current) {
+      const { classcode, search } = query
+      if (classcode) {
+        setFilter(String(classcode).toUpperCase())
+      } else if (search) {
+        setSearchFilter(search)
+      }
+      initialized.current = true
+    }
+  }, [isReady, query])
+
+  // Sync URL with state
+  useEffect(() => {
+    if (initialized.current) {
+      const params = new URLSearchParams()
+      if (filter) {
+        params.set('classcode', filter)
+      } else if (searchFilter) {
+        params.set('search', searchFilter)
+      }
+
+      const newQuery = params.toString()
+      const newPath = `/profile${newQuery ? `?${newQuery}` : ''}`
+
+      if (window.location.search !== `?${newQuery}` && (window.location.search || newQuery)) {
+        window.history.replaceState({ ...window.history.state, as: newPath, url: newPath }, '', newPath)
+      }
+    }
+  }, [filter, searchFilter])
+
   useEffect(() => {
     const abortController = new AbortController()
 
@@ -368,6 +407,10 @@ export default function StudentProfile() {
       if (!filter) {
         setPhotos([])
         setComments([])
+      } else {
+        // If there is a filter (classcode), fetch its data
+        const targetStudents = students.filter((s) => s.classcode == filter)
+        fetchData(targetStudents, abortController.signal)
       }
       setIsLoading(false)
       return
@@ -419,13 +462,6 @@ export default function StudentProfile() {
     const val = e.target.value
     setSearchFilter('')
     setFilter(val)
-    if (val) {
-      const targetStudents = students.filter((s) => s.classcode == val)
-      fetchData(targetStudents)
-    } else {
-      setPhotos([])
-      setComments([])
-    }
   }
 
   const handleSearchChange = (e) => {
@@ -647,6 +683,7 @@ export default function StudentProfile() {
                         refresh={() => refresh()}
                         setLoadingMessage={setLoadingMessage}
                         clearMessage={clearMessage}
+                        settings={settings}
                       />
                     ) : (
                       <></>
