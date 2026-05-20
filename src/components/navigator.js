@@ -98,7 +98,7 @@ const Navigator = ({ user }) => {
         <PageLink title='Resource Booking' href='/resource' />
         <PageLink title='Student Profile' href='/profile' />
         <PageLink title='Student Photos' href='/photo' />
-        <PageLink title='Speical Timetable' href='/specialTimetable' />
+        <PageLink title='Special Timetable' href='/specialTimetable' />
       </NavbarDropdown>
 
       <NavbarDropdown title='ITAV'>
