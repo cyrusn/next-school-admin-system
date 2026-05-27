@@ -14,7 +14,7 @@ const Navbar = () => {
   const pathname = usePathname()
   const { settings } = useSettings()
 
-  const SCHOOL_NAME = settings?.SCHOOL_NAME || process.env.SCHOOL_NAME
+  const SCHOOL_NAME = settings?.SCHOOL_NAME
 
   const handleLogin = () => {
     signIn('google')

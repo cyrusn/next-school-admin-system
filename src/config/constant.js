@@ -1,15 +1,13 @@
 import { DateTime } from 'luxon'
-export const FIRST_TERM_START_DATE =
-  process.env.FIRST_TERM_START_DATE || '2024-09-01'
-export const SECOND_TERM_START_DATE =
-  process.env.SECOND_TERM_START_DATE || '2025-01-20'
-export const SCHOOL_YEAR = process.env.SCHOOL_YEAR || null
-export const TERM = parseInt(process.env.TERM) || null
+import settings from './settings.json'
+
+export const FIRST_TERM_START_DATE = settings.FIRST_TERM_START_DATE
+export const SECOND_TERM_START_DATE = settings.SECOND_TERM_START_DATE
+export const SCHOOL_YEAR = settings.SCHOOL_YEAR
+export const TERM = parseInt(settings.TERM)
 export const START_TERM_DATE =
   TERM == 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE
 export const TIMEZONE = 'Asia/Hong_Kong'
-
-
 
 export const TODAY = DateTime.now()
   .setZone('Asia/Hong_Kong')

@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.10.8",
+    "commits": [
+      "chore: cleaned up obsolete process.env usages and moved constants to dynamic settings",
+      "fix: disabled browser caching for settings API to ensure data consistency on server restart",
+      "refactor: unified term handling in discipline module to prevent record mismatches"
+    ]
+  },
+  {
     "version": "v1.10.7",
     "commits": [
       "fix: changed namelist query parameters x1, x2, x3 to non-plural for consistency",
