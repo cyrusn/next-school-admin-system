@@ -1,38 +1,24 @@
 [
   {
-    "version": "v1.10.9",
+    "version": "v1.10.10",
     "commits": [
-      "fix: corrected IS_DC_DOWN boolean comparison bug on mark and meritDemerit pages allowing unauthorized submissions",
-      "fix: restricted DC event selection and editing on record page when IS_DC_DOWN is enabled",
-      "feat: added helpful downtime warning message on DC record page when system is locked"
-    ]
-  },
-  {
-    "version": "v1.10.8",
-    "commits": [
-      "chore: cleaned up obsolete process.env usages and moved constants to dynamic settings",
-      "fix: disabled browser caching for settings API to ensure data consistency on server restart",
-      "refactor: unified term handling in discipline module to prevent record mismatches"
-    ]
-  },
-  {
-    "version": "v1.10.7",
-    "commits": [
-      "fix: changed namelist query parameters x1, x2, x3 to non-plural for consistency",
-      "perf: added universal in-memory caching across core APIs (Timetables, Students, Teachers, Photos) for instant load times"
+      "fix: resolve Google API native fetch Premature close and duplex stream errors",
+      "fix: implement DC lockdown record editing restrictions and fix boolean check bypass (v1.10.9)",
+      "chore: bump version to 1.10.8 and cleanup process.env/settings cache",
+      "typo",
+      "Changed namelist query parameters x1, x2, x3 to non-plural for consistency",
+      "Added universal in-memory caching across core APIs (Timetables, Students, Teachers, Photos) for instant load times",
+      "Bumped version to 1.10.7"
     ]
   },
   {
     "version": "v1.10.6",
     "commits": [
-      "feat: standardized shareable URLs with query parameters. You can now copy and share your exact view with colleagues:",
-      "- Timetable: /timetable?term=2&type=teacher&codes=myt,cyn,pyl",
-      "- Student Profile: /profile?search=chan",
-      "- Student Photo: /photo?classcode=1a",
-      "- Namelist: /namelist/basic?classlevels=s4,s5&classcodes=5a,5b&x1=phy",
-      "- Teacher List: /teachers?search=cyn",
-      "perf: instant UI hydration and zero-lag URL syncing for a smoother experience",
-      "fix: resolved a navigation crash and fixed Namelist filter dependency logic"
+      "Implement standardized query parameters for Timetable, Profile, Photo, Namelist, and Teachers.",
+      "Support case-insensitive URL parameters and automatic plural/singular naming.",
+      "Optimize UI hydration to populate from URL immediately without waiting for background data.",
+      "Fix null pathname crash in navigation and filter logic dependencies in Namelist.",
+      "Bump version to 1.10.6."
     ]
   },
   {
