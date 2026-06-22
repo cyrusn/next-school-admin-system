@@ -18,7 +18,7 @@ export const columns = [
   <dt class='has-text-weight-bold'>Organization</dt>
   <dd>${organization}</dd>
   <dt class='has-text-weight-bold'>Images</dt>
-  <dd><a href='${imageFolderUrl}' target='_blank'>Link to images</a></dd>
+  <dd><a href='${imageFolderUrl}' target='_blank'>View Images</a></dd>
   <dt class='has-text-weight-bold'>Timestamp</dt>
   <dd>${DateTime.fromJSDate(new Date(timestamp)).setZone(TIMEZONE).toFormat('yyyy-MM-dd HH:mm')}
   </dd>

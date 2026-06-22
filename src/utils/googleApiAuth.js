@@ -9,6 +9,13 @@ const SERVICE_ACCOUNT_KEY_PATH = path.join(
   process.env.GOOGLE_API_KEY_FILENAME
 )
 
+const customFetch = (input, init) => {
+  if (init && init.body && !init.duplex) {
+    init.duplex = 'half'
+  }
+  return globalThis.fetch(input, init)
+}
+
 export async function getAuth(subject) {
   if (cachedClient && !subject) {
     return cachedClient // Return cached client if it exists
@@ -23,7 +30,10 @@ export async function getAuth(subject) {
       'https://www.googleapis.com/auth/gmail.send'
     ],
     clientOptions: {
-      subject: subject ? subject : 'schooladmin@liping.edu.hk'
+      subject: subject ? subject : 'schooladmin@liping.edu.hk',
+      transporterOptions: {
+        fetchImplementation: customFetch
+      }
     }
   })
 

@@ -2,6 +2,13 @@ const { google } = require('googleapis');
 const fs = require('fs');
 const path = require('path');
 
+const customFetch = (input, init) => {
+  if (init && init.body && !init.duplex) {
+    init.duplex = 'half';
+  }
+  return globalThis.fetch(input, init);
+};
+
 function parseEnv(filePath) {
   const content = fs.readFileSync(filePath, 'utf8');
   const env = {};
@@ -27,7 +34,10 @@ async function getAuth(env) {
   const auth = new google.auth.JWT({
     keyFile: keyPath,
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    subject: 'schooladmin@liping.edu.hk'
+    subject: 'schooladmin@liping.edu.hk',
+    transporterOptions: {
+      fetchImplementation: customFetch
+    }
   });
   return auth;
 }
