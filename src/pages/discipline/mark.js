@@ -54,9 +54,9 @@ export default function DisciplineForm() {
     .minus({ weeks: 1, days: WEEKDAY - 1 })
     .toFormat('yyyy-MM-dd')
 
-  const term = parseInt(settings.TERM)
-  console.log('DisciplineForm Render - settings.TERM:', settings.TERM, 'parsed term:', term)
-  const startTermDate = term === 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE
+  console.log('DisciplineForm Render - settings.TERM:', settings.TERM)
+  const startTermDate =
+    settings.TERM === 2 ? SECOND_TERM_START_DATE : FIRST_TERM_START_DATE
   const MIN_DATE =
     ROLE_ENUM[ROLE] == ROLE_ENUM['DC_ADMIN'] ? startTermDate : LAST_MONDAY
 
@@ -182,15 +182,13 @@ export default function DisciplineForm() {
     setLoadingMessage()
     setIsDisabled(true)
 
-    const { SCHOOL_YEAR: schoolYear, TERM: settingsTerm } = settings
-    const currentTerm = parseInt(settingsTerm)
+    console.log('handleSubmit - settingsTerm:', settings.TERM)
 
-    console.log('handleSubmit - settingsTerm:', settingsTerm, 'parsed currentTerm:', currentTerm)
-
-    if (!schoolYear || isNaN(currentTerm)) {
-      throw new Error(
+    if (!settings.SCHOOL_YEAR || !settings.TERM) {
+      setErrorMessage(
         'School Year or Term is missing in settings. Please check the spreadsheet.'
       )
+      return
     }
 
     const data = rows.reduce((prev, row) => {
@@ -198,8 +196,8 @@ export default function DisciplineForm() {
 
       const records = regnos.map((regno) => ({
         regno,
-        schoolYear,
-        term: currentTerm,
+        schoolYear: settings.SCHOOL_YEAR,
+        term: settings.TERM,
         eventDate,
         itemCode,
         description,
@@ -243,18 +241,6 @@ export default function DisciplineForm() {
     setRows(newRows)
   }
 
-  if (IS_DC_DOWN == 'true' && ROLE_ENUM[ROLE] < ROLE_ENUM['DC_ADMIN']) {
-    return (
-      <article className='message is-danger'>
-        <div className='message-body'>
-          Sorry, we&apos;re down for the preparation of the DC report for this
-          semesters, should you have any enquires, please contact DC head. Thank
-          you.
-        </div>
-      </article>
-    )
-  }
-
   const hasF6Student = rows.some((row) =>
     row.classcodes?.some((code) => code.startsWith('6'))
   )
@@ -265,7 +251,17 @@ export default function DisciplineForm() {
     <>
       <DisciplineNav />
 
-      <Notification {...notification} />
+      {IS_DC_DOWN && ROLE_ENUM[ROLE] < ROLE_ENUM['DC_ADMIN'] ? (
+        <article className='message is-danger mt-4 mx-4'>
+          <div className='message-body'>
+            Sorry, we&apos;re down for the preparation of the DC report for this
+            semesters, should you have any enquires, please contact DC head. Thank
+            you.
+          </div>
+        </article>
+      ) : (
+        <>
+          <Notification {...notification} />
       {rows.map((_row, index) => {
         return (
           <div key={index} className='box'>
@@ -320,6 +316,7 @@ export default function DisciplineForm() {
                   <label className='help is-info'>
                     {getMarkDescriptions(index).helpText}
                   </label>
+                  {/* <p className='heading mt-2'>Term {settings.TERM}</p> */}
                 </div>
 
                 <div className='field column is-3'>
@@ -453,6 +450,8 @@ export default function DisciplineForm() {
           </div>
         </div>
       </div>
+        </>
+      )}
     </>
   )
 }

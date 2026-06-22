@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.10.9",
+    "commits": [
+      "fix: corrected IS_DC_DOWN boolean comparison bug on mark and meritDemerit pages allowing unauthorized submissions",
+      "fix: restricted DC event selection and editing on record page when IS_DC_DOWN is enabled",
+      "feat: added helpful downtime warning message on DC record page when system is locked"
+    ]
+  },
+  {
     "version": "v1.10.8",
     "commits": [
       "chore: cleaned up obsolete process.env usages and moved constants to dynamic settings",

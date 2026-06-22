@@ -175,21 +175,6 @@ export default function MeritDemeritForm() {
     setFormData(newForm);
   };
 
-  if (
-    IS_DC_DOWN == "true" &&
-    ROLE_ENUM[ROLE] < ROLE_ENUM["DC_ADMIN"]
-  ) {
-    return (
-      <article className="message is-danger">
-        <div className="message-body">
-          Sorry, we&apos;re down for the preparation of the DC report for this
-          semesters, should you have any enquires, please contact DC head. Thank
-          you.
-        </div>
-      </article>
-    );
-  }
-
   const hasF6Student = formData.classcodes?.some((code) =>
     code.startsWith("6"),
   );
@@ -199,7 +184,17 @@ export default function MeritDemeritForm() {
   return (
     <>
       <DisciplineNav />
-      <Notification {...notification} />
+      {IS_DC_DOWN && ROLE_ENUM[ROLE] < ROLE_ENUM["DC_ADMIN"] ? (
+        <article className="message is-danger mt-4 mx-4">
+          <div className="message-body">
+            Sorry, we&apos;re down for the preparation of the DC report for this
+            semesters, should you have any enquires, please contact DC head. Thank
+            you.
+          </div>
+        </article>
+      ) : (
+        <>
+          <Notification {...notification} />
       <div className="box">
         <div className="field is-horizontal ">
           <div className="field-body columns">
@@ -343,6 +338,8 @@ export default function MeritDemeritForm() {
           </div>
         </div>
       </div>
+        </>
+      )}
     </>
   );
 }

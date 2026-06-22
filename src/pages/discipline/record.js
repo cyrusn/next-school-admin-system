@@ -32,6 +32,7 @@ export default function DisciplineRecord() {
   const { data: session } = useSession();
   const { settings } = useSettings();
   const { role: ROLE, initial: INITIAL } = session?.user?.info || {};
+  const IS_DC_DOWN = settings.IS_DC_DOWN === "true" || settings.IS_DC_DOWN === true;
   const { students } = useStudentsContext();
   const { users } = useUsersContext();
 
@@ -257,10 +258,12 @@ export default function DisciplineRecord() {
           ROLE === ROLE_ENUM["DC_ADMIN"];
         const isF6Restricted =
           isFilterF6 && !isDCAdmin && rowData.classcode?.startsWith("6");
+        const isDCDownRestricted = IS_DC_DOWN && !isDCAdmin;
 
         if (
           (rowData.informedAt && ROLE_ENUM[ROLE] < ROLE_ENUM["DC_ADMIN"]) ||
-          isF6Restricted
+          isF6Restricted ||
+          isDCDownRestricted
         ) {
           tr.classList.add("unselectable");
         }
@@ -292,6 +295,9 @@ export default function DisciplineRecord() {
             ROLE === ROLE_ENUM["DC_ADMIN"];
 
           if (isFilterF6 && !isDCAdmin && rowData.classcode?.startsWith("6")) {
+            return false;
+          }
+          if (IS_DC_DOWN && !isDCAdmin) {
             return false;
           }
           return (
@@ -400,6 +406,15 @@ export default function DisciplineRecord() {
   return (
     <div>
       <DisciplineNav />
+      {IS_DC_DOWN && ROLE_ENUM[ROLE] < ROLE_ENUM["DC_ADMIN"] ? (
+        <article className="message is-danger mt-4 mx-4">
+          <div className="message-body">
+            Sorry, we&apos;re down for the preparation of the DC report for this
+            semesters, should you have any enquires, please contact DC head. Thank
+            you.
+          </div>
+        </article>
+      ) : null}
       <HideformButton
         isShow={isShowFilters}
         handleShowClick={() => {
