@@ -2,10 +2,25 @@
   {
     "version": "v1.10.10",
     "commits": [
-      "fix: resolve Google API native fetch Premature close and duplex stream errors",
-      "fix: implement DC lockdown record editing restrictions and fix boolean check bypass (v1.10.9)",
+      "fix: resolve Google API native fetch Premature close and duplex stream errors"
+    ]
+  },
+  {
+    "version": "v1.10.9",
+    "commits": [
+      "fix: implement DC lockdown record editing restrictions and fix boolean check bypass (v1.10.9)"
+    ]
+  },
+  {
+    "version": "v1.10.8",
+    "commits": [
       "chore: bump version to 1.10.8 and cleanup process.env/settings cache",
-      "typo",
+      "typo"
+    ]
+  },
+  {
+    "version": "v1.10.7",
+    "commits": [
       "Changed namelist query parameters x1, x2, x3 to non-plural for consistency",
       "Added universal in-memory caching across core APIs (Timetables, Students, Teachers, Photos) for instant load times",
       "Bumped version to 1.10.7"
@@ -26,7 +41,12 @@
     "commits": [
       "style: move column toggles below search filters",
       "feat: restore Classcode and Classno to column visibility toggles",
-      "feat: show column visibility toggles as inline checkboxes above the table",
+      "feat: show column visibility toggles as inline checkboxes above the table"
+    ]
+  },
+  {
+    "version": "v1.10.3",
+    "commits": [
       "fix: correctly separate v1.10.3 and v1.10.4 in changelog and style colvis as checkboxes"
     ]
   },
@@ -42,7 +62,12 @@
     "commits": [
       "fix: update changelog generation to include chore commits",
       "fix: include scripts directory in Dockerfile for startup settings fetch",
-      "fix: resolve stale .next cache and missing component errors during dev build",
+      "fix: resolve stale .next cache and missing component errors during dev build"
+    ]
+  },
+  {
+    "version": "v1.10.0",
+    "commits": [
       "chore: bump version to 1.10.0 and migrate settings to Google Sheets"
     ]
   },
@@ -69,7 +94,12 @@
     "version": "v1.9.1",
     "commits": [
       "feat: add search bar to filter teacher list",
-      "feat: add recent updates changelog to index page",
+      "feat: add recent updates changelog to index page"
+    ]
+  },
+  {
+    "version": "v1.9.0",
+    "commits": [
       "Implemented fuzzy search with pattern matching for class/no (e.g., 2A03, 2A3).",
       "Added AbortController and optimized debouncing for snappier, efficient searching.",
       "Updated UI layout to prioritize fuzzy search and improve result clarity.",
@@ -80,7 +110,6 @@
   {
     "version": "v1.8.9",
     "commits": [
-      "chore: bump version to 1.8.9",
       "Added NEXT_PUBLIC_IS_FILTER_F6 environment variable support.",
       "Restricted F6 student selection in attendance and conduct entry.",
       "Blocked F6 record modification and deletion for restricted users in record lists.",
@@ -149,7 +178,12 @@
   {
     "version": "v1.6.3",
     "commits": [
-      "Improve print functionality for announcement box",
+      "Improve print functionality for announcement box"
+    ]
+  },
+  {
+    "version": "v1.6.2",
+    "commits": [
       "v1.6.2 fix: if no attendances summary found.",
       "bug fix"
     ]
@@ -164,7 +198,12 @@
     "version": "v1.6.0",
     "commits": [
       "feat: Add single/multi selection mode to Timetable and Namelist, add Term toggle to Timetable. Bump version to 1.6.0",
-      "Add term toggle to timetable",
+      "Add term toggle to timetable"
+    ]
+  },
+  {
+    "version": "v1.5.20",
+    "commits": [
       "re-initiation"
     ]
   }

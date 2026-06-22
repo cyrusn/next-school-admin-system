@@ -19,16 +19,29 @@ function generateChangelog() {
       const subject = parts[1].trim();
       const body = parts[2].trim();
       
+      let detectedVersion = null;
       const tagMatch = refs.match(/tag: (v[0-9\.]+)/);
       if (tagMatch) {
-        if (currentVersion.commits.length > 0 || currentVersion.version !== tagMatch[1]) {
-          versions.push(currentVersion);
+        detectedVersion = tagMatch[1];
+      } else {
+        const subjectVersionMatch = subject.match(/(?:bump(?:ed)?\s+version\s+to\s+|\(?v)([0-9]+\.[0-9]+\.[0-9]+)\)?/i);
+        if (subjectVersionMatch) {
+          detectedVersion = `v${subjectVersionMatch[1]}`;
         }
-        currentVersion = { version: tagMatch[1], commits: [] };
+      }
+
+      if (detectedVersion) {
+        if (currentVersion.commits.length > 0 && currentVersion.version !== detectedVersion) {
+          versions.push(currentVersion);
+          currentVersion = { version: detectedVersion, commits: [] };
+        } else if (currentVersion.commits.length === 0) {
+          currentVersion.version = detectedVersion;
+        }
       }
       
       // Filter out chore commits, version bumps, and merges
-      if (!subject || subject.match(/^[0-9\.]+$/) || subject.match(/^v[0-9\.]+$/) || subject.startsWith('Squash merge') || subject.startsWith('docs: update changelog') || subject.startsWith('docs: changelog') || subject.startsWith('bump version') || subject.includes('update version number')) {
+      const isPureBump = subject.match(/^(?:chore:\s*)?bump(?:ed)?\s+version(?:\s+to\s+[0-9\.]+)?$/i);
+      if (!subject || subject.match(/^[0-9\.]+$/) || subject.match(/^v[0-9\.]+$/) || subject.startsWith('Squash merge') || subject.startsWith('docs: update changelog') || subject.startsWith('docs: changelog') || subject.includes('update version number') || isPureBump) {
         continue;
       }
       
