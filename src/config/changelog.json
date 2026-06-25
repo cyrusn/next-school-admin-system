@@ -1,5 +1,12 @@
 [
   {
+    "version": "v1.11.0",
+    "commits": [
+      "feat: implement IS_ECA_DOWN flag to restrict eca membership modifications",
+      "update generate-changelog.js for build changelog by patch"
+    ]
+  },
+  {
     "version": "v1.10.10",
     "commits": [
       "fix: resolve Google API native fetch Premature close and duplex stream errors"
