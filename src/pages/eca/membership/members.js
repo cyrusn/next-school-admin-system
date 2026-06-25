@@ -12,8 +12,12 @@ import { validateForm } from '@/utils/formValidation' // Import the validation f
 import { createMembersInputInfoMapper } from '@/lib/eca/createMembersInputMapper'
 import { useRouter } from 'next/router'
 import NoClubAndTeamMessage from '../components/noClubAndTeamMessage'
+import { useSettings } from '@/context/settingsContext'
 
 const EcaMembers = () => {
+  const { settings } = useSettings()
+  const IS_ECA_DOWN = settings.IS_ECA_DOWN === 'true' || settings.IS_ECA_DOWN === true
+
   const { students } = useStudentsContext()
   const { data: session } = useSession()
   const { initial } = session?.user?.info
@@ -132,6 +136,21 @@ const EcaMembers = () => {
     students,
     filteredClubs
   )
+
+  if (IS_ECA_DOWN) {
+    return (
+      <>
+        <Nav />
+        <article className="message is-danger mt-4 mx-4">
+          <div className="message-body">
+            Sorry, we&apos;re down for the preparation of the ECA record for this
+            semesters, should you have any enquires, please contact ECA head. Thank
+            you.
+          </div>
+        </article>
+      </>
+    )
+  }
 
   if (clubs.length == 0) {
     return (

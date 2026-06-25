@@ -10,8 +10,12 @@ import Notification, {
   defaultNotification
 } from '@/components/notification'
 import EditModal from './components/editModal'
+import { useSettings } from '@/context/settingsContext'
 
 export default function EcaMembershipRecord() {
+  const { settings } = useSettings()
+  const IS_ECA_DOWN = settings.IS_ECA_DOWN === 'true' || settings.IS_ECA_DOWN === true
+
   const { students } = useStudentsContext()
   const [clubs, setClubs] = useState([])
 
@@ -91,7 +95,7 @@ export default function EcaMembershipRecord() {
                 <"level mt-0 mb-2" <"level-left" i> <"level-right" p>>
                 `,
     buttons: [
-      {
+      !IS_ECA_DOWN && {
         text: 'Edit',
         action() {
           setIsEdit((isEdit) => {
@@ -108,13 +112,14 @@ export default function EcaMembershipRecord() {
         text: 'Preview',
         autoPrint: false
       }
-    ],
+    ].filter(Boolean),
     searching: false,
     select: {
       items: 'row',
       style: 'multi',
 
       selectable: function (rowData) {
+        if (IS_ECA_DOWN) return false
         const { pic, associates, admininstrators } = rowData
         const relatedTeachers = [
           ...pic?.split(','),
@@ -129,7 +134,7 @@ export default function EcaMembershipRecord() {
       [50, 100, -1],
       [50, 100, 'All']
     ]
-  }), [initial])
+  }), [initial, IS_ECA_DOWN])
 
   const columns = [
     {
@@ -193,6 +198,15 @@ export default function EcaMembershipRecord() {
     <>
       <Nav />
       <Notification {...notification} />
+      {IS_ECA_DOWN ? (
+        <article className="message is-danger mt-4 mx-4">
+          <div className="message-body">
+            Sorry, we&apos;re down for the preparation of the ECA record for this
+            semesters, should you have any enquires, please contact ECA head. Thank
+            you.
+          </div>
+        </article>
+      ) : null}
       <div className='field is-horizontal'>
         <div className='field-body'>
           <div className='field has-addons'>
