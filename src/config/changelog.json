@@ -2,7 +2,8 @@
   {
     "version": "v1.12.0",
     "commits": [
-      "feat: dynamically calculate student indicators (isNewlyArrived, isNcs, isSen) and render senType as warning tags"
+      "feat: dynamically calculate student indicators (isNewlyArrived, isNcs, isSen) and render senType as warning tags",
+      "feat: display school year button in navbar"
     ]
   },
   {

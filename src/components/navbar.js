@@ -21,7 +21,7 @@ const Navbar = () => {
     const startYear = parseInt(schoolYearRaw, 10)
     if (!isNaN(startYear) && String(startYear).length === 4) {
       const endYear = (startYear + 1) % 100
-      formattedSchoolYear = `${startYear}-${String(endYear).padStart(2, '0')}`
+      formattedSchoolYear = `${String(startYear).slice(2)}${String(endYear).padStart(2, '0')}`
     } else {
       formattedSchoolYear = schoolYearRaw
     }
@@ -43,13 +43,14 @@ const Navbar = () => {
             <span className='icon'>
               <FontAwesomeIcon icon={faHome} />
             </span>
-            {SCHOOL_NAME} {formattedSchoolYear && `(${formattedSchoolYear})`}
+
+            {SCHOOL_NAME}
           </span>
           <span id='user' className='is-hidden-desktop icon-text'>
             <span className='icon'>
               <FontAwesomeIcon icon={faHome} />
             </span>
-            SKHLPSS {formattedSchoolYear && `(${formattedSchoolYear})`}{' '}
+            SKHLPSS
             {session && (
               <span className='has-text-weight-light'>
                 <small>{session?.user?.info?.initial}</small>
@@ -77,7 +78,6 @@ const Navbar = () => {
 
         <div className='navbar-end'>
           <ThemeSelector />
-
           {session ? (
             <div className='navbar-item'>
               <h2>Welcome back, {session.user?.info?.initial}!</h2>
@@ -90,9 +90,16 @@ const Navbar = () => {
             </div>
           )}
           <div className='navbar-item'>
-            <a className='button is-danger' onClick={() => signOut()}>
-              Sign Out
-            </a>
+            <div className='buttons'>
+              <a className='button is-danger' onClick={() => signOut()}>
+                Sign Out
+              </a>
+              {formattedSchoolYear && (
+                <span>
+                  <span className='button is-info'>{formattedSchoolYear}</span>
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>
