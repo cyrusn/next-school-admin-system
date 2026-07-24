@@ -1,5 +1,11 @@
 [
   {
+    "version": "v1.12.0",
+    "commits": [
+      "feat: dynamically calculate student indicators (isNewlyArrived, isNcs, isSen) and render senType as warning tags"
+    ]
+  },
+  {
     "version": "v1.11.0",
     "commits": [
       "feat: implement IS_ECA_DOWN flag to restrict eca membership modifications",
