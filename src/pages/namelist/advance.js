@@ -153,12 +153,12 @@ const columnDefs = [
     width: '8%',
     render: {
       sb: '[]',
-      _: function (row) {
-        return row
-          .map((type) => {
-            if (type == 'NCS') return '🌎'
-            if (type == 'Newly-Arrived') return '🇨🇳'
-            if (type == 'SEN') return '❤️'
+      _: function (data, type, row) {
+        return data
+          .map((item) => {
+            if (item == 'NCS') return '🌎'
+            if (item == 'Newly-Arrived') return '🇨🇳'
+            if (item == 'SEN') return `<span class="tag is-warning">❤️ ${row.senType || 'SEN'}</span>`
           })
           .join(' ')
       },

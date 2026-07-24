@@ -288,6 +288,7 @@ export default function StudentPhoto() {
                 classcode,
                 classno,
                 isSen,
+                senType,
                 isNcs,
                 isNewlyArrived,
                 isAllowAccessories,
@@ -305,20 +306,22 @@ export default function StudentPhoto() {
                     <div className='is-flex is-justify-content-center'>
                       {found && (
                         <figure>
+                        <a href={found.webContentLink} target='_blank' rel='noopener noreferrer'>
                           <Image
                             alt={String(regno)}
                             src={found.thumbnailLink}
                             width='160'
                             height='320'
                           />
+                        </a>
                         </figure>
                       )}
                     </div>
-                    <p>
+                    <p class='my-1'>
                       {cname || ename}
                       {isShowDetails && (
                         <span>
-                          {isSen && <span> ❤️</span>}
+                          {isSen && <span className='tag is-warning ml-1'>❤️ {senType}</span>}
                           {isNcs && <span> 🌎</span>}
                           {isAllowAccessories && <span> ✝️</span>}
                           {isNewlyArrived && <span> 🇨🇳</span>}

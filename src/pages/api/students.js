@@ -26,7 +26,7 @@ export default async function handler(req, res) {
     const settings = await getSettings()
     const spreadsheetId = settings.STUDENT_GOOGLE_SHEET_ID
     const auth = await getAuth()
-    const ranges = ['students!A1:U', 'groups!A1:G']
+    const ranges = ['students!A1:V', 'groups!A1:G']
     const response = await sheets.spreadsheets.values.batchGet({
       auth,
       spreadsheetId,
@@ -45,11 +45,41 @@ export default async function handler(req, res) {
     const students = convertRowsToCollection(studentRowValues)
     const groups = convertRowsToCollection(groupRowValues)
     const groupsbyRegno = groupBy(groups, 'regno')
+
+    const schoolYear = settings.SCHOOL_YEAR ? parseInt(settings.SCHOOL_YEAR, 10) : new Date().getFullYear()
+    const thresholdDate = new Date(schoolYear - 1, 8, 1) // September 1st of (schoolYear - 1)
+
     const studentData = students.map((s, index) => {
       const groups_ = groupsbyRegno[s.regno] || []
       const rowNo = index + 2
       s.range = `students!A${rowNo}:T${rowNo}`
       s.groups = groups_.map(({ groupName }) => groupName)
+
+      // Calculate isNewlyArrived dynamically from firstArrivedDate and thresholdDate
+      let isNewlyArrived = false
+      if (s.firstArrivedDate) {
+        const dateParts = String(s.firstArrivedDate).split('-')
+        if (dateParts.length === 3) {
+          const yr = parseInt(dateParts[0], 10)
+          const mo = parseInt(dateParts[1], 10) - 1
+          const dy = parseInt(dateParts[2], 10)
+          const arrivedDate = new Date(yr, mo, dy)
+          isNewlyArrived = arrivedDate > thresholdDate
+        } else {
+          const arrivedDate = new Date(s.firstArrivedDate)
+          if (!isNaN(arrivedDate.getTime())) {
+            isNewlyArrived = arrivedDate > thresholdDate
+          }
+        }
+      }
+      s.isNewlyArrived = isNewlyArrived
+
+      // Calculate isNcs dynamically from homeLanguage. If homeLanguage is not 'CHI', isNcs is true.
+      s.isNcs = s.homeLanguage ? String(s.homeLanguage).trim().toUpperCase() !== 'CHI' : false
+
+      // Calculate isSen dynamically from senType. If senType is present and not empty, isSen is true.
+      s.isSen = s.senType ? String(s.senType).trim() !== '' : false
+
       return s
     })
 

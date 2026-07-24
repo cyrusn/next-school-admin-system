@@ -622,6 +622,7 @@ export default function StudentProfile() {
               classcode,
               classno,
               isSen,
+              senType,
               isNcs,
               isNewlyArrived,
               x1,
@@ -654,7 +655,7 @@ export default function StudentProfile() {
                     </div>
                     <p>
                       {cname || ename}
-                      {isSen && <span> ❤️</span>}
+                      {isSen && <span className='tag is-warning ml-1'>❤️ {senType}</span>}
                       {isNcs && <span> 🌎</span>}
                       {isNewlyArrived && <span> 🇨🇳</span>}
                     </p>

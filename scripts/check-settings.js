@@ -43,7 +43,7 @@ async function getAuth(env) {
 }
 
 async function checkSettings() {
-  const env = parseEnv('.env.development');
+  const env = parseEnv(path.join(process.cwd(), '.env.development'));
   const spreadsheetId = env.SETTINGS_GOOGLE_SHEET_ID;
   
   try {
@@ -52,7 +52,7 @@ async function checkSettings() {
     
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'Sheet1!A:B',
+      range: 'setting!A:B',
     });
 
     console.log('Values in Google Sheet:');
