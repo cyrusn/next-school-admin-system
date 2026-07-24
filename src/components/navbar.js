@@ -15,6 +15,17 @@ const Navbar = () => {
   const { settings } = useSettings()
 
   const SCHOOL_NAME = settings?.SCHOOL_NAME
+  const schoolYearRaw = settings?.SCHOOL_YEAR
+  let formattedSchoolYear = ''
+  if (schoolYearRaw) {
+    const startYear = parseInt(schoolYearRaw, 10)
+    if (!isNaN(startYear) && String(startYear).length === 4) {
+      const endYear = (startYear + 1) % 100
+      formattedSchoolYear = `${startYear}-${String(endYear).padStart(2, '0')}`
+    } else {
+      formattedSchoolYear = schoolYearRaw
+    }
+  }
 
   const handleLogin = () => {
     signIn('google')
@@ -32,13 +43,13 @@ const Navbar = () => {
             <span className='icon'>
               <FontAwesomeIcon icon={faHome} />
             </span>
-            {SCHOOL_NAME}
+            {SCHOOL_NAME} {formattedSchoolYear && `(${formattedSchoolYear})`}
           </span>
           <span id='user' className='is-hidden-desktop icon-text'>
             <span className='icon'>
               <FontAwesomeIcon icon={faHome} />
             </span>
-            SKHLPSS{' '}
+            SKHLPSS {formattedSchoolYear && `(${formattedSchoolYear})`}{' '}
             {session && (
               <span className='has-text-weight-light'>
                 <small>{session?.user?.info?.initial}</small>
