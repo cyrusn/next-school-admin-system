@@ -9,7 +9,7 @@ export default function NamelistReport() {
   const { students } = useStudentsContext()
 
   const report = students.reduce((prev, student) => {
-    const { regno, classcode, sex, house } = student
+    const { regno, classcode, sex, house, x1, x2, x3 } = student
     const classlevel = `S${classcode[0]}`
     prev.classcodes ??= {}
     prev.classcodes[classcode] ??= {}
@@ -38,11 +38,25 @@ export default function NamelistReport() {
     prev.houses[house][classlevel].total += 1
     prev.houses[house][classlevel].sexes[sex] += 1
 
+    if (['S4', 'S5', 'S6'].includes(classlevel)) {
+      prev.electives ??= {}
+      prev.electives[classlevel] ??= { x1: {}, x2: {}, x3: {} }
+      if (x1) {
+        prev.electives[classlevel].x1[x1] = (prev.electives[classlevel].x1[x1] || 0) + 1
+      }
+      if (x2) {
+        prev.electives[classlevel].x2[x2] = (prev.electives[classlevel].x2[x2] || 0) + 1
+      }
+      if (x3) {
+        prev.electives[classlevel].x3[x3] = (prev.electives[classlevel].x3[x3] || 0) + 1
+      }
+    }
+
     return prev
   }, {})
 
   const classlevels = [
-    { title: 'S1', vacancy: 132 },
+    { title: 'S1', vacancy: 99 },
     { title: 'S2', vacancy: 132 },
     { title: 'S3', vacancy: 132 },
     { title: 'S4', vacancy: 132 },

@@ -35,16 +35,39 @@ const Navbar = () => {
     setIsActive(false)
   }, [pathname])
 
+  const isSystemDown =
+    settings?.IS_SYSTEM_DOWN === 'true' ||
+    settings?.IS_SYSTEM_DOWN === 'TRUE' ||
+    settings?.IS_SYSTEM_DOWN === true
+
+  const superAdmins = (settings?.SUPERADMIN || '')
+    .split(',')
+    .map((s) => s.trim().toLowerCase())
+  const userEmail = session?.user?.email || ''
+  const username = userEmail.split('@')[0].toLowerCase()
+  const isSuperAdmin = superAdmins.includes(username)
+
+  const isNavbarDanger = isSystemDown && isSuperAdmin
+
+  const navbarClass = `navbar has-shadow not-print ${
+    isNavbarDanger ? 'is-danger' : 'is-transparent'
+  }`
+
   return (
-    <nav className='navbar is-transparent has-shadow not-print'>
+    <nav className={navbarClass}>
       <div className='navbar-brand'>
-        <Link href='/' className='navbar-item has-text-weight-bold'>
+        <Link href='/' className={`navbar-item has-text-weight-bold ${isNavbarDanger ? 'has-text-white' : ''}`}>
           <span className='is-hidden-touch icon-text'>
             <span className='icon'>
               <FontAwesomeIcon icon={faHome} />
             </span>
 
             {SCHOOL_NAME}
+            {isSystemDown && (
+              <span className={`tag ml-2 ${isNavbarDanger ? 'is-warning' : 'is-danger'}`}>
+                Maintenance Mode
+              </span>
+            )}
           </span>
           <span id='user' className='is-hidden-desktop icon-text'>
             <span className='icon'>
@@ -56,12 +79,17 @@ const Navbar = () => {
                 <small>{session?.user?.info?.initial}</small>
               </span>
             )}
+            {isSystemDown && (
+              <span className={`tag ml-2 ${isNavbarDanger ? 'is-warning' : 'is-danger'}`}>
+                Maint.
+              </span>
+            )}
           </span>
         </Link>
 
         <a
           role='button'
-          className='navbar-burger'
+          className={`navbar-burger ${isNavbarDanger ? 'has-text-white' : ''}`}
           onClick={() => setIsActive(!isActive)}
         >
           <span aria-hidden='true'></span>
@@ -71,7 +99,7 @@ const Navbar = () => {
         </a>
       </div>
 
-      <div className={`navbar-menu ${isActive ? 'is-active' : ''}`}>
+      <div className={`navbar-menu ${isActive ? 'is-active' : ''} ${isNavbarDanger ? 'has-background-danger' : ''}`}>
         <div className='navbar-start'>
           <Navigator user={session?.user?.info} />
         </div>
@@ -80,7 +108,9 @@ const Navbar = () => {
           <ThemeSelector />
           {session ? (
             <div className='navbar-item'>
-              <h2>Welcome back, {session.user?.info?.initial}!</h2>
+              <h2 className={isNavbarDanger ? 'has-text-white' : ''}>
+                Welcome back, {session.user?.info?.initial}!
+              </h2>
             </div>
           ) : (
             <div className='navbar-item'>

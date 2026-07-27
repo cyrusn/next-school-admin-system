@@ -24,11 +24,12 @@
 .DS_Store
 *.pem
 
-# debug
+# debug (specific) and general logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+*.log
 
 # env files (can opt-in for committing if needed)
 .env*
@@ -39,7 +40,21 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local test stubs
 src/pages/api/test*.js
+
+# uploads / artifacts
 uploads/*
 app.tar
+
+# runtime settings (may be generated or environment-specific)
 src/config/settings.json
+
+# IDE/editor settings
+.vscode/
+.idea/
+
+# caches / editor history
+.cache/
+.history/

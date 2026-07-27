@@ -36,6 +36,7 @@ function CustomTable({ type, searchTerm }) {
           <th>Name</th>
           <th>姓名</th>
           {type == 'TEACHING_STAFF' && <th>班主任</th>}
+          {type == 'TEACHING_STAFF' && <th>閱讀課</th>}
           <th style={{ width: '5%' }} className='print-only'></th>
         </tr>
       </thead>
@@ -58,9 +59,10 @@ function CustomTable({ type, searchTerm }) {
               </td>
               <td>
                 {u.cname}
-                {u.title}
+                {u.cname? u.title : ''}
               </td>
               {type == 'TEACHING_STAFF' && <td>{u.classMaster}</td>}
+              {type == 'TEACHING_STAFF' && <td>{u.readingTeacher}</td>}
               <td style={{ width: '5%' }} className='print-only'></td>
             </tr>
           )

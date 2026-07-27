@@ -1,6 +1,7 @@
 import { TERM, HOMEBASES } from '@/config/constant/'
 import ClassReport from './classTable'
 import HouseReport from './houseTable'
+import ElectiveTable from './electiveTables'
 import { useUsersContext } from '@/context/usersContext'
 import { groupBy } from 'lodash'
 
@@ -29,6 +30,9 @@ export default function ClasslevelReports({ report, classlevels }) {
                 <HouseReport report={report} classlevel={classlevel} />
               </div>
             </div>
+            {['S4', 'S5', 'S6'].includes(classlevel.title) && (
+              <ElectiveTable report={report} level={classlevel.title} />
+            )}
           </div>
         )
       })}
