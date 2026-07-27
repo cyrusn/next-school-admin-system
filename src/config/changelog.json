@@ -1,7 +1,14 @@
 [
   {
+    "version": "v1.12.2",
+    "commits": [
+      "feat: enable maintenance mode, add elective reports, update homebases and teachers table"
+    ]
+  },
+  {
     "version": "v1.12.1",
     "commits": [
+      "bump version to 1.12.1 and generate changelog",
       "feat: display school year button in navbar and update changelog",
       "feat: display formatted school year in YYYY-YY format in navbar"
     ]
