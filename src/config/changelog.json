@@ -2,237 +2,232 @@
   {
     "version": "v1.12.2",
     "commits": [
-      "feat: enable maintenance mode, add elective reports, update homebases and teachers table"
+      "Feature: Enable maintenance mode, add elective reports, update homebases and teachers table"
     ]
   },
   {
     "version": "v1.12.1",
     "commits": [
-      "bump version to 1.12.1 and generate changelog",
-      "feat: display school year button in navbar and update changelog",
-      "feat: display formatted school year in YYYY-YY format in navbar"
+      "Feature: Display school year button in navbar and update changelog",
+      "Feature: Display formatted school year in YYYY-YY format in navbar"
     ]
   },
   {
     "version": "v1.12.0",
     "commits": [
-      "bump version to 1.12.0 and generate changelog",
-      "feat: dynamically calculate student indicators (isNewlyArrived, isNcs, isSen) and render senType as warning tags"
+      "Feature: Dynamically calculate student indicators (isNewlyArrived, isNcs, isSen) and render senType as warning tags"
     ]
   },
   {
     "version": "v1.11.0",
     "commits": [
-      "feat: implement IS_ECA_DOWN flag to restrict eca membership modifications",
-      "update generate-changelog.js for build changelog by patch"
+      "Feature: Implement IS_ECA_DOWN flag to restrict eca membership modifications",
+      "Update: Update generate-changelog.js for build changelog by patch"
     ]
   },
   {
     "version": "v1.10.10",
     "commits": [
-      "fix: resolve Google API native fetch Premature close and duplex stream errors"
+      "Fix: Resolve Google API native fetch Premature close and duplex stream errors"
     ]
   },
   {
     "version": "v1.10.9",
     "commits": [
-      "fix: implement DC lockdown record editing restrictions and fix boolean check bypass (v1.10.9)"
+      "Fix: Implement DC lockdown record editing restrictions and fix boolean check bypass (v1.10.9)"
     ]
   },
   {
     "version": "v1.10.8",
     "commits": [
-      "chore: bump version to 1.10.8 and cleanup process.env/settings cache",
-      "typo"
+      "Update: Typo"
     ]
   },
   {
     "version": "v1.10.7",
     "commits": [
-      "Changed namelist query parameters x1, x2, x3 to non-plural for consistency",
-      "Added universal in-memory caching across core APIs (Timetables, Students, Teachers, Photos) for instant load times",
-      "Bumped version to 1.10.7"
+      "Performance: Add universal API caching and fix namelist query params (v1.10.7)",
+      "- Changed namelist query parameters x1, x2, x3 to non-plural for consistency",
+      "- Added universal in-memory caching across core APIs (Timetables, Students, Teachers, Photos) for instant load times",
+      "- Bumped version to 1.10.7"
     ]
   },
   {
     "version": "v1.10.6",
     "commits": [
-      "Implement standardized query parameters for Timetable, Profile, Photo, Namelist, and Teachers.",
-      "Support case-insensitive URL parameters and automatic plural/singular naming.",
-      "Optimize UI hydration to populate from URL immediately without waiting for background data.",
-      "Fix null pathname crash in navigation and filter logic dependencies in Namelist.",
-      "Bump version to 1.10.6."
+      "Feature: Standardize shareable URLs and optimize UI hydration (v1.10.6)",
+      "- Implement standardized query parameters for Timetable, Profile, Photo, Namelist, and Teachers.",
+      "- Support case-insensitive URL parameters and automatic plural/singular naming.",
+      "- Optimize UI hydration to populate from URL immediately without waiting for background data.",
+      "- Fix null pathname crash in navigation and filter logic dependencies in Namelist.",
+      "- Bump version to 1.10.6."
     ]
   },
   {
     "version": "v1.10.5",
     "commits": [
-      "style: move column toggles below search filters",
-      "feat: restore Classcode and Classno to column visibility toggles",
-      "feat: show column visibility toggles as inline checkboxes above the table"
+      "Style: Move column toggles below search filters",
+      "Feature: Restore Classcode and Classno to column visibility toggles",
+      "Feature: Show column visibility toggles as inline checkboxes above the table"
     ]
   },
   {
     "version": "v1.10.3",
     "commits": [
-      "fix: correctly separate v1.10.3 and v1.10.4 in changelog and style colvis as checkboxes"
+      "Fix: Correctly separate v1.10.3 and v1.10.4 in changelog and style colvis as checkboxes"
     ]
   },
   {
     "version": "v1.10.4",
     "commits": [
-      "feat: add column visibility selection in advance namelist",
-      "fix: strictly use school year and term from spreadsheet settings"
+      "Feature: Add column visibility selection in advance namelist",
+      "Fix: Strictly use school year and term from spreadsheet settings"
     ]
   },
   {
     "version": "v1.10.3",
     "commits": [
-      "fix: update changelog generation to include chore commits",
-      "fix: include scripts directory in Dockerfile for startup settings fetch",
-      "fix: resolve stale .next cache and missing component errors during dev build"
-    ]
-  },
-  {
-    "version": "v1.10.0",
-    "commits": [
-      "chore: bump version to 1.10.0 and migrate settings to Google Sheets"
+      "Fix: Update changelog generation to include chore commits",
+      "Fix: Include scripts directory in Dockerfile for startup settings fetch",
+      "Fix: Resolve stale .next cache and missing component errors during dev build"
     ]
   },
   {
     "version": "v1.9.4",
     "commits": [
-      "fix: resolve DataTables dark mode styling and update setup guide"
+      "Fix: Resolve DataTables dark mode styling and update setup guide"
     ]
   },
   {
     "version": "v1.9.3",
     "commits": [
-      "feat: add auto-focus to search inputs and frontpage changelog pagination"
+      "Feature: Add auto-focus to search inputs and frontpage changelog pagination"
     ]
   },
   {
     "version": "v1.9.2",
     "commits": [
-      "feat: auto-focus teacher search input and update postExam template",
-      "feat: automate dynamic changelog generation from git history"
+      "Feature: Auto-focus teacher search input and update postExam template",
+      "Feature: Automate dynamic changelog generation from git history"
     ]
   },
   {
     "version": "v1.9.1",
     "commits": [
-      "feat: add search bar to filter teacher list",
-      "feat: add recent updates changelog to index page"
+      "Feature: Add search bar to filter teacher list",
+      "Feature: Add recent updates changelog to index page"
     ]
   },
   {
     "version": "v1.9.0",
     "commits": [
-      "Implemented fuzzy search with pattern matching for class/no (e.g., 2A03, 2A3).",
-      "Added AbortController and optimized debouncing for snappier, efficient searching.",
-      "Updated UI layout to prioritize fuzzy search and improve result clarity.",
-      "Displayed student electives (x1, x2, x3) directly using warning tags.",
-      "Fixed minor photo API parameter bug in profile module."
+      "Feature: Enhance fuzzy search and display electives in photo/profile (v1.9.0)",
+      "- Implemented fuzzy search with pattern matching for class/no (e.g., 2A03, 2A3).",
+      "- Added AbortController and optimized debouncing for snappier, efficient searching.",
+      "- Updated UI layout to prioritize fuzzy search and improve result clarity.",
+      "- Displayed student electives (x1, x2, x3) directly using warning tags.",
+      "- Fixed minor photo API parameter bug in profile module."
     ]
   },
   {
     "version": "v1.8.9",
     "commits": [
-      "Added NEXT_PUBLIC_IS_FILTER_F6 environment variable support.",
-      "Restricted F6 student selection in attendance and conduct entry.",
-      "Blocked F6 record modification and deletion for restricted users in record lists.",
-      "Added visual 'unselectable' indicators for restricted records."
+      "Feature: Implement F6 record filtering and restriction for non-DC_ADMIN users",
+      "- Added NEXT_PUBLIC_IS_FILTER_F6 environment variable support.",
+      "- Restricted F6 student selection in attendance and conduct entry.",
+      "- Blocked F6 record modification and deletion for restricted users in record lists.",
+      "- Added visual 'unselectable' indicators for restricted records."
     ]
   },
   {
     "version": "v1.8.8",
     "commits": [
-      "copy ./public to docker image",
-      "better outlook"
+      "Update: Copy ./public to docker image",
+      "Update: Better outlook"
     ]
   },
   {
     "version": "v1.8.7",
     "commits": [
-      "add submission time and refresh twice"
+      "Update: Add submission time and refresh twice"
     ]
   },
   {
     "version": "v1.8.6",
     "commits": [
-      "bug fix for grading in summary for F6"
+      "Update: Bug fix for grading in summary for F6"
     ]
   },
   {
     "version": "v1.8.5",
     "commits": [
-      "remove minDate for DC record and summary"
+      "Update: Remove minDate for DC record and summary"
     ]
   },
   {
     "version": "v1.8.4",
     "commits": [
-      "update postExam student list"
+      "Update: Update postExam student list"
     ]
   },
   {
     "version": "v1.8.3",
     "commits": [
-      "use useMemo"
+      "Update: Use useMemo"
     ]
   },
   {
     "version": "v1.8.1",
     "commits": [
-      "bug fix for getting initial in googleAuth"
+      "Update: Bug fix for getting initial in googleAuth"
     ]
   },
   {
     "version": "v1.8.0",
     "commits": [
-      "create calendar to user calendar",
-      "update min date"
+      "Update: Create calendar to user calendar",
+      "Update: Update min date"
     ]
   },
   {
     "version": "v1.7.2",
     "commits": [
-      "reading period can submit attendance proof",
-      "add substitude teachers",
-      "add flipped_classroom api",
-      "make announcement public"
+      "Update: Reading period can submit attendance proof",
+      "Update: Add substitude teachers",
+      "Update: Add flipped_classroom api",
+      "Update: Make announcement public"
     ]
   },
   {
     "version": "v1.6.3",
     "commits": [
-      "Improve print functionality for announcement box"
+      "Update: Improve print functionality for announcement box"
     ]
   },
   {
     "version": "v1.6.2",
     "commits": [
-      "v1.6.2 fix: if no attendances summary found.",
-      "bug fix"
+      "Update: V1.6.2 fix: if no attendances summary found.",
+      "Update: Bug fix"
     ]
   },
   {
     "version": "v1.6.1",
     "commits": [
-      "fix: simplified timetable category labels (removed term prefix). Bump version to 1.6.1"
+      "Fix: Simplified timetable category labels (removed term prefix). Bump version to 1.6.1"
     ]
   },
   {
     "version": "v1.6.0",
     "commits": [
-      "feat: Add single/multi selection mode to Timetable and Namelist, add Term toggle to Timetable. Bump version to 1.6.0",
-      "Add term toggle to timetable"
+      "Feature: Add single/multi selection mode to Timetable and Namelist, add Term toggle to Timetable. Bump version to 1.6.0",
+      "Update: Add term toggle to timetable"
     ]
   },
   {
     "version": "v1.5.20",
     "commits": [
-      "re-initiation"
+      "Update: Re-initiation"
     ]
   }
 ]

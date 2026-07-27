@@ -40,7 +40,7 @@ function generateChangelog() {
       }
       
       // Filter out chore commits, version bumps, and merges
-      const isPureBump = subject.match(/^(?:chore:\s*)?bump(?:ed)?\s+version(?:\s+to\s+[0-9\.]+)?$/i);
+      const isPureBump = subject.match(/^(?:chore:\s*)?bump(?:ed)?\s+version/i);
       if (!subject || subject.match(/^[0-9\.]+$/) || subject.match(/^v[0-9\.]+$/) || subject.startsWith('Squash merge') || subject.startsWith('docs: update changelog') || subject.startsWith('docs: changelog') || subject.includes('update version number') || isPureBump) {
         continue;
       }
@@ -49,9 +49,47 @@ function generateChangelog() {
       if (body) {
         const bullets = body.split('\n').filter(l => l.trim().startsWith('-'));
         if (bullets.length > 0) {
-          notes = bullets.map(b => b.replace(/^- /, '').trim());
+          notes.push(...bullets.map(b => b.trim()));
         }
       }
+      
+      notes = notes.map(note => {
+        const isSubItem = note.startsWith('- ');
+        let content = isSubItem ? note.slice(2).trim() : note;
+        
+        // Match conventional commit format
+        const match = content.match(/^(feat|fix|perf|refactor|docs|style|update|chore|test|ci|build)(\([^)]+\))?:\s*(.*)/i);
+        let prefix = isSubItem ? '' : 'Update: ';
+        
+        if (match) {
+          const type = match[1].toLowerCase();
+          
+          // Filter out purely internal chores, test, ci, build from the user-facing changelog
+          if (['chore', 'test', 'ci', 'build'].includes(type)) {
+            return null;
+          }
+          
+          const scopeMatch = match[2];
+          const scope = scopeMatch ? `[${scopeMatch.replace(/[()]/g, '')}] ` : '';
+          content = match[3].charAt(0).toUpperCase() + match[3].slice(1);
+          
+          if (type === 'feat') prefix = 'Feature: ';
+          else if (type === 'fix') prefix = 'Fix: ';
+          else if (type === 'perf') prefix = 'Performance: ';
+          else if (type === 'refactor') prefix = 'Refactor: ';
+          else if (type === 'docs') prefix = 'Documentation: ';
+          else if (type === 'style') prefix = 'Style: ';
+          else if (type === 'update') prefix = 'Update: ';
+          
+          content = `${prefix}${scope}${content}`;
+        } else {
+          // If it's a sub-item, we don't add "Update: " prefix
+          prefix = isSubItem ? '' : 'Update: ';
+          content = prefix + content.charAt(0).toUpperCase() + content.slice(1);
+        }
+        
+        return isSubItem ? `- ${content}` : content;
+      }).filter(Boolean);
       
       currentVersion.commits.push(...notes);
     }
