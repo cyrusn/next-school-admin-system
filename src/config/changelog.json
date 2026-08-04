@@ -1,5 +1,12 @@
 [
   {
+    "version": "v1.12.3",
+    "commits": [
+      "Update: Add schedules page, remove special timetable, and update constants",
+      "Update: Long format for school year"
+    ]
+  },
+  {
     "version": "v1.12.2",
     "commits": [
       "Feature: Enable maintenance mode, add elective reports, update homebases and teachers table"

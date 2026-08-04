@@ -23,8 +23,8 @@ export default async function handler(req, res) {
     const spreadsheetId = settings.TEACHER_GOOGLE_SHEET_ID
     const data = await getSheetData(
       spreadsheetId,
-      'A1:I',
-      (rowNo) => `A${rowNo}:I${rowNo}`
+      'A1:J',
+      (rowNo) => `A${rowNo}:J${rowNo}`
     )
 
     cachedTeachers = data

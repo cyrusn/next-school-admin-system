@@ -72,6 +72,7 @@ const Navigator = ({ user }) => {
           Regular Activity
         </Link>
         <PageLink title='Duty List' href='/duty' />
+        <PageLink title='Schedules' href='/schedules' />
       </NavbarDropdown>
 
       <NavbarDropdown title='Academic' includedPaths={['academic']}>
@@ -88,7 +89,7 @@ const Navigator = ({ user }) => {
           'resource',
           'profile',
           'photo',
-          'specialTimetable'
+          'schedules'
         ]}
       >
         <PageLink title='Namelist' href='/namelist' />
@@ -98,7 +99,6 @@ const Navigator = ({ user }) => {
         <PageLink title='Resource Booking' href='/resource' />
         <PageLink title='Student Profile' href='/profile' />
         <PageLink title='Student Photos' href='/photo' />
-        <PageLink title='Special Timetable' href='/specialTimetable' />
       </NavbarDropdown>
 
       <NavbarDropdown title='ITAV'>
