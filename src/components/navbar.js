@@ -18,10 +18,10 @@ const Navbar = () => {
   const schoolYearRaw = settings?.SCHOOL_YEAR
   let formattedSchoolYear = ''
   if (schoolYearRaw) {
-    const startYear = parseInt(schoolYearRaw, 10)
+    const startYear = parseInt(schoolYearRaw)
     if (!isNaN(startYear) && String(startYear).length === 4) {
       const endYear = (startYear + 1) % 100
-      formattedSchoolYear = `${String(startYear).slice(2)}${String(endYear).padStart(2, '0')}`
+      formattedSchoolYear = `${String(startYear)}-${String(endYear).padStart(2, '0')}`
     } else {
       formattedSchoolYear = schoolYearRaw
     }
