@@ -40,12 +40,13 @@ export default function Timetable() {
         const currentTerm = qTerm ? parseInt(qTerm) : term
         // Find the matching sheet name case-insensitively
         const targetType = type.toLowerCase()
-        const foundSheetName = Object.keys(timetables).find(key => {
+        const foundSheetName = Object.keys(timetables).find((key) => {
           const isTermMatch = key.startsWith(currentTerm === 1 ? '1st' : '2nd')
-          const isTypeMatch = key.split('_').slice(1).join('_').toLowerCase() === targetType
+          const isTypeMatch =
+            key.split('_').slice(1).join('_').toLowerCase() === targetType
           return isTermMatch && isTypeMatch
         })
-        
+
         if (foundSheetName) {
           setSheetName(foundSheetName)
           if (codes) {
@@ -133,7 +134,7 @@ export default function Timetable() {
     if (initialized.current) {
       const params = new URLSearchParams()
       params.set('term', term)
-      
+
       if (sheetName) {
         const type = sheetName.split('_').slice(1).join('_')
         params.set('type', type)
@@ -141,12 +142,19 @@ export default function Timetable() {
           params.set('codes', selectedTableNames.join(','))
         }
       }
-      
+
       const newQuery = params.toString()
       const newPath = `/timetable${newQuery ? `?${newQuery}` : ''}`
-      
-      if (window.location.search !== `?${newQuery}` && (window.location.search || newQuery)) {
-        window.history.replaceState({ ...window.history.state, as: newPath, url: newPath }, '', newPath)
+
+      if (
+        window.location.search !== `?${newQuery}` &&
+        (window.location.search || newQuery)
+      ) {
+        window.history.replaceState(
+          { ...window.history.state, as: newPath, url: newPath },
+          '',
+          newPath
+        )
       }
     }
   }, [term, sheetName, selectedTableNames])
@@ -154,7 +162,10 @@ export default function Timetable() {
   return (
     <>
       <div className='not-print'>
-        <div className='is-flex is-align-items-center mb-3' style={{ gap: '0.75rem' }}>
+        <div
+          className='is-flex is-align-items-center mb-3'
+          style={{ gap: '0.75rem' }}
+        >
           <div className='tabs is-toggle is-small mb-0'>
             <ul>
               <li className={term === 1 ? 'is-active' : ''}>
@@ -243,7 +254,7 @@ export default function Timetable() {
           .map((timetable, key, array) => {
             return (
               <TimetableElement
-                key={key}
+                key={`${key}-timetable`}
                 timetable={timetable}
                 isLast={array.length == key + 1}
               />

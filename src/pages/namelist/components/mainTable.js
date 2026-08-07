@@ -35,6 +35,30 @@ export default function MainTable({ report, classlevels }) {
               </tr>
 
               <tr>
+                <th className='has-text-centered'>Total</th>
+                {classlevels.map((cl) => {
+                  return (
+                    <td key={cl.title}>
+                      {Object.keys(report.classcodes).reduce((prev, key) => {
+                        if (key[0] == cl.title[1]) {
+                          prev += report.classcodes[key].total || 0
+                        }
+                        return prev
+                      }, 0)}
+                    </td>
+                  )
+                })}
+
+                <td>
+                  {Object.keys(report.classcodes).reduce((prev, key) => {
+                    prev += report.classcodes[key].total || 0
+                    return prev
+                  }, 0)}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
                 <th className='has-text-centered'>Vacancy</th>
                 {classlevels.map((cl) => {
                   return (
@@ -58,31 +82,6 @@ export default function MainTable({ report, classlevels }) {
                       prev += report.classcodes[key].total || 0
                       return prev
                     }, 0)}
-                </td>
-              </tr>
-              <tr></tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <th className='has-text-centered'>Summary</th>
-                {classlevels.map((cl) => {
-                  return (
-                    <td key={cl.title}>
-                      {Object.keys(report.classcodes).reduce((prev, key) => {
-                        if (key[0] == cl.title[1]) {
-                          prev += report.classcodes[key].total || 0
-                        }
-                        return prev
-                      }, 0)}
-                    </td>
-                  )
-                })}
-
-                <td>
-                  {Object.keys(report.classcodes).reduce((prev, key) => {
-                    prev += report.classcodes[key].total || 0
-                    return prev
-                  }, 0)}
                 </td>
               </tr>
             </tfoot>

@@ -44,33 +44,33 @@ const Navigator = ({ user }) => {
   return (
     <>
       <NavbarDropdown title='General' includedPaths={['duty']}>
-        <Link
+        <a
           href='https://liping.edu.hk/'
           target='_blank'
           className='navbar-item'
         >
           School Page
-        </Link>
-        <Link
+        </a>
+        <a
           href='https://eclass.liping.edu.hk/'
           target='_blank'
           className='navbar-item'
         >
           eClass
-        </Link>
-        <Link
+        </a>
+        <a
           href='http://clog.liping.edu.hk:3000/'
           target='_blank'
           className='navbar-item'
         >
           School Journal
-        </Link>
-        <Link href={calenderEventUrl} target='_blank' className='navbar-item'>
+        </a>
+        <a href={calenderEventUrl} target='_blank' className='navbar-item'>
           Calender Event
-        </Link>
-        <Link href={regularActivity} target='_blank' className='navbar-item'>
+        </a>
+        <a href={regularActivity} target='_blank' className='navbar-item'>
           Regular Activity
-        </Link>
+        </a>
         <PageLink title='Duty List' href='/duty' />
         <PageLink title='Schedules' href='/schedules' />
       </NavbarDropdown>
@@ -102,12 +102,12 @@ const Navigator = ({ user }) => {
       </NavbarDropdown>
 
       <NavbarDropdown title='ITAV'>
-        <Link href={itavBooking} target='_blank' className='navbar-item'>
+        <a href={itavBooking} target='_blank' className='navbar-item'>
           ITAV Booking (Green Form)
-        </Link>
-        <Link href={itavRepair} target='_blank' className='navbar-item'>
+        </a>
+        <a href={itavRepair} target='_blank' className='navbar-item'>
           ITAV Repair Service
-        </Link>
+        </a>
       </NavbarDropdown>
       <NavbarDropdown
         title='Discipline'
@@ -124,16 +124,16 @@ const Navigator = ({ user }) => {
 
       <NavbarDropdown title='Careers' includedPaths={['ole']}>
         <PageLink title='OLE Record' href='/ole' />
-        <Link
+        <a
           href='https://careers.liping.edu.hk/ss'
           target='_blank'
           className='navbar-item'
         >
           Subject Selection System
-        </Link>
-        <Link href={gotYourBackUrl} target='_blank' className='navbar-item'>
+        </a>
+        <a href={gotYourBackUrl} target='_blank' className='navbar-item'>
           Got Your Back Record
-        </Link>
+        </a>
       </NavbarDropdown>
       {
         //<p className='menu-label'>Staff Development</p>

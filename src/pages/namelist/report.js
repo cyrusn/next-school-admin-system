@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react'
 import Nav from './components/nav'
 import MainTable from './components/mainTable'
 import ClasslevelTables from './components/classlevelTables.js'
+import ElectiveTables from './components/electiveTables'
 import Loading from '@/components/loading'
 
 export default function NamelistReport() {
@@ -56,7 +57,7 @@ export default function NamelistReport() {
   }, {})
 
   const classlevels = [
-    { title: 'S1', vacancy: 99 },
+    { title: 'S1', vacancy: 102 },
     { title: 'S2', vacancy: 132 },
     { title: 'S3', vacancy: 132 },
     { title: 'S4', vacancy: 132 },
@@ -71,6 +72,7 @@ export default function NamelistReport() {
         <div className='has-text-centered'>
           <MainTable report={report} classlevels={classlevels} />
           <ClasslevelTables report={report} classlevels={classlevels} />
+          <ElectiveTables report={report} />
         </div>
       ) : (
         <Loading />

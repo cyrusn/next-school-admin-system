@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import _ from 'lodash'
 
 export default function TimetableElement({ timetable, isLast }) {
@@ -69,10 +70,10 @@ export default function TimetableElement({ timetable, isLast }) {
         <tbody>
           {periodKeyNames.map((periodKey, idx) => {
             return (
-              <>
+              <Fragment key={`periodGroup-${idx}`}>
                 {breakSessions[idx] &&
                   breakSessions[idx].map(({ title, time }, index) => (
-                    <tr key={index}>
+                    <tr key={`${idx}-${index}`}>
                       <td className='has-text-centered'>{time}</td>
                       <td colSpan='5' className='has-text-centered'>
                         <h1>{title}</h1>
@@ -86,7 +87,7 @@ export default function TimetableElement({ timetable, isLast }) {
                   >
                     {periodMappers[periodKey]}
                   </td>
-                  {dayKeyNames.map((dayKey, idx) => {
+                  {dayKeyNames.map((dayKey, index) => {
                     const cl = String(
                       timetable[`${dayKey}${periodKey}Cl`] || ''
                     )
@@ -119,10 +120,10 @@ export default function TimetableElement({ timetable, isLast }) {
                     }
 
                     return (
-                      <td key={idx} className='px-0'>
+                      <td key={`${idx}-${index}`} className='px-0'>
                         {zipContents.map((value, key) => {
                           return (
-                            <div key={key} className='has-text-centered'>
+                            <div key={`${idx}-${index}-${key}`} className='has-text-centered'>
                               {value.map((c, key) => {
                                 if (!c) return null
 
@@ -147,12 +148,12 @@ export default function TimetableElement({ timetable, isLast }) {
 
                                   return splited.map((t, k) => {
                                     return (
-                                      <>
+                                      <Fragment key={`split-${k}`}>
                                         {splited.length > 1 && k == 0 && <br />}
                                         <span key={k} className='is-italic'>
                                           #{t}{' '}
                                         </span>
-                                      </>
+                                      </Fragment>
                                     )
                                   })
                                 }
@@ -169,7 +170,7 @@ export default function TimetableElement({ timetable, isLast }) {
                     )
                   })}
                 </tr>
-              </>
+              </Fragment>
             )
           })}
         </tbody>
