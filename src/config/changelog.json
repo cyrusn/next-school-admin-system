@@ -1,5 +1,11 @@
 [
   {
+    "version": "v1.12.4",
+    "commits": [
+      "Fix: Correct vacancy calculations, fix timetable React key warnings, and support elective tables in namelist report"
+    ]
+  },
+  {
     "version": "v1.12.3",
     "commits": [
       "Update: Add schedules page, remove special timetable, and update constants",
