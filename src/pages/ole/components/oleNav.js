@@ -7,6 +7,7 @@ export default function OleNav() {
   const { settings } = useSettings()
 
   const OLE_SPREADSHEET_URL = settings?.OLE_SPREADSHEET_URL || '#'
+  const OLE_PHOTO_URL = settings?.OLE_PHOTO_URL || '#'
 
   const paths = [
     { href: '/ole/create', label: 'Create' },
@@ -16,7 +17,7 @@ export default function OleNav() {
       label: 'Spreadsheet',
       isExternalLink: true
     },
-    { href: '#', label: 'Photos', isExternalLink: true }
+    { href: OLE_PHOTO_URL, label: 'Photos', isExternalLink: true }
   ]
 
   return <Nav paths={paths} title='OLE Record' />
