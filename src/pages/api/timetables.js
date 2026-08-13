@@ -7,8 +7,8 @@ import { getAuth } from '@/utils/googleApiAuth'
 import { getSettings } from '@/utils/settings'
 const sheets = google.sheets('v4')
 
-let cachedTimetables = null
-let lastFetch = 0
+let cachedTimetablesMap = {}
+let lastFetchMap = {}
 const CACHE_DURATION = 1000 * 60 * 10 // 10 minutes
 
 export default async function handler(req, res) {
@@ -17,13 +17,16 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
+  const { sid } = req.query
+  const cacheKey = sid || 'default'
+
   const now = Date.now()
-  if (cachedTimetables && now - lastFetch < CACHE_DURATION) {
-    return res.status(200).json(cachedTimetables)
+  if (cachedTimetablesMap[cacheKey] && now - (lastFetchMap[cacheKey] || 0) < CACHE_DURATION) {
+    return res.status(200).json(cachedTimetablesMap[cacheKey])
   }
 
   try {
-    const settings = await getSettings()
+    const settings = await getSettings(req)
     const spreadsheetId = settings.TIMETABLE_SSID
     const auth = await getAuth()
     const ranges = [
@@ -54,8 +57,8 @@ export default async function handler(req, res) {
       return prev
     }, {})
 
-    cachedTimetables = timetables
-    lastFetch = now
+    cachedTimetablesMap[cacheKey] = timetables
+    lastFetchMap[cacheKey] = now
 
     res.status(200).json(timetables)
   } catch (error) {

@@ -1,4 +1,4 @@
-import { TERM, HOMEBASES } from '@/config/constant/'
+import { TERM } from '@/config/constant/'
 
 export default function HouseReport({ report, classlevel }) {
   console.log(report)

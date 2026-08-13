@@ -1,5 +1,20 @@
 [
   {
+    "version": "v1.12.7",
+    "commits": [
+      "Feature: Fetch homebase configurations dynamically from settings Google Sheet",
+      "Refactor: Remove hardcoded HOMEBASES constant in favor of dynamic context settings"
+    ]
+  },
+  {
+    "version": "v1.12.6",
+    "commits": [
+      "Feature: Support dynamic settings spreadsheet override via sid URL parameter for superadmins",
+      "Fix: Preserve URL query parameters and history seamlessly across Next.js navigation",
+      "Fix: Enforce strict superadmin authorization check dynamically on custom sid settings"
+    ]
+  },
+  {
     "version": "v1.12.5",
     "commits": [
       "Feature: Add NCS, Newly-Arrived, and SEN statistics to namelist report",

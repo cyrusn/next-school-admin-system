@@ -114,21 +114,36 @@ async function fetchSettings() {
 
   try {
     console.log('Fetching settings from Google Sheets at startup...');
-    const settingData = await retry(() => sheets.spreadsheets.values.get({
+    const response = await retry(() => sheets.spreadsheets.values.batchGet({
       spreadsheetId,
-      range: 'setting!A:B',
+      ranges: ['settings!A:B', 'homebase!A:C'],
       valueRenderOption: 'UNFORMATTED_VALUE',
       dateTimeRenderOption: 'FORMATTED_STRING'
     }), 3, 1000);
 
-    const rows = settingData.data.values || [];
+    const valueRanges = response.data.valueRanges || [];
+    
+    // Parse settings
+    const settingsData = valueRanges[0]?.values || [];
     const settings = {};
-
-    rows.forEach(row => {
+    settingsData.forEach(row => {
       if (row[0]) {
         settings[row[0]] = row[1];
       }
     });
+
+    // Parse homebases
+    const homebaseData = valueRanges[1]?.values || [];
+    const homebases = { 1: {}, 2: {} };
+    homebaseData.forEach((row, index) => {
+      if (index === 0) return; // skip header row
+      const [classcode, term1, term2] = row;
+      if (classcode) {
+        homebases[1][classcode] = String(term1 || '');
+        homebases[2][classcode] = String(term2 || '');
+      }
+    });
+    settings.HOMEBASES = homebases;
 
     const outputPath = path.join(process.cwd(), 'src', 'config', 'settings.json');
     fs.writeFileSync(outputPath, JSON.stringify(settings, null, 2), 'utf8');

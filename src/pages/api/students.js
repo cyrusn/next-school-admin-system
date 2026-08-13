@@ -7,8 +7,8 @@ import { getAuth } from '@/utils/googleApiAuth'
 import { getSettings } from '@/utils/settings'
 const sheets = google.sheets('v4')
 
-let cachedStudents = null
-let lastFetch = 0
+let cachedStudentsMap = {}
+let lastFetchMap = {}
 const CACHE_DURATION = 1000 * 60 * 10 // 10 minutes
 
 export default async function handler(req, res) {
@@ -17,13 +17,16 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
+  const { sid } = req.query
+  const cacheKey = sid || 'default'
+
   const now = Date.now()
-  if (cachedStudents && now - lastFetch < CACHE_DURATION) {
-    return res.status(200).json(cachedStudents)
+  if (cachedStudentsMap[cacheKey] && now - (lastFetchMap[cacheKey] || 0) < CACHE_DURATION) {
+    return res.status(200).json(cachedStudentsMap[cacheKey])
   }
 
   try {
-    const settings = await getSettings()
+    const settings = await getSettings(req)
     const spreadsheetId = settings.STUDENT_GOOGLE_SHEET_ID
     const auth = await getAuth()
     const ranges = ['students!A1:V', 'groups!A1:G']
@@ -90,8 +93,8 @@ export default async function handler(req, res) {
     // )
 
     const filteredStudentData = studentData.filter(({ isSkip }) => !isSkip)
-    cachedStudents = filteredStudentData
-    lastFetch = now
+    cachedStudentsMap[cacheKey] = filteredStudentData
+    lastFetchMap[cacheKey] = now
 
     res.status(200).json(filteredStudentData)
   } catch (error) {

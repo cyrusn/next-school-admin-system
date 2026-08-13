@@ -1,4 +1,4 @@
-import { TERM, HOMEBASES } from '@/config/constant/'
+import { TERM } from '@/config/constant/'
 import ClassReport from './classTable'
 import HouseReport from './houseTable'
 import ElectiveTable from './electiveTables'

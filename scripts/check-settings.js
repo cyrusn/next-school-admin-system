@@ -52,7 +52,7 @@ async function checkSettings() {
     
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'setting!A:B',
+      range: 'settings!A:B',
     });
 
     console.log('Values in Google Sheet:');

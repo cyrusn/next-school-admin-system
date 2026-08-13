@@ -10,10 +10,10 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const data = await getSettings()
+      const data = await getSettings(req)
       res.status(200).json(data)
     } catch (error) {
-      console.error('Error fetching settings from Google Sheets:', error)
+      console.error('Error fetching settings:', error)
       res.status(500).json({ error: 'Failed to fetch settings' })
     }
   } else {

@@ -9,7 +9,15 @@ export const SettingsContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch('/api/settings')
+        let url = '/api/settings'
+        if (typeof window !== 'undefined') {
+          const params = new URLSearchParams(window.location.search)
+          const sid = params.get('sid')
+          if (sid) {
+            url += `?sid=${sid}`
+          }
+        }
+        const response = await fetch(url)
         if (response.ok) {
           const data = await response.json()
           setSettings(data)

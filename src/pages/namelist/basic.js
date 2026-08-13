@@ -7,7 +7,7 @@ import CheckboxInput from '@/components/form/checkboxInput'
 import RadioInput from '@/components/form/radioInput'
 import Nav from './components/nav'
 import NamelistTable from './components/namelistTable.js'
-import { HOMEBASES, TERM } from '@/config/constant'
+import { TERM } from '@/config/constant'
 import { useSettings } from '@/context/settingsContext'
 
 export default function Namelist() {
@@ -16,7 +16,8 @@ export default function Namelist() {
 
   const { settings } = useSettings()
   const term = settings.TERM || TERM
-  const CLASSCODES = Object.keys(HOMEBASES[term] || HOMEBASES[1])
+  const HOMEBASES = settings.HOMEBASES || { 1: {}, 2: {} }
+  const CLASSCODES = Object.keys(HOMEBASES[term] || HOMEBASES[1] || {})
 
   const defaultFilters = {
     classlevels: [],

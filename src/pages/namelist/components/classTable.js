@@ -1,9 +1,10 @@
-import { TERM, HOMEBASES } from '@/config/constant/'
+import { TERM } from '@/config/constant/'
 import { useSettings } from '@/context/settingsContext'
 
 export default function ClassReport({ report, classlevel, classMasters }) {
   const { settings } = useSettings()
   const term = settings.TERM || TERM
+  const HOMEBASES = settings.HOMEBASES || { 1: {}, 2: {} }
   const sexes = ['F', 'M']
   return (
     <table
