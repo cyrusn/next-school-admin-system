@@ -10,7 +10,7 @@ export default function NamelistReport() {
   const { students } = useStudentsContext()
 
   const report = students.reduce((prev, student) => {
-    const { regno, classcode, sex, house, x1, x2, x3 } = student
+    const { regno, classcode, sex, house, x1, x2, x3, isNcs, isNewlyArrived, isSen } = student
     const classlevel = `S${classcode[0]}`
     prev.classcodes ??= {}
     prev.classcodes[classcode] ??= {}
@@ -19,9 +19,15 @@ export default function NamelistReport() {
     prev.classcodes[classcode].total ??= 0
     prev.classcodes[classcode].sexes[sex] ??= 0
     prev.classcodes[classcode].houses[house] ??= 0
+    prev.classcodes[classcode].ncs ??= 0
+    prev.classcodes[classcode].newlyArrived ??= 0
+    prev.classcodes[classcode].sen ??= 0
     prev.classcodes[classcode].total += 1
     prev.classcodes[classcode].sexes[sex] += 1
     prev.classcodes[classcode].houses[house] += 1
+    if (isNcs) prev.classcodes[classcode].ncs += 1
+    if (isNewlyArrived) prev.classcodes[classcode].newlyArrived += 1
+    if (isSen) prev.classcodes[classcode].sen += 1
 
     prev.houses ??= {}
     prev.houses[house] ??= {}

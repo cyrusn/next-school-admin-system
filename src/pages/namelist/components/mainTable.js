@@ -56,9 +56,8 @@ export default function MainTable({ report, classlevels }) {
                   }, 0)}
                 </td>
               </tr>
-            </tbody>
-            <tfoot>
-              <tr>
+
+              <tr className='is-italic has-text-weight-extrabold'>
                 <th className='has-text-centered'>Vacancy</th>
                 {classlevels.map((cl) => {
                   return (
@@ -84,7 +83,76 @@ export default function MainTable({ report, classlevels }) {
                     }, 0)}
                 </td>
               </tr>
-            </tfoot>
+
+              <tr>
+                <th className='has-text-centered'>NCS</th>
+                {classlevels.map((cl) => {
+                  return (
+                    <td key={cl.title}>
+                      {Object.keys(report.classcodes).reduce((prev, key) => {
+                        if (key[0] == cl.title[1]) {
+                          prev += report.classcodes[key].ncs || 0
+                        }
+                        return prev
+                      }, 0)}
+                    </td>
+                  )
+                })}
+
+                <td>
+                  {Object.keys(report.classcodes).reduce((prev, key) => {
+                    prev += report.classcodes[key].ncs || 0
+                    return prev
+                  }, 0)}
+                </td>
+              </tr>
+
+              <tr>
+                <th className='has-text-centered'>Newly-Arrived</th>
+                {classlevels.map((cl) => {
+                  return (
+                    <td key={cl.title}>
+                      {Object.keys(report.classcodes).reduce((prev, key) => {
+                        if (key[0] == cl.title[1]) {
+                          prev += report.classcodes[key].newlyArrived || 0
+                        }
+                        return prev
+                      }, 0)}
+                    </td>
+                  )
+                })}
+
+                <td>
+                  {Object.keys(report.classcodes).reduce((prev, key) => {
+                    prev += report.classcodes[key].newlyArrived || 0
+                    return prev
+                  }, 0)}
+                </td>
+              </tr>
+
+              <tr>
+                <th className='has-text-centered'>SEN</th>
+                {classlevels.map((cl) => {
+                  return (
+                    <td key={cl.title}>
+                      {Object.keys(report.classcodes).reduce((prev, key) => {
+                        if (key[0] == cl.title[1]) {
+                          prev += report.classcodes[key].sen || 0
+                        }
+                        return prev
+                      }, 0)}
+                    </td>
+                  )
+                })}
+
+                <td>
+                  {Object.keys(report.classcodes).reduce((prev, key) => {
+                    prev += report.classcodes[key].sen || 0
+                    return prev
+                  }, 0)}
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
         <div className='column auto'>

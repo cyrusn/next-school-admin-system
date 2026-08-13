@@ -1,5 +1,12 @@
 [
   {
+    "version": "v1.12.5",
+    "commits": [
+      "Feature: Add NCS, Newly-Arrived, and SEN statistics to namelist report",
+      "Fix: fixing ole photo url"
+    ]
+  },
+  {
     "version": "v1.12.4",
     "commits": [
       "Fix: Correct vacancy calculations, fix timetable React key warnings, and support elective tables in namelist report"
