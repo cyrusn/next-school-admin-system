@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import Head from 'next/head'
 import { SessionProvider } from 'next-auth/react'
 import '@/styles/globals.css' // Import your global styles
 import '@/styles/print.css' // Import your global styles
@@ -12,8 +12,6 @@ import { UsersContextProvider } from '@/context/usersContext'
 import Navbar from '../components/navbar'
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
-  const router = useRouter()
-
   useEffect(() => {
     if (typeof window === 'undefined') return
 
@@ -65,7 +63,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       const currentParams = new URLSearchParams(window.location.search)
       if (!currentParams.has('sid')) {
         currentParams.set('sid', storedSid)
-        const newUrl = window.location.pathname + '?' + currentParams.toString() + (window.location.hash || '')
+        const newUrl =
+          window.location.pathname +
+          '?' +
+          currentParams.toString() +
+          (window.location.hash || '')
         originalReplaceState.call(window.history, null, '', newUrl)
       }
     }
@@ -105,22 +107,27 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   }, [])
 
   return (
-    <SessionProvider session={session}>
-      <SettingsContextProvider>
-        <Navbar />
-        <div className='container'>
-          <div className='section'>
-            <ProtectedRoute>
-              <UsersContextProvider>
-                <StudentsContextProvider>
-                  <Component {...pageProps} />
-                </StudentsContextProvider>
-              </UsersContextProvider>
-            </ProtectedRoute>
+    <>
+      <Head>
+        <title>LPSS SAS</title>
+      </Head>
+      <SessionProvider session={session}>
+        <SettingsContextProvider>
+          <Navbar />
+          <div className='container'>
+            <div className='section'>
+              <ProtectedRoute>
+                <UsersContextProvider>
+                  <StudentsContextProvider>
+                    <Component {...pageProps} />
+                  </StudentsContextProvider>
+                </UsersContextProvider>
+              </ProtectedRoute>
+            </div>
           </div>
-        </div>
-      </SettingsContextProvider>
-    </SessionProvider>
+        </SettingsContextProvider>
+      </SessionProvider>
+    </>
   )
 }
 
