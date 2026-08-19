@@ -2,6 +2,7 @@
   {
     "version": "v1.12.8",
     "commits": [
+      "Update: Feature: update namelist advance page columns",
       "Update: Feature: adding exam arrangement on photo and profile",
       "Fix: Fix warning for autoprefixer",
       "Fix: Move <title> tag to _app.js from _document.js"
