@@ -141,58 +141,48 @@ const columnDefs = [
     target: 12
   },
   {
-    title: 'Info',
+    title: 'NCS',
     data(row) {
-      const result = []
-      if (row.isNcs) result.push('NCS')
-      if (row.isNewlyArrived) result.push('Newly-Arrived')
-      if (row.isSen) result.push('SEN')
-      return result
+      const { isNcs } = row
+      return `${isNcs ? 'Y' : ''}`
     },
     visible: false,
-    width: '8%',
-    render: {
-      sb: '[]',
-      _: function (data, type, row) {
-        return data
-          .map((item) => {
-            if (item == 'NCS') return '🌎'
-            if (item == 'Newly-Arrived') return '🇨🇳'
-            if (item == 'SEN') return `<span class="tag is-warning">❤️ ${row.senType || 'SEN'}</span>`
-          })
-          .join(' ')
-      },
-      export: '[]'
-    },
+    width: '5%',
     searchBuilder: {
-      orthogonal: 'sb',
-      defaultCondition: 'contains'
-    },
-    searchBuilderType: 'array',
-    searchPanes: {
-      options: [
-        {
-          label: 'NCS',
-          value: function (rowData) {
-            return rowData.isNcs == true
-          }
-        },
-        {
-          label: 'Newly-Arrived',
-          value: function (rowData) {
-            return rowData.isNewlyArrived == true
-          }
-        },
-
-        {
-          label: 'SEN',
-          value: function (rowData) {
-            return rowData.isSen == true
-          }
-        }
-      ]
+      defaultCondition: '='
     },
     target: 13
+  },
+  {
+    title: 'SEN Type',
+    data: 'senType',
+    width: '5%',
+    visible: false,
+    searchBuilder: {
+      defaultCondition: 'contains'
+    },
+    target: 14
+  },
+  {
+    title: 'Exam Arrangement',
+    data: 'examArrangement',
+    width: '5%',
+    visible: false,
+    searchBuilder: {
+      defaultCondition: 'contains'
+    },
+    target: 15
+  },
+
+  {
+    title: 'First Arrival Date',
+    data: 'firstArrivedDate',
+    width: '10%',
+    visible: false,
+    searchBuilder: {
+      defaultCondition: '>'
+    },
+    target: 16
   }
 ]
 
@@ -209,7 +199,7 @@ const options = {
   layout: {
     top3: {
       searchPanes: {
-        columns: [1, 2, 6, 7, 9, 10, 11, 12, 13],
+        columns: [1, 2, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16],
         viewTotal: true,
         initCollapsed: true,
         cascadePanes: true,
@@ -218,7 +208,7 @@ const options = {
     },
     top2: {
       searchBuilder: {
-        columns: [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+        columns: [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
         cascadePanes: true,
         viewTotal: true
       }
@@ -265,7 +255,6 @@ const AdvanceList = () => {
   const { students } = useStudentsContext()
   const ref = useRef(null)
   const id = 'namelistTable'
-
 
   return (
     <>
