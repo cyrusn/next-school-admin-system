@@ -623,6 +623,7 @@ export default function StudentProfile() {
               classno,
               isSen,
               senType,
+              examArrangement,
               isNcs,
               isNewlyArrived,
               x1,
@@ -655,10 +656,19 @@ export default function StudentProfile() {
                     </div>
                     <p>
                       {cname || ename}
-                      {isSen && <span className='tag is-warning ml-1'>❤️ {senType}</span>}
                       {isNcs && <span> 🌎</span>}
                       {isNewlyArrived && <span> 🇨🇳</span>}
                     </p>
+                    {(isSen || examArrangement) && (
+                      <div className='tags is-justify-content-center mb-1'>
+                        {isSen && <span className='tag is-warning'>❤️ {senType}</span>}
+                        {examArrangement && (
+                          <span className='tag is-info'>
+                            ✏️ {String(examArrangement || '').split(',').map((s) => s.trim()).join(' ')}
+                          </span>
+                        )}
+                      </div>
+                    )}
                     <div className='tags is-justify-content-center'>
                       <span className='tag is-dark'>{classcodeAndNo}</span>
                       <span className='tag is-success'>{regno}</span>

@@ -1,6 +1,6 @@
 {
   "name": "next-school-admin-system",
-  "version": "1.12.7",
+  "version": "1.12.8",
   "private": true,
   "scripts": {
     "dev": "node scripts/fetch-settings.js && next dev",
@@ -25,7 +25,7 @@
     "datatables.net-plugins": "^2.2.2",
     "datatables.net-react": "^1.0.0",
     "datatables.net-responsive-bm": "^3.0.4",
-    "datatables.net-searchbuilder-bm": "^2.0.0",
+    "datatables.net-searchbuilder-bm": "^1.8.3",
     "datatables.net-searchpanes-bm": "^2.3.4",
     "datatables.net-select-bm": "^3.0.0",
     "formidable": "^3.5.4",

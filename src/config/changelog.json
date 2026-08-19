@@ -1,24 +1,23 @@
 [
   {
-    "version": "v1.12.7",
+    "version": "v1.12.8",
     "commits": [
-      "Feature: Fetch homebase configurations dynamically from settings Google Sheet",
-      "Refactor: Remove hardcoded HOMEBASES constant in favor of dynamic context settings"
+      "Update: Feature: adding exam arrangement on photo and profile",
+      "Fix: Fix warning for autoprefixer",
+      "Fix: Move <title> tag to _app.js from _document.js"
     ]
   },
   {
-    "version": "v1.12.6",
+    "version": "v1.12.7",
     "commits": [
-      "Feature: Support dynamic settings spreadsheet override via sid URL parameter for superadmins",
-      "Fix: Preserve URL query parameters and history seamlessly across Next.js navigation",
-      "Fix: Enforce strict superadmin authorization check dynamically on custom sid settings"
+      "Update: Release v1.12.7: Support dynamic Google Sheet settings override and dynamic homebases"
     ]
   },
   {
     "version": "v1.12.5",
     "commits": [
-      "Feature: Add NCS, Newly-Arrived, and SEN statistics to namelist report",
-      "Fix: fixing ole photo url"
+      "Update: Release v1.12.5: Add NCS, Newly-Arrived, and SEN statistics to namelist report",
+      "Fix: Fetch Photo Url in settings"
     ]
   },
   {
