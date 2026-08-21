@@ -257,6 +257,7 @@ export default function Timetable() {
                 key={`${key}-timetable`}
                 timetable={timetable}
                 isLast={array.length == key + 1}
+                sheetName={sheetName}
               />
             )
           })}
