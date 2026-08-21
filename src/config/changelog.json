@@ -1,11 +1,8 @@
 [
   {
-    "version": "v1.12.9",
+    "version": "v1.12.10",
     "commits": [
-      "Feature: Show dropout students and their statistics for Superadmin",
-      "Feature: Add dropout visibility toggle into cohort dropdown for Superadmin",
-      "Style: Update navbar status borders, tags, and apply line-through styling for dropout students",
-      "Fix: Resolve cohort dropdown label dynamically preserving current and historical default school years"
+      "Feature: Support schFromType for newly arrived logic and namelist advance"
     ]
   },
   {
