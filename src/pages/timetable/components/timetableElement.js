@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import _ from 'lodash'
 
-export default function TimetableElement({ timetable, isLast }) {
+export default function TimetableElement({ timetable, isLast, sheetName }) {
   const {
     ShortName,
     EngName,
@@ -24,11 +24,13 @@ export default function TimetableElement({ timetable, isLast }) {
     P6: '13:55 -14:50',
     P7: '14:50 -15:45',
     P8: '15:45 -16:10',
-    AF: 'After School'
+    // AF: 'After School'
   }
 
   const dayKeyNames = ['D1', 'D2', 'D3', 'D4', 'D5']
-  const periodKeyNames = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'AF']
+  const periodKeyNames = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 
+    // 'AF'
+  ]
 
   const breakSessions = {
     0: [{ title: 'Assembly', time: '08:00 - 08:20' }],
@@ -69,6 +71,12 @@ export default function TimetableElement({ timetable, isLast }) {
         </thead>
         <tbody>
           {periodKeyNames.map((periodKey, idx) => {
+            const isClassTimetable = sheetName?.toLowerCase().includes('class')
+            const isSeniorForm = /^[4-6]/.test(ShortName)
+            if (isClassTimetable && isSeniorForm && periodKey === 'P8') {
+              return null
+            }
+
             return (
               <Fragment key={`periodGroup-${idx}`}>
                 {breakSessions[idx] &&
@@ -80,6 +88,7 @@ export default function TimetableElement({ timetable, isLast }) {
                       </td>
                     </tr>
                   ))}
+
                 <tr key={idx}>
                   <td
                     className='has-text-centered is-dark-border'
