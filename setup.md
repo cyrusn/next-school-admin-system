@@ -84,9 +84,9 @@ The system reads the **first row (Row 1)** of each Google Sheet as property name
 
 #### Sheet: `students`
 Contains basic student information.
-- **Headers**: `regno`, `classcode`, `classno`, `ename`, `cname`, `sex`, `house`, `dob`, `schoolYear`, `x1`, `x2`, `x3`, `senType`, `homeLanguage`, `firstArrivedDate`, `regDate`, `isHidden`, `isSkip`, `isAllowAccessories`, `remark`, `isImport`
+- **Headers**: `regno`, `classcode`, `classno`, `ename`, `cname`, `sex`, `house`, `dob`, `schoolYear`, `x1`, `x2`, `x3`, `senType`, `homeLanguage`, `firstArrivedDate`, `regDate`, `isHidden`, `isSkip`, `isAllowAccessories`, `remark`, `isImport`, `schFromType`, `schFrom`
 - **Note**: 
-  - `isNewlyArrived` is calculated dynamically on the backend based on whether `firstArrivedDate` is after September 1st of the previous school year (`{SCHOOL_YEAR - 1}-09-01`).
+  - `isNewlyArrived` is calculated dynamically on the backend based on whether `firstArrivedDate` is after September 1st of the previous school year (`{SCHOOL_YEAR - 1}-09-01`). However, if `schFromType` is `'中學'` or `'小學'`, the student is not considered newly arrived (`isNewlyArrived` defaults to `false`).
   - `isNcs` is calculated dynamically on the backend based on whether `homeLanguage` is not `'CHI'` (e.g., `'ENG'`, `'URDU'`). If `homeLanguage` is empty or missing, `isNcs` defaults to `false`.
   - `isSen` is calculated dynamically on the backend based on whether `senType` has a value (non-empty). If `senType` is empty or missing, `isSen` defaults to `false`.
 - **Example**:

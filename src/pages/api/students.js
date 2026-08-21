@@ -29,7 +29,7 @@ export default async function handler(req, res) {
     const settings = await getSettings(req)
     const spreadsheetId = settings.STUDENT_GOOGLE_SHEET_ID
     const auth = await getAuth()
-    const ranges = ['students!A1:V', 'groups!A1:G']
+    const ranges = ['students!A1:X', 'groups!A1:G']
     const response = await sheets.spreadsheets.values.batchGet({
       auth,
       spreadsheetId,
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
     const studentData = students.map((s, index) => {
       const groups_ = groupsbyRegno[s.regno] || []
       const rowNo = index + 2
-      s.range = `students!A${rowNo}:T${rowNo}`
+      s.range = `students!A${rowNo}:X${rowNo}`
       s.groups = groups_.map(({ groupName }) => groupName)
 
       // Calculate isNewlyArrived dynamically from firstArrivedDate and thresholdDate
@@ -74,6 +74,9 @@ export default async function handler(req, res) {
             isNewlyArrived = arrivedDate > thresholdDate
           }
         }
+      }
+      if (s.schFromType === '中學' || s.schFromType === '小學') {
+        isNewlyArrived = false
       }
       s.isNewlyArrived = isNewlyArrived
 
