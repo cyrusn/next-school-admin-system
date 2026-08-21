@@ -1,9 +1,6 @@
-import { getSheetData } from './googleSheet'
-import { getSettings } from '@/utils/settings'
+import { getTeachersData } from '@/pages/api/teachers'
 
 export async function getUserInfos() {
-  const settings = await getSettings()
-  const spreadsheetId = settings.TEACHER_GOOGLE_SHEET_ID
-  const userInfos = await getSheetData(spreadsheetId, 'A1:H')
+  const userInfos = await getTeachersData()
   return userInfos
 }

@@ -16,6 +16,7 @@ import { useStudentsContext } from '@/context/studentContext'
 import Loading from '@/components/loading'
 
 const TYPE_MAPPER = {
+  GENERAL: '一般',
   LEARNING_TRAIT: '學習',
   FAMILY_BACKGROUND: '家庭',
   CLASSROOM_BEHAVIOUR: '課堂表現',
@@ -132,11 +133,11 @@ function CreateComment({
   const handleSubmit = async () => {
     setLoadingMessage()
     const { type, content } = comment
-    const schoolYear = settings.SCHOOL_YEAR;
+    const schoolYear = settings.SCHOOL_YEAR
     if (!schoolYear) {
       throw new Error(
-        "School Year is missing in settings. Please check the spreadsheet."
-      );
+        'School Year is missing in settings. Please check the spreadsheet.'
+      )
     }
     const row = [regno, type, content, initial, schoolYear]
 
@@ -250,6 +251,8 @@ export default function StudentProfile() {
   const { data: session } = useSession()
   const { settings } = useSettings()
   const initial = session?.user?.info?.initial
+  const classMaster = session?.user?.info?.classMaster
+  const readingTeacher = session?.user?.info?.readingTeacher
 
   const [photos, setPhotos] = useState([])
   const [comments, setComments] = useState([])
@@ -269,35 +272,7 @@ export default function StudentProfile() {
 
   const groupedComments = _.groupBy(comments, 'regno')
 
-  const classcodes = [
-    '1A',
-    '1B',
-    '1C',
-    '1D',
-    '2A',
-    '2B',
-    '2C',
-    '2D',
-    '3A',
-    '3B',
-    '3C',
-    '3D',
-    '4A',
-    '4B',
-    '4C',
-    '4D',
-    '4E',
-    '5A',
-    '5B',
-    '5C',
-    '5D',
-    '5E',
-    '6A',
-    '6B',
-    '6C',
-    '6D',
-    '6E'
-  ]
+  const classcodes = Object.keys(settings?.HOMEBASES?.[1] || {}).sort()
 
   const fetchData = async (targetStudents, signal) => {
     if (!targetStudents || targetStudents.length === 0) {
@@ -392,8 +367,15 @@ export default function StudentProfile() {
       const newQuery = params.toString()
       const newPath = `/profile${newQuery ? `?${newQuery}` : ''}`
 
-      if (window.location.search !== `?${newQuery}` && (window.location.search || newQuery)) {
-        window.history.replaceState({ ...window.history.state, as: newPath, url: newPath }, '', newPath)
+      if (
+        window.location.search !== `?${newQuery}` &&
+        (window.location.search || newQuery)
+      ) {
+        window.history.replaceState(
+          { ...window.history.state, as: newPath, url: newPath },
+          '',
+          newPath
+        )
       }
     }
   }, [filter, searchFilter])
@@ -561,6 +543,13 @@ export default function StudentProfile() {
                   <option value=''>Select class</option>
                   {classcodes
                     .filter((classcode) => {
+                      if (
+                        classcode === classMaster ||
+                        classcode === readingTeacher
+                      ) {
+                        return true
+                      }
+
                       const found = privileges.find((p) => p.initial == initial)
                       if (!found) return false
 
@@ -636,7 +625,10 @@ export default function StudentProfile() {
               (file) => file.name.split('.')[0] == `lp${regno}`
             )
             return (
-              <div className={`box ${isDropout ? 'is-dropout' : ''}`} key={regno}>
+              <div
+                className={`box ${isDropout ? 'is-dropout' : ''}`}
+                key={regno}
+              >
                 <div className='columns'>
                   <div className='column is-one-quarter-desktop has-text-centered'>
                     <div className='is-flex is-justify-content-center'>
@@ -662,10 +654,16 @@ export default function StudentProfile() {
                     </p>
                     {(isSen || examArrangement) && (
                       <div className='tags is-justify-content-center mb-1'>
-                        {isSen && <span className='tag is-warning'>❤️ {senType}</span>}
+                        {isSen && (
+                          <span className='tag is-warning'>❤️ {senType}</span>
+                        )}
                         {examArrangement && (
                           <span className='tag is-info'>
-                            ✏️ {String(examArrangement || '').split(',').map((s) => s.trim()).join(' ')}
+                            ✏️{' '}
+                            {String(examArrangement || '')
+                              .split(',')
+                              .map((s) => s.trim())
+                              .join(' ')}
                           </span>
                         )}
                       </div>

@@ -113,18 +113,18 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       </Head>
       <SessionProvider session={session}>
         <SettingsContextProvider>
-          <Navbar />
-          <div className='container'>
-            <div className='section'>
-              <ProtectedRoute>
-                <UsersContextProvider>
-                  <StudentsContextProvider>
+          <StudentsContextProvider>
+            <Navbar />
+            <div className='container'>
+              <div className='section'>
+                <ProtectedRoute>
+                  <UsersContextProvider>
                     <Component {...pageProps} />
-                  </StudentsContextProvider>
-                </UsersContextProvider>
-              </ProtectedRoute>
+                  </UsersContextProvider>
+                </ProtectedRoute>
+              </div>
             </div>
-          </div>
+          </StudentsContextProvider>
         </SettingsContextProvider>
       </SessionProvider>
     </>

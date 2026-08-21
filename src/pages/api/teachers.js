@@ -6,33 +6,37 @@ let cachedTeachersMap = {}
 let lastFetchMap = {}
 const CACHE_DURATION = 1000 * 60 * 10 // 10 minutes
 
-export default async function handler(req, res) {
-  const session = await getSession({ req })
-  if (!session) {
-    new Error('Unauthorized')
-    return res.status(401).json({ error: 'Unauthorized' })
-  }
-
-  const { sid } = req.query
+export async function getTeachersData(req = null) {
+  const { sid } = req?.query || {}
   const cacheKey = sid || 'default'
 
   const now = Date.now()
   if (cachedTeachersMap[cacheKey] && now - (lastFetchMap[cacheKey] || 0) < CACHE_DURATION) {
-    return res.status(200).json(cachedTeachersMap[cacheKey])
+    return cachedTeachersMap[cacheKey]
+  }
+
+  const settings = await getSettings(req)
+  const spreadsheetId = settings.TEACHER_GOOGLE_SHEET_ID
+  const data = await getSheetData(
+    spreadsheetId,
+    'A1:K',
+    (rowNo) => `A${rowNo}:K${rowNo}`
+  )
+
+  cachedTeachersMap[cacheKey] = data
+  lastFetchMap[cacheKey] = now
+
+  return data
+}
+
+export default async function handler(req, res) {
+  const session = await getSession({ req })
+  if (!session) {
+    return res.status(401).json({ error: 'Unauthorized' })
   }
 
   try {
-    const settings = await getSettings(req)
-    const spreadsheetId = settings.TEACHER_GOOGLE_SHEET_ID
-    const data = await getSheetData(
-      spreadsheetId,
-      'A1:J',
-      (rowNo) => `A${rowNo}:J${rowNo}`
-    )
-
-    cachedTeachersMap[cacheKey] = data
-    lastFetchMap[cacheKey] = now
-
+    const data = await getTeachersData(req)
     res.status(200).json(data)
   } catch (error) {
     console.error('Error accessing Google Sheets:', error)
