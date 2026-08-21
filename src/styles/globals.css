@@ -79,3 +79,9 @@ table.dataTable tfoot td {
   background-position: center;
   background-repeat: no-repeat;
 }
+
+.is-dropout,
+.is-dropout * {
+  text-decoration: line-through !important;
+  color: var(--bulma-danger, #f14668) !important;
+}

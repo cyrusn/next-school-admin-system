@@ -8,28 +8,40 @@ import {
 export const StudentsContext = createContext()
 
 export const StudentsContextProvider = ({ children }) => {
-  const [students, setStudents] = useState(() => {
+  const [showDropout, setShowDropout] = useState(false)
+  const [allStudents, setAllStudents] = useState(() => {
     return []
   })
 
   useEffect(() => {
     const fetchData = async () => {
-      const studentsResponse = await fetch('/api/students')
-      const studentsData = await studentsResponse.json()
-
-      localStorage.setItem('students', JSON.stringify(studentsData))
-
-      setStudents(studentsData)
+      try {
+        const studentsResponse = await fetch('/api/students')
+        if (studentsResponse.ok) {
+          const studentsData = await studentsResponse.json()
+          if (Array.isArray(studentsData)) {
+            localStorage.setItem('students', JSON.stringify(studentsData))
+            setAllStudents(studentsData)
+          }
+        }
+      } catch (e) {
+        console.error(e)
+      }
     }
-    if (students.length == 0) {
+    if (allStudents.length == 0) {
       fetchData()
     }
-  }, [students])
+  }, [allStudents])
+
+  const students = showDropout ? allStudents : allStudents.filter(s => !s.isDropout)
 
   return (
     <StudentsContext.Provider
       value={{
-        students
+        students,
+        allStudents,
+        showDropout,
+        setShowDropout
       }}
     >
       {children}

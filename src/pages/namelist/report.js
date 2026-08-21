@@ -7,10 +7,21 @@ import ElectiveTables from './components/electiveTables'
 import Loading from '@/components/loading'
 
 export default function NamelistReport() {
-  const { students } = useStudentsContext()
+  const { allStudents } = useStudentsContext()
 
-  const report = students.reduce((prev, student) => {
-    const { regno, classcode, sex, house, x1, x2, x3, isNcs, isNewlyArrived, isSen } = student
+  const report = (allStudents || []).reduce((prev, student) => {
+    const { regno, classcode, sex, house, x1, x2, x3, isNcs, isNewlyArrived, isSen, isDropout } = student
+
+    if (isDropout) {
+      if (classcode && /^[1-6]/.test(classcode)) {
+        prev.dropouts ??= {}
+        prev.dropouts[classcode] ??= { total: 0 }
+        prev.dropouts[classcode].total += 1
+      }
+      return prev
+    }
+
+    if (!classcode || !/^[1-6]/.test(classcode)) return prev
     const classlevel = `S${classcode[0]}`
     prev.classcodes ??= {}
     prev.classcodes[classcode] ??= {}
@@ -74,7 +85,7 @@ export default function NamelistReport() {
   return (
     <h1>
       <Nav />
-      {students.length ? (
+      {allStudents?.length ? (
         <div className='has-text-centered'>
           <MainTable report={report} classlevels={classlevels} />
           <ClasslevelTables report={report} classlevels={classlevels} />

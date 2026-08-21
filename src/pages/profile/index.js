@@ -628,14 +628,15 @@ export default function StudentProfile() {
               isNewlyArrived,
               x1,
               x2,
-              x3
+              x3,
+              isDropout
             } = student
             const classcodeAndNo = `${classcode}${String(classno).padStart(2, '0')}`
             const found = photos?.find(
               (file) => file.name.split('.')[0] == `lp${regno}`
             )
             return (
-              <div className='box' key={regno}>
+              <div className={`box ${isDropout ? 'is-dropout' : ''}`} key={regno}>
                 <div className='columns'>
                   <div className='column is-one-quarter-desktop has-text-centered'>
                     <div className='is-flex is-justify-content-center'>

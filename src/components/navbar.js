@@ -7,15 +7,17 @@ import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import ThemeSelector from '@/components/themeSelector'
 import { useSettings } from '@/context/settingsContext'
+import { useStudentsContext } from '@/context/studentContext'
 
 const Navbar = () => {
   const { data: session, status } = useSession()
   const [isActive, setIsActive] = useState(false)
   const pathname = usePathname()
   const { settings } = useSettings()
+  const { showDropout, setShowDropout } = useStudentsContext()
 
   const SCHOOL_NAME = settings?.SCHOOL_NAME
-  const schoolYearRaw = settings?.SCHOOL_YEAR
+  const schoolYearRaw = settings?.DEFAULT_SCHOOL_YEAR || settings?.SCHOOL_YEAR
   let formattedSchoolYear = ''
   if (schoolYearRaw) {
     const startYear = parseInt(schoolYearRaw)
@@ -49,25 +51,88 @@ const Navbar = () => {
 
   const isNavbarDanger = isSystemDown && isSuperAdmin
 
-  const navbarClass = `navbar has-shadow not-print ${
-    isNavbarDanger ? 'is-danger' : 'is-transparent'
-  }`
+  const [currentSid, setCurrentSid] = useState('default')
+
+  useEffect(() => {
+    const sid = sessionStorage.getItem('sid')
+    if (sid) setCurrentSid(sid)
+  }, [])
+
+  const cohortOptions = []
+  if (isSuperAdmin && settings) {
+    Object.keys(settings).forEach((key) => {
+      let year = null
+      if (key.startsWith('COHORT_SETTINGS_GOOGLE_SHEET_ID_')) {
+        year = key.replace('COHORT_SETTINGS_GOOGLE_SHEET_ID_', '')
+      } else if (key.startsWith('PREVIOUS_COHORT_SETTINGS_GOOGLE_SHEET_ID_')) {
+        year = key.replace('PREVIOUS_COHORT_SETTINGS_GOOGLE_SHEET_ID_', '')
+      }
+      if (year && !isNaN(parseInt(year))) {
+        cohortOptions.push({
+          year: parseInt(year),
+          sheetId: settings[key],
+          label: `${year}-${String((parseInt(year) + 1) % 100).padStart(2, '0')}`
+        })
+      }
+    })
+    cohortOptions.sort((a, b) => b.year - a.year)
+  }
+
+  const handleCohortChange = (sheetId) => {
+    if (sheetId === 'default') {
+      sessionStorage.removeItem('sid')
+      const urlObj = new URL(window.location.href)
+      urlObj.searchParams.delete('sid')
+      window.location.href = urlObj.toString()
+    } else {
+      sessionStorage.setItem('sid', sheetId)
+      const urlObj = new URL(window.location.href)
+      urlObj.searchParams.set('sid', sheetId)
+      window.location.href = urlObj.toString()
+    }
+  }
+
+  const isNavbarWarning = currentSid !== 'default'
+  const activeCohortLabel = cohortOptions.find(opt => opt.sheetId === currentSid)?.label || 'Previous Cohort'
+
+  let topBorderColor = 'none'
+  if (isNavbarDanger) {
+    topBorderColor = '4px solid var(--bulma-danger, #f14668)'
+  }
+
+  let bottomBorderColor = 'none'
+  if (showDropout) {
+    bottomBorderColor = '4px solid var(--bulma-success, #48c774)'
+  } else if (isNavbarWarning) {
+    bottomBorderColor = '4px solid var(--bulma-warning, #ffe08a)'
+  }
+
+  const navbarClass = 'navbar has-shadow not-print is-transparent'
 
   return (
-    <nav className={navbarClass}>
+    <nav
+      className={navbarClass}
+      style={{ borderBottom: bottomBorderColor, borderTop: topBorderColor }}
+    >
       <div className='navbar-brand'>
-        <Link href='/' className={`navbar-item has-text-weight-bold ${isNavbarDanger ? 'has-text-white' : ''}`}>
+        <Link href='/' className='navbar-item has-text-weight-bold'>
           <span className='is-hidden-touch icon-text'>
             <span className='icon'>
               <FontAwesomeIcon icon={faHome} />
             </span>
 
             {SCHOOL_NAME}
-            {isSystemDown && (
-              <span className={`tag ml-2 ${isNavbarDanger ? 'is-warning' : 'is-danger'}`}>
-                Maintenance Mode
-              </span>
-            )}
+            <span className='tags has-addons ml-2'>
+              {isSystemDown && (
+                <span className='tag is-danger'>Maintenance Mode</span>
+              )}
+              {currentSid !== 'default' && (
+                <span className='tag is-warning'>{activeCohortLabel}</span>
+              )}
+              {showDropout && (
+                <span className='tag is-success'>Dropouts</span>
+              )}
+            </span>
           </span>
           <span id='user' className='is-hidden-desktop icon-text'>
             <span className='icon'>
@@ -79,17 +144,23 @@ const Navbar = () => {
                 <small>{session?.user?.info?.initial}</small>
               </span>
             )}
-            {isSystemDown && (
-              <span className={`tag ml-2 ${isNavbarDanger ? 'is-warning' : 'is-danger'}`}>
-                Maint.
-              </span>
-            )}
+            <span className='tags has-addons ml-2'>
+              {isSystemDown && (
+                <span className='tag is-danger'>Maint.</span>
+              )}
+              {currentSid !== 'default' && (
+                <span className='tag is-warning'>Prev.</span>
+              )}
+              {showDropout && (
+                <span className='tag is-success'>Dropouts</span>
+              )}
+            </span>
           </span>
         </Link>
 
         <a
           role='button'
-          className={`navbar-burger ${isNavbarDanger ? 'has-text-white' : ''}`}
+          className='navbar-burger'
           onClick={() => setIsActive(!isActive)}
         >
           <span aria-hidden='true'></span>
@@ -99,7 +170,7 @@ const Navbar = () => {
         </a>
       </div>
 
-      <div className={`navbar-menu ${isActive ? 'is-active' : ''} ${isNavbarDanger ? 'has-background-danger' : ''}`}>
+      <div className={`navbar-menu ${isActive ? 'is-active' : ''}`}>
         <div className='navbar-start'>
           <Navigator user={session?.user?.info} />
         </div>
@@ -108,9 +179,7 @@ const Navbar = () => {
           <ThemeSelector />
           {session ? (
             <div className='navbar-item'>
-              <h2 className={isNavbarDanger ? 'has-text-white' : ''}>
-                Welcome back, {session.user?.info?.initial}!
-              </h2>
+              <h2>Welcome back, {session.user?.info?.initial}!</h2>
             </div>
           ) : (
             <div className='navbar-item'>
@@ -124,11 +193,66 @@ const Navbar = () => {
               <a className='button is-danger' onClick={() => signOut()}>
                 Sign Out
               </a>
-              {formattedSchoolYear && (
+              {isSuperAdmin ? (
+                <div className='dropdown is-hoverable is-right'>
+                  <div className='dropdown-trigger'>
+                    <button
+                      className={
+                        'button ' +
+                        (currentSid !== 'default' ? 'is-warning' : 'is-info')
+                      }
+                      aria-haspopup='true'
+                      aria-controls='dropdown-menu'
+                    >
+                      <span>
+                        {currentSid === 'default'
+                          ? formattedSchoolYear
+                          : `‼️${formattedSchoolYear}`}
+                      </span>
+                    </button>
+                  </div>
+                  <div className='dropdown-menu' id='dropdown-menu' role='menu'>
+                    <div className='dropdown-content'>
+                      <a
+                        className={`dropdown-item ${currentSid === 'default' ? 'is-active' : ''}`}
+                        onClick={() => handleCohortChange('default')}
+                      >
+                        {formattedSchoolYear
+                          ? `Current (${formattedSchoolYear})`
+                          : 'Current Cohort'}
+                      </a>
+                      {cohortOptions.length > 0 && (
+                        <>
+                          {cohortOptions.map((opt) => (
+                            <a
+                              key={opt.year}
+                              className={`dropdown-item ${currentSid === opt.sheetId ? 'is-active' : ''}`}
+                              onClick={() => handleCohortChange(opt.sheetId)}
+                            >
+                              {opt.label}
+                            </a>
+                          ))}
+                        </>
+                      )}
+                      <hr className='dropdown-divider' />
+                      <a
+                        className='dropdown-item'
+                        onClick={() => setShowDropout(!showDropout)}
+                      >
+                        <span
+                          className={`has-text-weight-bold ${showDropout ? 'has-text-danger' : 'has-text-success'}`}
+                        >
+                          {showDropout ? 'Hide Dropouts' : 'Show Dropouts'}
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ) : formattedSchoolYear ? (
                 <span>
                   <span className='button is-info'>{formattedSchoolYear}</span>
                 </span>
-              )}
+              ) : null}
             </div>
           </div>
         </div>

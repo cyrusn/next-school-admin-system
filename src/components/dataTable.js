@@ -24,6 +24,18 @@ const DataTableInstance = ({
 }) => {
   DataTable.use(DT)
 
+  const enhancedOptions = {
+    ...options,
+    createdRow: (row, data, dataIndex) => {
+      if (data && data.isDropout) {
+        row.classList.add('is-dropout')
+      }
+      if (options && options.createdRow) {
+        options.createdRow(row, data, dataIndex)
+      }
+    }
+  }
+
   return (
     <div className='table-container'>
       <DataTable
@@ -32,7 +44,7 @@ const DataTableInstance = ({
         className={`table is-bordered striped is-narrow is-hoverable is-fullwidth ${className ? className : ''}`}
         columns={columns}
         ajax={url}
-        options={options}
+        options={enhancedOptions}
         data={data}
       >
         <thead></thead>

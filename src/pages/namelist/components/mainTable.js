@@ -152,6 +152,29 @@ export default function MainTable({ report, classlevels }) {
                   }, 0)}
                 </td>
               </tr>
+
+              <tr>
+                <th className='has-text-centered'>Dropout</th>
+                {classlevels.map((cl) => {
+                  return (
+                    <td key={cl.title}>
+                      {Object.keys(report.dropouts || {}).reduce((prev, key) => {
+                        if (key[0] == cl.title[1]) {
+                          prev += report.dropouts[key].total || 0
+                        }
+                        return prev
+                      }, 0)}
+                    </td>
+                  )
+                })}
+
+                <td>
+                  {Object.keys(report.dropouts || {}).reduce((prev, key) => {
+                    prev += report.dropouts[key].total || 0
+                    return prev
+                  }, 0)}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

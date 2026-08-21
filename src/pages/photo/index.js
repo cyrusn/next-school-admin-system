@@ -295,7 +295,8 @@ export default function StudentPhoto() {
                 isAllowAccessories,
                 x1,
                 x2,
-                x3
+                x3,
+                isDropout
               } = student
               const classcodeAndNo = `${classcode}${String(classno).padStart(2, '0')}`
               const found = files?.find(
@@ -303,7 +304,7 @@ export default function StudentPhoto() {
               )
               return (
                 <div className='cell has-text-centered' key={regno}>
-                  <div className='box'>
+                  <div className={`box ${isDropout ? 'is-dropout' : ''}`}>
                     <div className='is-flex is-justify-content-center'>
                       {found && (
                         <figure>
@@ -318,7 +319,7 @@ export default function StudentPhoto() {
                         </figure>
                       )}
                     </div>
-                    <p class='my-1'>
+                    <p className='my-1'>
                       {cname || ename}
                       {isShowDetails && (
                         <span>

@@ -77,7 +77,7 @@ export default function NamelistTable({
           </tr>
           {_.sortBy(students, ['classcode', 'classno']).map((s) => {
             return (
-              <tr key={s.regno}>
+              <tr key={s.regno} className={s.isDropout ? 'is-dropout' : ''}>
                 <td>{`${s.classcode}${String(s.classno).padStart(2, 0)}`}</td>
                 <td
                   className={

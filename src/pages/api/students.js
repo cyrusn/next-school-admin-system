@@ -92,7 +92,7 @@ export default async function handler(req, res) {
     //   (rowNo) => `A${rowNo}:R${rowNo}`
     // )
 
-    const filteredStudentData = studentData.filter(({ isSkip }) => !isSkip)
+    const filteredStudentData = studentData
     cachedStudentsMap[cacheKey] = filteredStudentData
     lastFetchMap[cacheKey] = now
 

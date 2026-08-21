@@ -53,24 +53,30 @@ export async function getSettings(req) {
             })
 
             if (dynamicSettings && Object.keys(dynamicSettings).length > 0) {
-              const dynamicSuperAdmins = (dynamicSettings.SUPERADMIN || '')
-                .split(',')
-                .map((s) => s.trim().toLowerCase())
+              // Inject SUPERADMIN and cohort keys from defaultSettings so frontend logic persists
+              dynamicSettings.SUPERADMIN = defaultSettings.SUPERADMIN || ''
+              dynamicSettings.DEFAULT_SCHOOL_YEAR = defaultSettings.SCHOOL_YEAR || ''
+              Object.keys(defaultSettings).forEach((key) => {
+                if (
+                  key.startsWith('COHORT_SETTINGS_GOOGLE_SHEET_ID_') ||
+                  key.startsWith('PREVIOUS_COHORT_SETTINGS_GOOGLE_SHEET_ID_')
+                ) {
+                  dynamicSettings[key] = defaultSettings[key]
+                }
+              })
 
-              if (dynamicSuperAdmins.includes(username)) {
-                const homebaseData = valueRanges[1]?.values || []
-                const homebases = { 1: {}, 2: {} }
-                homebaseData.forEach((row, index) => {
-                  if (index === 0) return // skip header row
-                  const [classcode, term1, term2] = row
-                  if (classcode) {
-                    homebases[1][classcode] = String(term1 || '')
-                    homebases[2][classcode] = String(term2 || '')
-                  }
-                })
-                dynamicSettings.HOMEBASES = homebases
-                return dynamicSettings
-              }
+              const homebaseData = valueRanges[1]?.values || []
+              const homebases = { 1: {}, 2: {} }
+              homebaseData.forEach((row, index) => {
+                if (index === 0) return // skip header row
+                const [classcode, term1, term2] = row
+                if (classcode) {
+                  homebases[1][classcode] = String(term1 || '')
+                  homebases[2][classcode] = String(term2 || '')
+                }
+              })
+              dynamicSettings.HOMEBASES = homebases
+              return dynamicSettings
             }
           } catch (err) {
             console.error('Error fetching dynamic settings from sid:', sid, err)
