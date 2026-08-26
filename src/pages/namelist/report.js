@@ -10,7 +10,19 @@ export default function NamelistReport() {
   const { allStudents } = useStudentsContext()
 
   const report = (allStudents || []).reduce((prev, student) => {
-    const { regno, classcode, sex, house, x1, x2, x3, isNcs, isNewlyArrived, isSen, isDropout } = student
+    const {
+      regno,
+      classcode,
+      sex,
+      house,
+      x1,
+      x2,
+      x3,
+      isNcs,
+      isNewlyArrived,
+      isSen,
+      isDropout
+    } = student
 
     if (isDropout) {
       if (classcode && /^[1-6]/.test(classcode)) {
@@ -60,13 +72,16 @@ export default function NamelistReport() {
       prev.electives ??= {}
       prev.electives[classlevel] ??= { x1: {}, x2: {}, x3: {} }
       if (x1) {
-        prev.electives[classlevel].x1[x1] = (prev.electives[classlevel].x1[x1] || 0) + 1
+        prev.electives[classlevel].x1[x1] =
+          (prev.electives[classlevel].x1[x1] || 0) + 1
       }
       if (x2) {
-        prev.electives[classlevel].x2[x2] = (prev.electives[classlevel].x2[x2] || 0) + 1
+        prev.electives[classlevel].x2[x2] =
+          (prev.electives[classlevel].x2[x2] || 0) + 1
       }
       if (x3) {
-        prev.electives[classlevel].x3[x3] = (prev.electives[classlevel].x3[x3] || 0) + 1
+        prev.electives[classlevel].x3[x3] =
+          (prev.electives[classlevel].x3[x3] || 0) + 1
       }
     }
 
@@ -74,7 +89,7 @@ export default function NamelistReport() {
   }, {})
 
   const classlevels = [
-    { title: 'S1', vacancy: 102 },
+    { title: 'S1', vacancy: 99 },
     { title: 'S2', vacancy: 132 },
     { title: 'S3', vacancy: 132 },
     { title: 'S4', vacancy: 132 },
