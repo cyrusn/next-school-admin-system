@@ -89,7 +89,8 @@ const Navigator = ({ user }) => {
           'resource',
           'profile',
           'photo',
-          'schedules'
+          'schedules',
+          'substitutionRecord'
         ]}
       >
         <PageLink title='Namelist' href='/namelist' />
@@ -99,6 +100,7 @@ const Navigator = ({ user }) => {
         <PageLink title='Resource Booking' href='/resource' />
         <PageLink title='Student Profile' href='/profile' />
         <PageLink title='Student Photos' href='/photo' />
+        <PageLink title='Substitution Records' href='/substitutionRecord' />
       </NavbarDropdown>
 
       <NavbarDropdown title='ITAV'>

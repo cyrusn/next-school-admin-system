@@ -23,10 +23,37 @@ export async function getTeachersData(req = null) {
     (rowNo) => `A${rowNo}:K${rowNo}`
   )
 
-  cachedTeachersMap[cacheKey] = data
+  let substitutionData = []
+  try {
+    substitutionData = await getSheetData(
+      spreadsheetId,
+      'substitutionRecord!A:F',
+      (rowNo) => `substitutionRecord!A${rowNo}:F${rowNo}`
+    )
+  } catch (err) {
+    console.error('Error fetching substitutionRecord sheet:', err)
+  }
+
+  const mergedData = data.map((teacher) => {
+    const subRecord = substitutionData.find(
+      (sub) => sub.teacher === teacher.initial || sub.teacher === teacher.name
+    )
+    if (subRecord) {
+      return {
+        ...teacher,
+        base: subRecord.base,
+        substitutionNumber: subRecord.substitutionNumber,
+        pureSubNumber: subRecord.pureSubNumber,
+        pureNegative: subRecord.pureNegative
+      }
+    }
+    return teacher
+  })
+
+  cachedTeachersMap[cacheKey] = mergedData
   lastFetchMap[cacheKey] = now
 
-  return data
+  return mergedData
 }
 
 export default async function handler(req, res) {
