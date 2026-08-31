@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.13.0",
+    "commits": [
+      "Update: Feature: Add Substitution Records for teachers",
+      "Update: Set max to 99",
+      "Update: Better deployment tools",
+      "Update: Hide sstu lesson for senior form",
+      "Update: Hide sstu lesson for senior form",
+      "Update: Use teachers sheet for the data of classmaster and readingTeacher"
+    ]
+  },
+  {
     "version": "v1.12.10",
     "commits": [
       "Feature: Support schFromType for newly arrived logic and namelist advance"
