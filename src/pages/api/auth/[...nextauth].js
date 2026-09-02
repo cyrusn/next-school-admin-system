@@ -3,7 +3,14 @@ import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import { getUserInfos } from '@/utils/userInfos'
 
-export default NextAuth({
+export default async function auth(req, res) {
+  const host = req.headers['x-forwarded-host'] || req.headers.host
+  const protocol = req.headers['x-forwarded-proto'] || (process.env.NODE_ENV === 'production' ? 'https' : 'http')
+  if (host) {
+    process.env.NEXTAUTH_URL = `${protocol}://${host}`
+  }
+
+  return await NextAuth(req, res, {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -43,3 +50,4 @@ export default NextAuth({
     signIn: '/auth/signin' // Custom sign-in page
   }
 })
+}

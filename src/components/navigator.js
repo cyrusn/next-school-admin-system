@@ -100,7 +100,7 @@ const Navigator = ({ user }) => {
         <PageLink title='Resource Booking' href='/resource' />
         <PageLink title='Student Profile' href='/profile' />
         <PageLink title='Student Photos' href='/photo' />
-        <PageLink title='Substitution Records' href='/substitutionRecord' />
+        <PageLink title='Substitution Records' href='/substitution_record' />
       </NavbarDropdown>
 
       <NavbarDropdown title='ITAV'>
@@ -127,7 +127,7 @@ const Navigator = ({ user }) => {
       <NavbarDropdown title='Careers' includedPaths={['ole']}>
         <PageLink title='OLE Record' href='/ole' />
         <a
-          href='https://careers.liping.edu.hk/ss'
+          href={process.env.NEXT_PUBLIC_SUBJECT_SELECTION_URL || 'https://careers.liping.edu.hk/ss'}
           target='_blank'
           className='navbar-item'
         >
@@ -145,11 +145,11 @@ const Navigator = ({ user }) => {
       }
       <NavbarDropdown
         title='ECA'
-        includedPaths={['registration', 'membership', 'postExam', 'eca']}
+        includedPaths={['registration', 'membership', 'post_exam', 'eca']}
       >
         <PageLink title='Club registration' href='/eca/registration' />
         <PageLink title='Membership Record' href='/eca/membership' />
-        <PageLink title='Post Exam Activity' href='/postExam' />
+        <PageLink title='Post Exam Activity' href='/post_exam' />
       </NavbarDropdown>
     </>
   )

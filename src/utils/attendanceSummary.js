@@ -4,7 +4,7 @@ import { getSettings } from '@/utils/settings'
 
 const TOKEN = process.env.STRAPI_API_KEY
 const Authorization = `Bearer ${TOKEN}`
-const BASE_URL = 'https://careers.liping.edu.hk/strapi/api'
+const BASE_URL = process.env.STRAPI_BASE_URL || 'https://careers.liping.edu.hk/strapi/api'
 
 export async function getAttendanceSummary() {
   const settings = await getSettings()
@@ -16,8 +16,7 @@ export async function getAttendanceSummary() {
   }
 
   const qs = `filters[schoolYear]=${schoolYear}&filters[term]=${term}&pagination[pageSize]=800`
-  const url =
-    'https://careers.liping.edu.hk/strapi/api/attendances/summary?' + qs
+  const url = `${BASE_URL}/attendances/summary?${qs}`
 
   const response = await fetch(url, {
     headers: {

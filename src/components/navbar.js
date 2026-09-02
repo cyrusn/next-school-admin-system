@@ -15,6 +15,26 @@ const Navbar = () => {
   const pathname = usePathname()
   const { settings } = useSettings()
   const { showDropout, setShowDropout } = useStudentsContext()
+  const [isFetching, setIsFetching] = useState(false)
+
+  const handleFetchAll = async () => {
+    if (isFetching) return
+    setIsFetching(true)
+    try {
+      const res = await fetch('/api/admin/fetch-all', { method: 'POST' })
+      if (res.ok) {
+        alert('Settings refetched successfully!')
+        window.location.reload()
+      } else {
+        const err = await res.json()
+        alert('Failed to refetch settings: ' + (err.error || 'Unknown error'))
+      }
+    } catch (e) {
+      alert('Error: ' + e.message)
+    } finally {
+      setIsFetching(false)
+    }
+  }
 
   const SCHOOL_NAME = settings?.SCHOOL_NAME
   const schoolYearRaw = settings?.DEFAULT_SCHOOL_YEAR || settings?.SCHOOL_YEAR
@@ -243,6 +263,16 @@ const Navbar = () => {
                           className={`has-text-weight-bold ${showDropout ? 'has-text-danger' : 'has-text-success'}`}
                         >
                           {showDropout ? 'Hide Dropouts' : 'Show Dropouts'}
+                        </span>
+                      </a>
+                      <hr className='dropdown-divider' />
+                      <a
+                        className={`dropdown-item ${isFetching ? 'is-loading' : ''}`}
+                        onClick={handleFetchAll}
+                        style={{ pointerEvents: isFetching ? 'none' : 'auto' }}
+                      >
+                        <span className='has-text-weight-bold has-text-link'>
+                          {isFetching ? 'Fetching...' : 'Fetch All Settings'}
                         </span>
                       </a>
                     </div>

@@ -6,6 +6,10 @@ import { getAuth } from '@/utils/googleApiAuth'
 
 let cachedSettings = null;
 
+export function clearSettingsCache() {
+  cachedSettings = null;
+}
+
 // Function to fetch settings from the local JSON file.
 // This file is generated at startup by scripts/fetch-settings.js
 export async function getSettings(req) {

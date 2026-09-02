@@ -1,5 +1,19 @@
 [
   {
+    "version": "v1.13.2",
+    "commits": [
+      "Feature: Add dynamic multi-domain DNS support for NextAuth and Strapi",
+      "Feature: Add manual 'Fetch All' settings button in navigation bar for Superadmins"
+    ]
+  },
+  {
+    "version": "v1.13.1",
+    "commits": [
+      "Feature: Add public janitor calendar API endpoints",
+      "Feature: Add dynamically generated Email column in Advanced Namelist"
+    ]
+  },
+  {
     "version": "v1.13.0",
     "commits": [
       "Update: Feature: Add Substitution Records for teachers",
