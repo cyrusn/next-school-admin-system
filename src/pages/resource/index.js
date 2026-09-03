@@ -57,7 +57,7 @@ const Resource = () => {
     resourceType: { required: true },
     resourceEmail: { required: true },
     title: { required: true },
-    description: { required: true },
+    description: { required: false },
     picEmail: { requird: true, email: true },
     rruleValue: {
       custom({ rruleType, rruleFreq, rruleValue }, field) {

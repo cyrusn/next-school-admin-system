@@ -15,19 +15,31 @@ const columnDefs = [
     }
   },
   {
+    title: 'Email',
+    data(row) {
+      return `lp${row.regno}@liping.edu.hk`
+    },
+    width: '15%',
+    visible: false,
+    searchBuilder: {
+      defaultCondition: 'contains'
+    },
+    target: 1
+  },
+  {
     title: 'Class',
     data(row) {
       const { classcode, classno } = row
       return `${classcode}${String(classno).padStart(2, 0)}`
     },
     width: '8%',
-    target: 1
+    target: 2
   },
   {
     title: 'Classcode',
     data: 'classcode',
     visible: false,
-    target: 2,
+    target: 3,
     width: '5%',
     searchBuilder: {
       defaultCondition: '='
@@ -38,12 +50,12 @@ const columnDefs = [
     data: 'classno',
     visible: false,
     width: '5%',
-    target: 3
+    target: 4
   },
   {
     title: 'Name',
     data: 'ename',
-    target: 4,
+    target: 5,
     width: '15%',
     searchBuilder: {
       defaultCondition: 'contains'
@@ -52,7 +64,7 @@ const columnDefs = [
   {
     title: '姓名',
     data: 'cname',
-    target: 5,
+    target: 6,
     width: '10%',
     searchBuilder: {
       defaultCondition: 'contains'
@@ -61,7 +73,7 @@ const columnDefs = [
   {
     title: 'Sex',
     data: 'sex',
-    target: 6,
+    target: 7,
     width: '5%',
     searchBuilder: {
       defaultCondition: '='
@@ -70,7 +82,7 @@ const columnDefs = [
   {
     title: 'House',
     data: 'house',
-    target: 7,
+    target: 8,
     width: '5%',
     searchBuilder: {
       defaultCondition: '='
@@ -79,7 +91,7 @@ const columnDefs = [
   {
     title: 'DOB',
     data: 'dob',
-    target: 8,
+    target: 9,
     width: '10%',
     visible: true,
     searchPanes: { show: false },
@@ -89,7 +101,7 @@ const columnDefs = [
   },
   {
     title: 'X1',
-    target: 9,
+    target: 10,
     data: 'x1',
     width: '5%',
     visible: false,
@@ -100,7 +112,7 @@ const columnDefs = [
   {
     title: 'X2',
     data: 'x2',
-    target: 10,
+    target: 11,
     width: '5%',
     visible: false,
     searchBuilder: {
@@ -110,7 +122,7 @@ const columnDefs = [
   {
     title: 'X3',
     data: 'x3',
-    target: 11,
+    target: 12,
     width: '5%',
     visible: false,
     searchBuilder: {
@@ -138,7 +150,7 @@ const columnDefs = [
       show: true,
       orthogonal: 'sp'
     },
-    target: 12
+    target: 13
   },
   {
     title: 'NCS',
@@ -151,7 +163,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: '='
     },
-    target: 13
+    target: 14
   },
   {
     title: 'SEN Type',
@@ -161,7 +173,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: 'contains'
     },
-    target: 14
+    target: 15
   },
   {
     title: 'Exam Arrangement',
@@ -171,9 +183,8 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: 'contains'
     },
-    target: 15
+    target: 16
   },
-
   {
     title: 'First Arrival Date',
     data: 'firstArrivedDate',
@@ -182,7 +193,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: '>'
     },
-    target: 16
+    target: 17
   },
   {
     title: 'School From Type',
@@ -192,7 +203,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: '='
     },
-    target: 17
+    target: 18
   },
   {
     title: 'School From',
@@ -202,7 +213,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: 'contains'
     },
-    target: 18
+    target: 19
   }
 ]
 
@@ -219,7 +230,7 @@ const options = {
   layout: {
     top3: {
       searchPanes: {
-        columns: [1, 2, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+        columns: [2, 3, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
         viewTotal: true,
         initCollapsed: true,
         cascadePanes: true,
@@ -228,7 +239,7 @@ const options = {
     },
     top2: {
       searchBuilder: {
-        columns: [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+        columns: [0, 1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
         cascadePanes: true,
         viewTotal: true
       }
@@ -268,7 +279,10 @@ const options = {
   },
   columnDefs,
   lengthMenu: [35, 60, -1],
-  order: [1]
+  order: [
+    [3, 'asc'],
+    [4, 'asc']
+  ]
 }
 
 const AdvanceList = () => {

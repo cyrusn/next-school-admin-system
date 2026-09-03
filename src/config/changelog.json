@@ -1,5 +1,9 @@
 [
   {
+    "version": "v1.13.3",
+    "commits": ["Feature: Add QR code generator in tools"]
+  },
+  {
     "version": "v1.13.2",
     "commits": [
       "Feature: Add dynamic multi-domain DNS support for NextAuth and Strapi",
@@ -105,9 +109,7 @@
   },
   {
     "version": "v1.10.8",
-    "commits": [
-      "Update: Typo"
-    ]
+    "commits": ["Update: Typo"]
   },
   {
     "version": "v1.10.7",
@@ -214,39 +216,27 @@
   },
   {
     "version": "v1.8.7",
-    "commits": [
-      "Update: Add submission time and refresh twice"
-    ]
+    "commits": ["Update: Add submission time and refresh twice"]
   },
   {
     "version": "v1.8.6",
-    "commits": [
-      "Update: Bug fix for grading in summary for F6"
-    ]
+    "commits": ["Update: Bug fix for grading in summary for F6"]
   },
   {
     "version": "v1.8.5",
-    "commits": [
-      "Update: Remove minDate for DC record and summary"
-    ]
+    "commits": ["Update: Remove minDate for DC record and summary"]
   },
   {
     "version": "v1.8.4",
-    "commits": [
-      "Update: Update postExam student list"
-    ]
+    "commits": ["Update: Update postExam student list"]
   },
   {
     "version": "v1.8.3",
-    "commits": [
-      "Update: Use useMemo"
-    ]
+    "commits": ["Update: Use useMemo"]
   },
   {
     "version": "v1.8.1",
-    "commits": [
-      "Update: Bug fix for getting initial in googleAuth"
-    ]
+    "commits": ["Update: Bug fix for getting initial in googleAuth"]
   },
   {
     "version": "v1.8.0",
@@ -266,9 +256,7 @@
   },
   {
     "version": "v1.6.3",
-    "commits": [
-      "Update: Improve print functionality for announcement box"
-    ]
+    "commits": ["Update: Improve print functionality for announcement box"]
   },
   {
     "version": "v1.6.2",
@@ -292,8 +280,6 @@
   },
   {
     "version": "v1.5.20",
-    "commits": [
-      "Update: Re-initiation"
-    ]
+    "commits": ["Update: Re-initiation"]
   }
 ]

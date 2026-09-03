@@ -6,17 +6,27 @@ const calendar = google.calendar('v3')
 export function formatGoogleDate(dateObj) {
   if (!dateObj) return null
   if (dateObj.date) {
-    return DateTime.fromISO(dateObj.date, { zone: 'Asia/Hong_Kong' }).toFormat("yyyy-MM-dd'T'HH:mm:ss")
+    return DateTime.fromISO(dateObj.date, { zone: 'Asia/Hong_Kong' }).toFormat(
+      "yyyy-MM-dd'T'HH:mm:ss"
+    )
   }
   if (dateObj.dateTime) {
-    return DateTime.fromISO(dateObj.dateTime).setZone('Asia/Hong_Kong').toFormat("yyyy-MM-dd'T'HH:mm:ss")
+    return DateTime.fromISO(dateObj.dateTime)
+      .setZone('Asia/Hong_Kong')
+      .toFormat("yyyy-MM-dd'T'HH:mm:ss")
   }
   return null
 }
 
-export async function deleteRemovedEventAndCheckIsRequireJanitor(auth, calendarId, event) {
+export async function deleteRemovedEventAndCheckIsRequireJanitor(
+  auth,
+  calendarId,
+  event
+) {
   const attendees = event.attendees || []
   const title = event.summary || ''
+  const description = event.description || ''
+  const location = event.location || ''
   let isDeleted = false
 
   for (const g of attendees) {
@@ -37,18 +47,26 @@ export async function deleteRemovedEventAndCheckIsRequireJanitor(auth, calendarI
         eventId: event.id
       })
     } catch (err) {
-      console.error(`Failed to delete event ${event.id} from calendar ${calendarId}:`, err)
+      console.error(
+        `Failed to delete event ${event.id} from calendar ${calendarId}:`,
+        err
+      )
     }
     return { isRequireJanitor: false, isDeleted: true }
   }
 
-  const isRequireJanitor = attendees.some((g) => {
-    const guestName = g.displayName || ''
-    const email = g.email || ''
-    const user = email.split('@')[0].replace('lp', '').toLowerCase()
-    const nameToCheck = guestName || user
-    return nameToCheck.toLowerCase().includes('janitor')
-  })
+  const isRequireJanitor =
+    attendees.some((g) => {
+      const guestName = g.displayName || ''
+      const email = g.email || ''
+      const user = email.split('@')[0].replace('lp', '').toLowerCase()
+      const nameToCheck = guestName || user
+      return nameToCheck.toLowerCase().includes('janitor')
+    }) ||
+    !!description
+      .replace(/^Created.*?\n/gm, '')
+      .replace(/^Last Modified.*?\n/gm, '')
+      .replace(title.split(' - ')[1].trim(), '')
 
   return { isRequireJanitor, isDeleted: false }
 }
@@ -57,33 +75,42 @@ export async function getItemThumbnails(auth, attachments) {
   if (!attachments || attachments.length === 0) return []
   const drive = google.drive('v3')
   try {
-    const results = await Promise.all(attachments.map(async (attachment) => {
-      const { fileId } = attachment
-      if (!fileId) return attachment
-      try {
-        const response = await drive.files.get({
-          auth,
-          fileId,
-          fields: 'thumbnailLink,mimeType,downloadUrl,webContentLink,webViewLink',
-          supportsAllDrives: true
-        })
-        const file = response.data
-        if (file) {
-          const { thumbnailLink, mimeType, downloadUrl, webContentLink, webViewLink } = file
-          return {
-            ...attachment,
-            thumbnailLink: thumbnailLink || '',
-            mimeType: mimeType || '',
-            downloadUrl: downloadUrl || webContentLink || '',
-            webContentLink: webContentLink || '',
-            webViewLink: webViewLink || ''
+    const results = await Promise.all(
+      attachments.map(async (attachment) => {
+        const { fileId } = attachment
+        if (!fileId) return attachment
+        try {
+          const response = await drive.files.get({
+            auth,
+            fileId,
+            fields:
+              'thumbnailLink,mimeType,downloadUrl,webContentLink,webViewLink',
+            supportsAllDrives: true
+          })
+          const file = response.data
+          if (file) {
+            const {
+              thumbnailLink,
+              mimeType,
+              downloadUrl,
+              webContentLink,
+              webViewLink
+            } = file
+            return {
+              ...attachment,
+              thumbnailLink: thumbnailLink || '',
+              mimeType: mimeType || '',
+              downloadUrl: downloadUrl || webContentLink || '',
+              webContentLink: webContentLink || '',
+              webViewLink: webViewLink || ''
+            }
           }
+        } catch (err) {
+          console.error(`Failed to get file ${fileId} from drive:`, err)
         }
-      } catch (err) {
-        console.error(`Failed to get file ${fileId} from drive:`, err)
-      }
-      return attachment
-    }))
+        return attachment
+      })
+    )
     return results
   } catch (e) {
     console.error('Error in getItemThumbnails:', e)
@@ -100,7 +127,12 @@ export async function fetchCalendars({ auth }) {
   }))
 }
 
-export async function fetchEventsByCalendarId({ auth, startDate, endDate, id }) {
+export async function fetchEventsByCalendarId({
+  auth,
+  startDate,
+  endDate,
+  id
+}) {
   const response = await calendar.events.list({
     auth,
     calendarId: id,
@@ -123,7 +155,12 @@ export async function fetchAllEvents({ auth, startDate, endDate }) {
   const response = await calendar.calendarList.list({ auth })
   const calendars = response.data.items || []
 
-  const matchedCalendars = calendars.filter((cal) => /Main Building/.exec(cal.summary || ''))
+  const matchedCalendars = calendars.filter(
+    (cal) =>
+      /Main Building/.exec(cal.summary || '') &&
+      !cal.summary.includes('(Computer)') &&
+      !cal.summary.includes('(iPad)')
+  )
 
   const eventsPromises = matchedCalendars.map(async (cal) => {
     const calendarName = cal.summary || ''
@@ -140,7 +177,12 @@ export async function fetchAllEvents({ auth, startDate, endDate }) {
     const events = eventsResponse.data.items || []
     const modifiedEvents = []
     for (const event of events) {
-      const { isRequireJanitor, isDeleted } = await deleteRemovedEventAndCheckIsRequireJanitor(auth, calendarId, event)
+      const { isRequireJanitor, isDeleted } =
+        await deleteRemovedEventAndCheckIsRequireJanitor(
+          auth,
+          calendarId,
+          event
+        )
       if (isDeleted) continue
 
       modifiedEvents.push({
@@ -160,36 +202,64 @@ export async function fetchAllEvents({ auth, startDate, endDate }) {
   return resultsArrays.flat()
 }
 
-export async function fetchJanitorEvents({ auth, startDate, endDate, settings }) {
-  const calendarId = settings.JANITOR_GROUP_CALENDAR_EMAIL || 'c_4611d8d7d8c15ce261f053d3b110e411ce8d41d1418c9858cf27cea1b8eea0ec@group.calendar.google.com'
+export async function fetchJanitorEvents({
+  auth,
+  startDate,
+  endDate,
+  settings
+}) {
+  const calendarId =
+    settings.JANITOR_GROUP_CALENDAR_EMAIL ||
+    'c_4611d8d7d8c15ce261f053d3b110e411ce8d41d1418c9858cf27cea1b8eea0ec@group.calendar.google.com'
   const timeMin = `${startDate}T00:00:00+08:00`
   const timeMax = `${endDate}T23:59:59+08:00`
   const singleEvents = true
 
-  const [result1, result2] = await Promise.all([
-    calendar.events.list({
-      auth,
-      calendarId,
-      timeMin,
-      timeMax,
-      singleEvents
-    }).catch(err => {
-      console.error(`Error listing events for calendar ${calendarId}:`, err)
-      return { data: { items: [] } }
-    }),
-    calendar.events.list({
-      auth,
-      calendarId: 'janitor@liping.edu.hk',
-      timeMin,
-      timeMax,
-      singleEvents
-    }).catch(err => {
-      console.error('Error listing events for janitor@liping.edu.hk:', err)
-      return { data: { items: [] } }
-    })
+  const [result1, result2, result3] = await Promise.all([
+    calendar.events
+      .list({
+        auth,
+        calendarId,
+        timeMin,
+        timeMax,
+        singleEvents
+      })
+      .catch((err) => {
+        console.error(`Error listing events for calendar ${calendarId}:`, err)
+        return { data: { items: [] } }
+      }),
+    calendar.events
+      .list({
+        auth,
+        calendarId: 'janitor@liping.edu.hk',
+        timeMin,
+        timeMax,
+        singleEvents
+      })
+      .catch((err) => {
+        console.error('Error listing events for janitor@liping.edu.hk:', err)
+        return { data: { items: [] } }
+      }),
+    calendar.events
+      .list({
+        auth,
+        calendarId:
+          'c_188296g6v8ehahrfln76ougj8m22g@resource.calendar.google.com',
+        timeMin,
+        timeMax,
+        singleEvents
+      })
+      .catch((err) => {
+        console.error('Error listing events for Hall', err)
+        return { data: { items: [] } }
+      })
   ])
 
-  const combined = [...(result1.data?.items || []), ...(result2.data?.items || [])]
+  const combined = [
+    ...(result1.data?.items || []),
+    ...(result2.data?.items || []),
+    ...(result3.data?.items || [])
+  ]
 
   combined.sort((a, b) => {
     const startA = a.start?.dateTime || a.start?.date || ''
@@ -197,13 +267,15 @@ export async function fetchJanitorEvents({ auth, startDate, endDate, settings })
     return startA.localeCompare(startB)
   })
 
-  const finalEvents = await Promise.all(combined.map(async (item) => {
-    const attachments = await getItemThumbnails(auth, item.attachments)
-    return {
-      ...item,
-      attachments
-    }
-  }))
+  const finalEvents = await Promise.all(
+    combined.map(async (item) => {
+      const attachments = await getItemThumbnails(auth, item.attachments)
+      return {
+        ...item,
+        attachments
+      }
+    })
+  )
 
   return finalEvents
 }

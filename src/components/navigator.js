@@ -127,7 +127,7 @@ const Navigator = ({ user }) => {
       <NavbarDropdown title='Careers' includedPaths={['ole']}>
         <PageLink title='OLE Record' href='/ole' />
         <a
-          href={process.env.NEXT_PUBLIC_SUBJECT_SELECTION_URL || 'https://careers.liping.edu.hk/ss'}
+          href={process.env.NEXT_PUBLIC_SUBJECT_SELECTION_URL}
           target='_blank'
           className='navbar-item'
         >
@@ -150,6 +150,15 @@ const Navigator = ({ user }) => {
         <PageLink title='Club registration' href='/eca/registration' />
         <PageLink title='Membership Record' href='/eca/membership' />
         <PageLink title='Post Exam Activity' href='/post_exam' />
+      </NavbarDropdown>
+      <NavbarDropdown title='Tools'>
+        <a
+          href='https://api.liping.edu.hk/qrcode'
+          target='_blank'
+          className='navbar-item'
+        >
+          QR Code Generator
+        </a>
       </NavbarDropdown>
     </>
   )

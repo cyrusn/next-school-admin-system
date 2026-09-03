@@ -4,7 +4,7 @@ import { getSettings } from '@/utils/settings'
 
 const TOKEN = process.env.STRAPI_API_KEY
 const Authorization = `Bearer ${TOKEN}`
-const BASE_URL = process.env.STRAPI_BASE_URL || 'https://careers.liping.edu.hk/strapi/api'
+const BASE_URL = process.env.STRAPI_BASE_URL
 
 export async function getAttendanceSummary() {
   const settings = await getSettings()
