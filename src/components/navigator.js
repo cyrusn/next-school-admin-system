@@ -127,7 +127,7 @@ const Navigator = ({ user }) => {
       <NavbarDropdown title='Careers' includedPaths={['ole']}>
         <PageLink title='OLE Record' href='/ole' />
         <a
-          href={process.env.NEXT_PUBLIC_SUBJECT_SELECTION_URL}
+          href={settings.SUBJECT_SELECTION_URL || '#'}
           target='_blank'
           className='navbar-item'
         >
