@@ -293,6 +293,7 @@ export default function StudentPhoto() {
                 isNcs,
                 isNewlyArrived,
                 isAllowAccessories,
+                isRepeater,
                 x1,
                 x2,
                 x3,
@@ -326,6 +327,7 @@ export default function StudentPhoto() {
                           {isNcs && <span> 🌎</span>}
                           {isAllowAccessories && <span> ✝️</span>}
                           {isNewlyArrived && <span> 🇨🇳</span>}
+                          {isRepeater && <span className='tag is-danger ml-1'>R</span>}
                         </span>
                       )}
                     </p>

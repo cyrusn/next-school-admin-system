@@ -615,6 +615,7 @@ export default function StudentProfile() {
               examArrangement,
               isNcs,
               isNewlyArrived,
+              isRepeater,
               x1,
               x2,
               x3,
@@ -651,6 +652,7 @@ export default function StudentProfile() {
                       {cname || ename}
                       {isNcs && <span> 🌎</span>}
                       {isNewlyArrived && <span> 🇨🇳</span>}
+                      {isRepeater && <span className='tag is-danger ml-1'>R</span>}
                     </p>
                     {(isSen || examArrangement) && (
                       <div className='tags is-justify-content-center mb-1'>

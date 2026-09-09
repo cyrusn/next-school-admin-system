@@ -23,7 +23,7 @@ export async function getStudentsData(req) {
   const settings = await getSettings(req)
   const spreadsheetId = settings.STUDENT_GOOGLE_SHEET_ID
   const auth = await getAuth()
-  const ranges = ['students!A1:X', 'groups!A1:G']
+  const ranges = ['students!A1:AZ', 'groups!A1:G']
   const response = await sheets.spreadsheets.values.batchGet({
     auth,
     spreadsheetId,
@@ -78,6 +78,9 @@ export async function getStudentsData(req) {
 
     // Calculate isSen dynamically from senType. If senType is present and not empty, isSen is true.
     s.isSen = s.senType ? String(s.senType).trim() !== '' : false
+
+    // Parse isRepeater column to boolean.
+    s.isRepeater = s.isRepeater === true || String(s.isRepeater).trim().toUpperCase() === 'TRUE'
 
     return s
   })

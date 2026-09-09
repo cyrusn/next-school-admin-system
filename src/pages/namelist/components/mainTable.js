@@ -85,6 +85,29 @@ export default function MainTable({ report, classlevels }) {
               </tr>
 
               <tr>
+                <th className='has-text-centered'>Repeater</th>
+                {classlevels.map((cl) => {
+                  return (
+                    <td key={cl.title}>
+                      {Object.keys(report.classcodes).reduce((prev, key) => {
+                        if (key[0] == cl.title[1]) {
+                          prev += report.classcodes[key].repeater || 0
+                        }
+                        return prev
+                      }, 0)}
+                    </td>
+                  )
+                })}
+
+                <td>
+                  {Object.keys(report.classcodes).reduce((prev, key) => {
+                    prev += report.classcodes[key].repeater || 0
+                    return prev
+                  }, 0)}
+                </td>
+              </tr>
+
+              <tr>
                 <th className='has-text-centered'>NCS</th>
                 {classlevels.map((cl) => {
                   return (

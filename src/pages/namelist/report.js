@@ -21,6 +21,7 @@ export default function NamelistReport() {
       isNcs,
       isNewlyArrived,
       isSen,
+      isRepeater,
       isDropout
     } = student
 
@@ -45,12 +46,14 @@ export default function NamelistReport() {
     prev.classcodes[classcode].ncs ??= 0
     prev.classcodes[classcode].newlyArrived ??= 0
     prev.classcodes[classcode].sen ??= 0
+    prev.classcodes[classcode].repeater ??= 0
     prev.classcodes[classcode].total += 1
     prev.classcodes[classcode].sexes[sex] += 1
     prev.classcodes[classcode].houses[house] += 1
     if (isNcs) prev.classcodes[classcode].ncs += 1
     if (isNewlyArrived) prev.classcodes[classcode].newlyArrived += 1
     if (isSen) prev.classcodes[classcode].sen += 1
+    if (isRepeater) prev.classcodes[classcode].repeater += 1
 
     prev.houses ??= {}
     prev.houses[house] ??= {}

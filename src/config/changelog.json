@@ -1,5 +1,11 @@
 [
   {
+    "version": "v1.13.5",
+    "commits": [
+      "Feature: Add repeater information and statistics to student profile, photo page, and namelist report"
+    ]
+  },
+  {
     "version": "v1.13.4",
     "commits": [
       "Feature: Add iPad suspension tracking for administrators and optimize status-based selection logic"

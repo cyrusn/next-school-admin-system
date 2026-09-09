@@ -153,6 +153,19 @@ const columnDefs = [
     target: 13
   },
   {
+    title: 'Repeater',
+    data(row) {
+      const { isRepeater } = row
+      return `${isRepeater ? 'Y' : ''}`
+    },
+    visible: false,
+    width: '5%',
+    searchBuilder: {
+      defaultCondition: '='
+    },
+    target: 14
+  },
+  {
     title: 'NCS',
     data(row) {
       const { isNcs } = row
@@ -163,7 +176,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: '='
     },
-    target: 14
+    target: 15
   },
   {
     title: 'SEN Type',
@@ -173,7 +186,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: 'contains'
     },
-    target: 15
+    target: 16
   },
   {
     title: 'Exam Arrangement',
@@ -183,7 +196,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: 'contains'
     },
-    target: 16
+    target: 17
   },
   {
     title: 'First Arrival Date',
@@ -193,7 +206,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: '>'
     },
-    target: 17
+    target: 18
   },
   {
     title: 'Reg Date',
@@ -203,7 +216,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: '>'
     },
-    target: 18
+    target: 19
   },
   {
     title: 'School From Type',
@@ -213,7 +226,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: '='
     },
-    target: 19
+    target: 20
   },
   {
     title: 'School From',
@@ -223,7 +236,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: 'contains'
     },
-    target: 20
+    target: 21
   }
 ]
 
@@ -240,7 +253,7 @@ const options = {
   layout: {
     top3: {
       searchPanes: {
-        columns: [2, 3, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+        columns: [2, 3, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
         viewTotal: true,
         initCollapsed: true,
         cascadePanes: true,
@@ -249,7 +262,7 @@ const options = {
     },
     top2: {
       searchBuilder: {
-        columns: [0, 1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+        columns: [0, 1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
         cascadePanes: true,
         viewTotal: true
       }
