@@ -196,6 +196,16 @@ const columnDefs = [
     target: 17
   },
   {
+    title: 'Reg Date',
+    data: 'regDate',
+    width: '10%',
+    visible: false,
+    searchBuilder: {
+      defaultCondition: '>'
+    },
+    target: 18
+  },
+  {
     title: 'School From Type',
     data: 'schFromType',
     width: '10%',
@@ -203,7 +213,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: '='
     },
-    target: 18
+    target: 19
   },
   {
     title: 'School From',
@@ -213,7 +223,7 @@ const columnDefs = [
     searchBuilder: {
       defaultCondition: 'contains'
     },
-    target: 19
+    target: 20
   }
 ]
 
@@ -230,7 +240,7 @@ const options = {
   layout: {
     top3: {
       searchPanes: {
-        columns: [2, 3, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+        columns: [2, 3, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
         viewTotal: true,
         initCollapsed: true,
         cascadePanes: true,
@@ -239,7 +249,7 @@ const options = {
     },
     top2: {
       searchBuilder: {
-        columns: [0, 1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+        columns: [0, 1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
         cascadePanes: true,
         viewTotal: true
       }

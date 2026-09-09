@@ -9,6 +9,7 @@ import IpadNav from './nav.js'
 export default function IPadResult() {
   const [records, setRecords] = useState([])
   const [isModalActive, setIsModalActive] = useState(false)
+  const [modalAction, setModalAction] = useState('DELETE')
   const [selectedRecords, setSelectedRecords] = useState([])
   const tableRef = useRef(null)
   const { data: session } = useSession()
@@ -32,6 +33,17 @@ export default function IPadResult() {
         text: 'Delete',
         className: 'is-danger',
         action: function () {
+          setModalAction('DELETE')
+          setIsModalActive(true)
+        }
+      })
+    }
+    if (ROLE_ENUM[ROLE] >= ROLE_ENUM['DC_ADMIN']) {
+      buttons.push({
+        text: 'Suspend',
+        className: 'is-warning',
+        action: function () {
+          setModalAction('SUSPEND')
           setIsModalActive(true)
         }
       })
@@ -52,6 +64,11 @@ export default function IPadResult() {
       ],
       select: true,
       buttons,
+      createdRow: (row, data) => {
+        if (data && data.status === 'SUSPEND') {
+          row.classList.add('is-danger')
+        }
+      },
       columns: [
         { data: 'classcode', title: 'Class' },
         { data: 'classno', title: 'No.' },
@@ -72,8 +89,27 @@ export default function IPadResult() {
         },
         {
           data(row) {
+            let admins = []
             const { freq } = row
-            return row[`issueDate_${freq}`] || ''
+            for (let i = freq; i > 0; i--) {
+              if (row[`admin_${i}`]) {
+                admins.push(row[`admin_${i}`])
+              }
+            }
+            return admins.join(', ') || ''
+          },
+          title: 'Admin'
+        },
+        {
+          data(row) {
+            let issueDates = []
+            const { freq } = row
+            for (let i = freq; i > 0; i--) {
+              if (row[`issueDate_${i}`]) {
+                issueDates.push(row[`issueDate_${i}`])
+              }
+            }
+            return issueDates.join(', ') || ''
           },
           title: 'issueDate'
         }
@@ -85,6 +121,44 @@ export default function IPadResult() {
     const rangeObjects = selectedRecords.map((r) => {
       r['status'] = 'INACTIVE'
       r['timestamp'] = getTimestamp()
+      return r
+    })
+
+    try {
+      const response = await fetch('/api/ipad', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ rangeObjects })
+      })
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result)
+      }
+
+      setIsModalActive(false)
+      setSelectedRecords([])
+      await fetchRecords()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const setSuspendStatus = async () => {
+    const hasPending = selectedRecords.some((r) => r.status === 'PENDING')
+    if (hasPending) {
+      alert('Student with PENDING status cannot be suspended.')
+      return
+    }
+
+    const rangeObjects = selectedRecords.map((r) => {
+      r['status'] = 'SUSPEND'
+      r['timestamp'] = getTimestamp()
+      const { freq } = r
+      r[`issueDate_${freq}`] = getTimestamp().split('T')[0]
+      const { initial } = session.user.info
+      r[`admin_${freq}`] = initial
       return r
     })
 
@@ -156,10 +230,15 @@ export default function IPadResult() {
             <>
               <header className='modal-card-head'>
                 <h1 className='modal-card-title'>
-                  Confirm to remove the right
+                  {modalAction === 'SUSPEND' ? 'Confirm to suspend' : 'Confirm to remove the right'}
                 </h1>
               </header>
               <div className='modal-card-body'>
+                {modalAction === 'SUSPEND' && selectedRecords.some(r => r.status === 'PENDING') && (
+                  <div className='notification is-warning is-light'>
+                    Students with <strong>PENDING</strong> status cannot be suspended.
+                  </div>
+                )}
                 <div className='tags'>
                   {selectedRecords?.map((r, key) => {
                     return (
@@ -174,7 +253,8 @@ export default function IPadResult() {
                 <div className='buttons'>
                   <button
                     className='button is-danger'
-                    onClick={setInactiveStatus}
+                    onClick={modalAction === 'SUSPEND' ? setSuspendStatus : setInactiveStatus}
+                    disabled={modalAction === 'SUSPEND' && selectedRecords.some(r => r.status === 'PENDING')}
                   >
                     Confirm
                   </button>

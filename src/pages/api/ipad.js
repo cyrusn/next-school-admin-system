@@ -19,10 +19,13 @@ const headerKeys = [
   'freq',
   'teacher_1',
   'issueDate_1',
+  'admin_1',
   'teacher_2',
   'issueDate_2',
+  'admin_2',
   'teacher_3',
-  'issueDate_3'
+  'issueDate_3',
+  'admin_3'
 ]
 
 export const getHandler = async (req, res) => {
@@ -34,12 +37,12 @@ export const getHandler = async (req, res) => {
   try {
     const settings = await getSettings()
     const spreadsheetId = settings.IPAD_SSID
-    const range = 'A1:M'
+    const range = 'A1:P'
 
     const data = await getSheetData(
       spreadsheetId,
       range,
-      (rowNo) => `A${rowNo}:M${rowNo}`
+      (rowNo) => `A${rowNo}:P${rowNo}`
     )
 
     res.status(200).json(data)
@@ -65,10 +68,13 @@ export const putHandler = async (req, res) => {
       'freq',
       'teacher_1',
       'issueDate_1',
+      'admin_1',
       'teacher_2',
       'issueDate_2',
+      'admin_2',
       'teacher_3',
-      'issueDate_3'
+      'issueDate_3',
+      'admin_3'
     ]
 
     const totalUpdatedRows = await batchUpdateSpreadsheet(
@@ -101,6 +107,9 @@ export const postHandler = async (req, res) => {
         'PENDING',
         1,
         initial,
+        '',
+        '',
+        '',
         '',
         '',
         '',
