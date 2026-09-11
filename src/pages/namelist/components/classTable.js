@@ -1,7 +1,7 @@
 import { TERM } from '@/config/constant/'
 import { useSettings } from '@/context/settingsContext'
 
-export default function ClassReport({ report, classlevel, classMasters }) {
+export default function ClassReport({ report, classlevel, classMasters, showStats }) {
   const { settings } = useSettings()
   const term = settings.TERM || TERM
   const HOMEBASES = settings.HOMEBASES || { 1: {}, 2: {} }
@@ -51,6 +51,115 @@ export default function ClassReport({ report, classlevel, classMasters }) {
             </tr>
           )
         })}
+
+        {showStats && (
+          <>
+            <tr>
+              <th className='has-text-centered'>Repeater</th>
+              {Object.keys(report.classcodes)
+                .filter((classcode) => classcode[0] == classlevel.title[1])
+                .map((classcode) => {
+                  return (
+                    <td key={classcode}>
+                      {report.classcodes[classcode].repeater || 0}
+                    </td>
+                  )
+                })}
+              <td>
+                {Object.keys(report.classcodes)
+                  .filter((classcode) => classcode[0] == classlevel.title[1])
+                  .reduce((prev, classcode) => {
+                    prev += report.classcodes[classcode].repeater || 0
+                    return prev
+                  }, 0)}
+              </td>
+            </tr>
+
+            <tr>
+              <th className='has-text-centered'>NCS</th>
+              {Object.keys(report.classcodes)
+                .filter((classcode) => classcode[0] == classlevel.title[1])
+                .map((classcode) => {
+                  return (
+                    <td key={classcode}>
+                      {report.classcodes[classcode].ncs || 0}
+                    </td>
+                  )
+                })}
+              <td>
+                {Object.keys(report.classcodes)
+                  .filter((classcode) => classcode[0] == classlevel.title[1])
+                  .reduce((prev, classcode) => {
+                    prev += report.classcodes[classcode].ncs || 0
+                    return prev
+                  }, 0)}
+              </td>
+            </tr>
+
+            <tr>
+              <th className='has-text-centered'>Newly-Arrived</th>
+              {Object.keys(report.classcodes)
+                .filter((classcode) => classcode[0] == classlevel.title[1])
+                .map((classcode) => {
+                  return (
+                    <td key={classcode}>
+                      {report.classcodes[classcode].newlyArrived || 0}
+                    </td>
+                  )
+                })}
+              <td>
+                {Object.keys(report.classcodes)
+                  .filter((classcode) => classcode[0] == classlevel.title[1])
+                  .reduce((prev, classcode) => {
+                    prev += report.classcodes[classcode].newlyArrived || 0
+                    return prev
+                  }, 0)}
+              </td>
+            </tr>
+
+            <tr>
+              <th className='has-text-centered'>SEN</th>
+              {Object.keys(report.classcodes)
+                .filter((classcode) => classcode[0] == classlevel.title[1])
+                .map((classcode) => {
+                  return (
+                    <td key={classcode}>
+                      {report.classcodes[classcode].sen || 0}
+                    </td>
+                  )
+                })}
+              <td>
+                {Object.keys(report.classcodes)
+                  .filter((classcode) => classcode[0] == classlevel.title[1])
+                  .reduce((prev, classcode) => {
+                    prev += report.classcodes[classcode].sen || 0
+                    return prev
+                  }, 0)}
+              </td>
+            </tr>
+
+            <tr>
+              <th className='has-text-centered'>Dropout</th>
+              {Object.keys(report.classcodes)
+                .filter((classcode) => classcode[0] == classlevel.title[1])
+                .map((classcode) => {
+                  return (
+                    <td key={classcode}>
+                      {report.dropouts?.[classcode]?.total || 0}
+                    </td>
+                  )
+                })}
+              <td>
+                {Object.keys(report.classcodes)
+                  .filter((classcode) => classcode[0] == classlevel.title[1])
+                  .reduce((prev, classcode) => {
+                    prev += report.dropouts?.[classcode]?.total || 0
+                    return prev
+                  }, 0)}
+              </td>
+            </tr>
+          </>
+        )}
       </tbody>
       <tfoot>
         <tr>

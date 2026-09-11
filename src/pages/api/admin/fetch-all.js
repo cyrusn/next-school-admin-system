@@ -1,5 +1,6 @@
 import { getSession } from 'next-auth/react'
 import { getSettings, clearSettingsCache } from '@/utils/settings'
+import { clearResourcesCache } from '@/utils/resources'
 import { execSync } from 'child_process'
 
 export default async function handler(req, res) {
@@ -38,6 +39,7 @@ export default async function handler(req, res) {
 
     // Invalidate the local cache
     clearSettingsCache()
+    clearResourcesCache()
 
     return res.status(200).json({ message: 'Settings successfully refetched' })
   } catch (error) {

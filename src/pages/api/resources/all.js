@@ -1,5 +1,5 @@
 import { getAuth } from '@/utils/googleApiAuth'
-import { fetchCalendars } from '@/utils/janitorCalendar'
+import { fetchAllEvents } from '@/utils/resources'
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -10,12 +10,18 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' })
   }
 
+  const { startDate, endDate, includeDevices } = req.query
+
+  if (!startDate || !endDate) {
+    return res.status(400).json({ error: 'Missing required parameters: startDate and endDate' })
+  }
+
   try {
     const auth = await getAuth()
-    const list = await fetchCalendars({ auth })
-    res.status(200).json(list)
+    const events = await fetchAllEvents({ auth, startDate, endDate, includeDevices })
+    res.status(200).json(events)
   } catch (error) {
-    console.error('Error fetching calendar list:', error)
+    console.error('Error fetching all janitor events:', error)
     res.status(500).json({ error: error.message })
   }
 }

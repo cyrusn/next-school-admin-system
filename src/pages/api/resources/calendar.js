@@ -1,5 +1,5 @@
 import { getAuth } from '@/utils/googleApiAuth'
-import { fetchEventsByCalendarId } from '@/utils/janitorCalendar'
+import { fetchEventsByCalendarId } from '@/utils/resources'
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')

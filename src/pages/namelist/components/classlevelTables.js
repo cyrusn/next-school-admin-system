@@ -5,7 +5,7 @@ import ElectiveTable from './electiveTables'
 import { useUsersContext } from '@/context/usersContext'
 import { groupBy } from 'lodash'
 
-export default function ClasslevelReports({ report, classlevels }) {
+export default function ClasslevelReports({ report, classlevels, showStats }) {
   const { users } = useUsersContext()
   const classMasters = groupBy(
     users.filter(({ classMaster }) => classMaster),
@@ -24,6 +24,7 @@ export default function ClasslevelReports({ report, classlevels }) {
                   report={report}
                   classlevel={classlevel}
                   classMasters={classMasters}
+                  showStats={showStats}
                 />
               </div>
               <div className='column auto'>

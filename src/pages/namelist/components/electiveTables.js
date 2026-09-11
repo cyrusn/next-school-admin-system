@@ -1,11 +1,20 @@
 import React from 'react'
 
-const X1_SUBJECTS = ['BIO', 'PHY', 'CHIST', 'VA', 'THS', 'BAFS']
-const X2_SUBJECTS = ['CHEM', 'BIO2', 'ECON', 'GEOG', 'HIST', 'HMSC', 'ICT']
-const X3_SUBJECTS = ['HMSC3', 'M2']
+const X1_SUBJECTS = ['BIO', 'BAFS', 'CHIST', 'PHY', 'THS', 'VA', 'Drop1']
+const X2_SUBJECTS = [
+  'BIO2',
+  'CHEM',
+  'ECON',
+  'GEOG',
+  'HMSC',
+  'HIST',
+  'ICT',
+  'Drop2'
+]
+const X3_SUBJECTS = ['HMSC3', 'M2', 'Drop3']
 
 function ElectiveSubTable({ title, subjects, data }) {
-  const total = subjects.reduce((prev, sub) => prev + (data[sub] || 0), 0)
+  // const total = subjects.reduce((prev, sub) => prev + (data[sub] || 0), 0)
 
   return (
     <div className='column'>
@@ -22,7 +31,7 @@ function ElectiveSubTable({ title, subjects, data }) {
                     {sub}
                   </th>
                 ))}
-                <th className='has-text-centered'>Total</th>
+                {/* <th className='has-text-centered'>Total</th> */}
               </tr>
             </thead>
             <tbody>
@@ -32,7 +41,7 @@ function ElectiveSubTable({ title, subjects, data }) {
                     {data[sub] || '-'}
                   </td>
                 ))}
-                <td className='has-text-centered'>{total || '-'}</td>
+                {/* <td className='has-text-centered'>{total || '-'}</td> */}
               </tr>
             </tbody>
           </table>

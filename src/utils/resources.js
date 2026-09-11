@@ -1,7 +1,32 @@
+import { getAuth } from './googleApiAuth'
 import { google } from 'googleapis'
 import { DateTime } from 'luxon'
 
+const admin = google.admin('directory_v1')
 const calendar = google.calendar('v3')
+
+let cachedResources = null
+
+export async function getResourcesData() {
+  if (cachedResources) {
+    return cachedResources
+  }
+
+  console.log('[Resources] Cache miss, fetching calendars from Google Admin API...')
+  const auth = await getAuth()
+  const response = await admin.resources.calendars.list({
+    auth,
+    customer: 'my_customer'
+  })
+
+  cachedResources = response.data
+  return cachedResources
+}
+
+export function clearResourcesCache() {
+  console.log('[Resources] Clearing cached resources...')
+  cachedResources = null
+}
 
 export function formatGoogleDate(dateObj) {
   if (!dateObj) return null
@@ -66,7 +91,7 @@ export async function deleteRemovedEventAndCheckIsRequireJanitor(
     !!description
       .replace(/^Created.*?\n/gm, '')
       .replace(/^Last Modified.*?\n/gm, '')
-      .replace(title.split(' - ')[1].trim(), '')
+      .replace(title.split(' - ')[1]?.trim() || '', '')
 
   return { isRequireJanitor, isDeleted: false }
 }
@@ -151,16 +176,22 @@ export async function fetchEventsByCalendarId({
   }))
 }
 
-export async function fetchAllEvents({ auth, startDate, endDate }) {
+export async function fetchAllEvents({ auth, startDate, endDate, includeDevices = 'false' }) {
   const response = await calendar.calendarList.list({ auth })
   const calendars = response.data.items || []
 
-  const matchedCalendars = calendars.filter(
-    (cal) =>
-      /Main Building/.exec(cal.summary || '') &&
-      !cal.summary.includes('(Computer)') &&
-      !cal.summary.includes('(iPad)')
-  )
+  const matchedCalendars = calendars.filter((cal) => {
+    const summary = cal.summary || ''
+    const isMainBuilding = /Main Building/.exec(summary)
+    const isDisplayBoard = summary.includes('Display Board')
+    const isDevice = summary.includes('Notebook') || summary.includes('iPad') || summary.includes('Computer')
+
+    if (includeDevices === 'true') {
+      return isMainBuilding || isDisplayBoard || isDevice
+    } else {
+      return (isMainBuilding || isDisplayBoard) && !isDevice
+    }
+  })
 
   const eventsPromises = matchedCalendars.map(async (cal) => {
     const calendarName = cal.summary || ''
@@ -186,6 +217,7 @@ export async function fetchAllEvents({ auth, startDate, endDate }) {
       if (isDeleted) continue
 
       modifiedEvents.push({
+        id: event.id,
         calendarName,
         title: event.summary || '',
         start: formatGoogleDate(event.start),
@@ -199,7 +231,17 @@ export async function fetchAllEvents({ auth, startDate, endDate }) {
   })
 
   const resultsArrays = await Promise.all(eventsPromises)
-  return resultsArrays.flat()
+  const flatEvents = resultsArrays.flat()
+
+  // Deduplicate events by id
+  const uniqueEvents = []
+  const seenIds = new Set()
+  for (const ev of flatEvents) {
+    if (ev.id && seenIds.has(ev.id)) continue
+    if (ev.id) seenIds.add(ev.id)
+    uniqueEvents.push(ev)
+  }
+  return uniqueEvents
 }
 
 export async function fetchJanitorEvents({

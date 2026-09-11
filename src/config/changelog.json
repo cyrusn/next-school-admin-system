@@ -1,5 +1,11 @@
 [
   {
+    "version": "v1.13.6",
+    "commits": [
+      "Feature: Better views for bookings and resource list caching on server"
+    ]
+  },
+  {
     "version": "v1.13.5",
     "commits": [
       "Feature: Add repeater information and statistics to student profile, photo page, and namelist report"

@@ -8,6 +8,7 @@ import Loading from '@/components/loading'
 
 export default function NamelistReport() {
   const { allStudents } = useStudentsContext()
+  const [showStats, setShowStats] = useState(false)
 
   const report = (allStudents || []).reduce((prev, student) => {
     const {
@@ -105,8 +106,16 @@ export default function NamelistReport() {
       <Nav />
       {allStudents?.length ? (
         <div className='has-text-centered'>
+          <div className='buttons is-centered my-3 no-print'>
+            <button
+              className={`button is-small ${showStats ? 'is-danger' : 'is-info'}`}
+              onClick={() => setShowStats(!showStats)}
+            >
+              {showStats ? 'Hide' : 'Show'} Details
+            </button>
+          </div>
           <MainTable report={report} classlevels={classlevels} />
-          <ClasslevelTables report={report} classlevels={classlevels} />
+          <ClasslevelTables report={report} classlevels={classlevels} showStats={showStats} />
           <ElectiveTables report={report} />
         </div>
       ) : (

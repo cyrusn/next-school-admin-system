@@ -1,6 +1,6 @@
 import { getAuth } from '@/utils/googleApiAuth'
 import { getSettings } from '@/utils/settings'
-import { fetchJanitorEvents } from '@/utils/janitorCalendar'
+import { fetchJanitorEvents } from '@/utils/resources'
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
