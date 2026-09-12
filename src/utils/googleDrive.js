@@ -122,4 +122,23 @@ export async function getImageUrls(DRIVE_ID, FOLDER_ID, filenames) {
   return response.data
 }
 
-export async function getFiles(folderId) {}
+export async function getFiles(folderId) {
+  const auth = await getAuth()
+  let q = `'${folderId}' in parents and trashed = false`
+
+  try {
+    const response = await drive.files.list({
+      auth,
+      pageSize: 1000,
+      includeItemsFromAllDrives: true,
+      supportsAllDrives: true,
+      q,
+      fields: 'files(id,name,mimeType,webViewLink,iconLink,thumbnailLink,fileExtension)',
+      orderBy: 'folder,name'
+    })
+    return response.data.files
+  } catch (e) {
+    console.error('Error fetching Google Drive files:', e)
+    throw e
+  }
+}
