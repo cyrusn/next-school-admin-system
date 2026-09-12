@@ -91,7 +91,7 @@ export default function AllBookings({ onBack }) {
     })
 
     const response = await fetch(
-      `/api/janitor_calendar/all?startDate=${start}&endDate=${start}&includeDevices=${includeDevices}`
+      `/api/resources/all?startDate=${start}&endDate=${start}&includeDevices=true`
     )
     if (!response.ok) {
       console.error(response)
@@ -129,7 +129,7 @@ export default function AllBookings({ onBack }) {
               onChange={(e) => setIncludeDevices(e.target.checked)}
               className='mr-2'
             />
-            Include iPad/Notebook
+            Include iPad/Notebook/Display Board
           </label>
         </div>
         <div className='control'>
@@ -140,6 +140,12 @@ export default function AllBookings({ onBack }) {
       </div>
     )
   }
+
+  const displayedEvents = events.filter((event) => {
+    if (includeDevices) return true
+    const parsed = parseLocation(event.calendarName)
+    return parsed.floor !== 'Devices and Board'
+  })
 
   return (
     <div>
@@ -157,11 +163,14 @@ export default function AllBookings({ onBack }) {
           message={notification.message}
         />
         {hasFetched &&
-          (events && events.length > 0 ? (
-            <div className='box'>
+          (displayedEvents && displayedEvents.length > 0 ? (
+            <>
               <p className='title is-3'>{fetchedDate}</p>
-              <GroupByLocation events={events} resourcesList={resourcesList} />
-            </div>
+              <GroupByLocation
+                events={displayedEvents}
+                resourcesList={resourcesList}
+              />
+            </>
           ) : (
             <p className='has-text-centered has-text-grey my-5'>
               No bookings for this date.
@@ -202,7 +211,11 @@ export function parseLocation(location) {
     }
 
     return {
-      type: location.includes('iPad') ? 'iPad' : (location.includes('Display Board') ? 'Display Board' : 'Notebook'),
+      type: location.includes('iPad')
+        ? 'iPad'
+        : location.includes('Display Board')
+          ? 'Display Board'
+          : 'Notebook',
       floor: 'Devices and Board',
       roomNo: '',
       roomName: cleanName
@@ -299,7 +312,10 @@ function EventsByRoomOrType({ events }) {
           const firstEvent = groupedEvents[0]
 
           let heading = key
-          if (firstEvent.floor !== 'Devices and Board' && !firstEvent.parsedResourceName) {
+          if (
+            firstEvent.floor !== 'Devices and Board' &&
+            !firstEvent.parsedResourceName
+          ) {
             heading = `${firstEvent.roomNo || 'Unspecified'} ${firstEvent.roomName}`
           }
 
@@ -331,8 +347,14 @@ function EventsByRoomOrType({ events }) {
 }
 
 function Event({ event }) {
-  const { start, end, description, teacherInitial, cleanEventTitle, isRequireJanitor } =
-    event
+  const {
+    start,
+    end,
+    description,
+    teacherInitial,
+    cleanEventTitle,
+    isRequireJanitor
+  } = event
 
   const modifiedDescription = (description || '')
     .replace(/^Created.*?\n/gm, '')
