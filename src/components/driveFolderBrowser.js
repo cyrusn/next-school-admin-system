@@ -291,27 +291,18 @@ export default function DriveFolderBrowser({ rootFolderId, rootName }) {
       {/* Upper Folder and Action controls */}
       <div className='is-flex is-justify-content-space-between is-align-items-center mb-4'>
         <div className='buttons mb-0'>
-          <button
-            className='button is-warning px-2'
-            onClick={() => handleBreadcrumbClick(breadcrumbs.length - 2)}
-            disabled={breadcrumbs.length <= 1}
-            title='Up a layer (Backspace)'
-          >
-            <span className='icon mx-0'>
-              <FontAwesomeIcon icon={faArrowUp} />
-            </span>
-          </button>
-          <a
-            className='button is-link'
-            href={`https://drive.google.com/drive/folders/${currentFolderId}`}
-            target='_blank'
-            rel='noreferrer'
-          >
-            <span className='icon mr-1'>
-              <FontAwesomeIcon icon={faExternalLinkAlt} />
-            </span>
-            <span>Open folder in Google Drive</span>
-          </a>
+          {breadcrumbs.length > 1 && (
+            <button
+              className='button is-warning px-2'
+              onClick={() => handleBreadcrumbClick(breadcrumbs.length - 2)}
+              disabled={breadcrumbs.length <= 1}
+              title='Up a layer (Backspace)'
+            >
+              <span className='icon mx-0'>
+                <FontAwesomeIcon icon={faArrowUp} />
+              </span>
+            </button>
+          )}
         </div>
 
         {/* Right side controls: Sorting + List / Grid View Toggle */}
@@ -368,6 +359,19 @@ export default function DriveFolderBrowser({ rootFolderId, rootName }) {
       {breadcrumbs.length > 0 && (
         <nav className='breadcrumb mb-4' aria-label='breadcrumbs'>
           <ul>
+            <li>
+              {' '}
+              <a
+                className='is-link mb-4'
+                href={`https://drive.google.com/drive/folders/${currentFolderId}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='icon mr-1'>
+                  <FontAwesomeIcon icon={faExternalLinkAlt} />
+                </span>
+              </a>
+            </li>
             {breadcrumbs.map((crumb, idx) => {
               const isActive = idx === breadcrumbs.length - 1
               return (
@@ -428,7 +432,7 @@ export default function DriveFolderBrowser({ rootFolderId, rootName }) {
                 return (
                   <div
                     key={file.id}
-                    className='column is-2-desktop is-3-tablet is-6-mobile'
+                    className='column is-2-widescreen is-3-desktop is-4-tablet is-6-mobile'
                   >
                     <div
                       className={`box is-clickable p-0 m-0 ${
@@ -440,7 +444,9 @@ export default function DriveFolderBrowser({ rootFolderId, rootName }) {
                         flexDirection: 'column',
                         justifyContent: 'space-between',
                         overflow: 'hidden',
-                        border: isSelected ? '2px solid grey' : '2px solid transparent'
+                        border: isSelected
+                          ? '2px solid grey'
+                          : '2px solid transparent'
                       }}
                       onClick={() => handleItemClick(file)}
                     >
@@ -479,7 +485,7 @@ export default function DriveFolderBrowser({ rootFolderId, rootName }) {
                             alt={file.name}
                             fill
                             unoptimized
-                            style={{ objectFit: 'cover' }}
+                            style={{ objectFit: 'cover', borderRadius: '0.25rem' }}
                             onError={() => handleImageError(file.id)}
                           />
                         ) : (
@@ -523,13 +529,17 @@ export default function DriveFolderBrowser({ rootFolderId, rootName }) {
                     onClick={() => handleItemClick(file)}
                     style={{
                       cursor: 'pointer',
-                      border: isSelected ? '2px solid grey' : '2px solid transparent'
+                      border: isSelected
+                        ? '2px solid grey'
+                        : '2px solid transparent'
                     }}
                   >
                     <span className='panel-icon mr-2'>
                       <FontAwesomeIcon
                         icon={icon}
-                        className={isFolder ? 'has-text-warning' : 'has-text-info'}
+                        className={
+                          isFolder ? 'has-text-warning' : 'has-text-info'
+                        }
                       />
                     </span>
                     <span className='has-text-weight-semibold is-size-6'>
